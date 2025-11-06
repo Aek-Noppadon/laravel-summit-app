@@ -27,6 +27,8 @@ class ProductCreate extends Component
         $this->supplier_rep = Str::trim($this->supplier_rep);
         $this->principal = Str::trim($this->principal);
 
+        // Comment
+
         $this->validate(
             [
                 'product_name' => 'required|unique:products',
