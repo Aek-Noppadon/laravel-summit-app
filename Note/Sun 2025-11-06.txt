@@ -24,7 +24,7 @@
 
       - Create repository = laravel-summit-app
         - Copy คำสั่งทั้งหมดที่ command folder project
-
+          =================================================================================
           echo "# laravel-summit-app" >> README.md
           git init
           git add README.md
@@ -32,8 +32,14 @@
           git branch -M main
           git remote add origin https://github.com/Aek-Noppadon/laravel-summit-app.git
           git push -u origin main
-
+          =================================================================================
           git .add
+          git commit -m "first commit"
+          git push -u origin main
+          git push -u origin main --force 
+            ! [rejected]        main -> main (fetch first)
+            error: failed to push some refs to 'https://github.com/Aek-Noppadon/laravel-summit-app.git'
+          =================================================================================
 
   
 
