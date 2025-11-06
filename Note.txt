@@ -1,0 +1,11 @@
+composer require filament/filament:"^3.3" -W
+
+php artisan filament:install --panels
+
+
+php artisan make:filament-user
+
+php artisan make (Show all lists make)
+
+php artisan make:filament-resource User
+  - app/Filament/Resources/UserResource.php

@@ -1,0 +1,39 @@
+=================================================================================
+*** Sun สอน และช่วยเพิ่ม และแก้ไข Code วันที่ 06/11/2025 ***
+=================================================================================
+1. สอนเรื่องการใช้ Git ไว้ที่เครื่อง
+  1.1 Intall git = https://git-scm.com/install/windows
+
+      - Check version git ที่เครื่อง = git --version 
+
+  1.2 Register & Login ที่เว็บ = https://github.com/
+      - Username = ake.srikrung@gmail.com
+      - Password = 9b6vyxcnDBLDtZ9
+
+      ========================================================
+        Cloud (Repository)
+        - f1
+        - f2
+
+
+
+        My pc  (Local) ---- > commit (f1,f2) --->push(^)
+        - feature 1
+        - feature 2
+        ========================================================
+
+      - Create repository = laravel-summit-app
+        - Copy คำสั่งทั้งหมดที่ command folder project
+
+          echo "# laravel-summit-app" >> README.md
+          git init
+          git add README.md
+          git commit -m "first commit"
+          git branch -M main
+          git remote add origin https://github.com/Aek-Noppadon/laravel-summit-app.git
+          git push -u origin main
+
+          git .add
+
+  
+

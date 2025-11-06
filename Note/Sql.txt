@@ -1,0 +1,49 @@
+ if (empty($this->search)) {
+            $customers = Customer::orderBy('code', 'asc')
+                ->where(function ($q) {
+                    $q->where(function ($sub) {
+                        $sub->where('source', '1')
+                            ->where('created_user_id', $this->user_id);
+                    })
+                        ->orWhere('source', '0');
+                })
+                ->paginate($this->pagination);
+        } else {
+            $customers = Customer::where(function ($q) {
+                $q->where('source', '1')
+                    ->where('created_user_id', $this->user_id)
+                    ->orWhere('source', '0');
+            })
+                ->where(function ($q) {
+                    $q->where('code', 'like', '%' . $this->search . '%')
+                        ->orWhere('name_english', 'like', '%' . $this->search . '%')
+                        ->orWhere('name_thai', 'like', '%' . $this->search . '%')
+                        ->orWhere('parent_code', 'like', '%' . $this->search . '%');
+                })
+                ->orderBy('code', 'asc')
+                ->paginate($this->pagination);
+}
+
+    if (empty($this->search)) {
+            $customers = Customer::where(function ($q) {
+                $q->where('source', '1')
+                    ->where('created_user_id', $this->user_id)
+                    ->orWhere('source', '0');
+            })
+                ->orderBy('code', 'asc')
+                ->paginate($this->pagination);
+        } else {
+            $customers = Customer::where(function ($q) {
+                $q->where('source', '1')
+                    ->where('created_user_id', $this->user_id)
+                    ->orWhere('source', '0');
+            })
+                ->where(function ($q) {
+                    $q->where('code', 'like', '%' . $this->search . '%')
+                        ->orWhere('name_english', 'like', '%' . $this->search . '%')
+                        ->orWhere('name_thai', 'like', '%' . $this->search . '%')
+                        ->orWhere('parent_code', 'like', '%' . $this->search . '%');
+                })
+                ->orderBy('code', 'asc')
+                ->paginate($this->pagination);
+        }

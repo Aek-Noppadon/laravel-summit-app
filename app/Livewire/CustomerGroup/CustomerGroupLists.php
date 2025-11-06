@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Livewire\CustomerGroup;
+
+use App\Models\CustomerGroup;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class CustomerGroupLists extends Component
+{
+    use WithPagination;
+    public $search;
+    public $pagination = 20;
+
+    #[On('refresh-customer-group')]
+    public function render()
+    {
+        if (is_null($this->search)) {
+            $customer_groups = CustomerGroup::orderBy('id', 'asc')
+                ->paginate($this->pagination);
+        } else {
+            $customer_groups = CustomerGroup::Where('name', 'like', '%' . $this->search . '%')
+                ->orderBy('id', 'asc')
+                ->paginate($this->pagination);
+        }
+
+        return view('livewire.customer-group.customer-group-lists', [
+            'customer_groups' => $customer_groups
+        ]);
+    }
+
+    public function deleteCustomerGroup($id, $name)
+    {
+        $this->dispatch("confirm", id: $id, name: $name);
+    }
+
+    #[On('destroy')]
+    public function destroy($id, $name)
+    {
+        CustomerGroup::find($id)->delete();
+
+        $this->dispatch(
+            "sweet.success",
+            position: "center",
+            title: "Deleted Successfully !!",
+            text: "Customer Group : " . $name,
+            // text: "Customer Group Id : " . $id . ", Name : " . $name,
+            icon: "success",
+            timer: 3000,
+            // url: route('customer-group.list'),
+        );
+
+        $this->dispatch('close-modal-customer-group');
+    }
+}

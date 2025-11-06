@@ -1,0 +1,114 @@
+1. composer require laravel/breeze --dev
+    - php artisan breeze:install
+        - Blade with Alpine
+        - Darkmode
+        - PHP test
+
+
+1 millisecond = 0.001 seconds
+
+1000 ms = 1s
+
+php artisan make:seeder UsersTableSeeder
+php artisan db:seed
+
+3. Config livewire (Optional)
+    - php artisan livewire:publish --config
+    
+Check Laravel Version = php artisan --Version
+
+Clear Cache
+php artisan config:cache
+php artisan cache:clear
+php artisan view:clear
+
+1. Install SQL & ODBC Drive
+    1.1 = SQLSRV511
+    1.2 = msodbcsql
+
+2. Copy file D:\Web Application\SQL Server Driver\SQLSRV511 to folder xampp/php/ext
+
+    2.1 = php_pdo_sqlsrv_82_ts_x64.dll  (PHP Version 8.2)
+    2.2 = php_sqlsrv_82_ts_x64.dll  (PHP Version 8.2)
+
+2. Config file PHP.ini
+	extension=php_pdo_sqlsrv_82_ts_x64
+	extension=php_sqlsrv_82_ts_x64
+
+3. Laravel config file
+    3.1 .env = DB_CONNECTION=sqlsrv
+               DB_HOST=SCOLAXDB
+               DB_PORT=1433
+               DB_DATABASE=SCOLAX63LIVE
+               DB_USERNAME=sa
+               DB_PASSWORD=Pa$$w0rd
+
+    3.2 config/database.php =  'sqlsrv' => [
+                        'driver' => 'sqlsrv',
+                        'url' => env('DATABASE_URL'),
+                        'host' => env('DB_HOST', 'localhost'),
+                        'port' => env('DB_PORT', '1433'),
+                        'database' => env('DB_DATABASE', 'forge'),
+                        'username' => env('DB_USERNAME', 'forge'),
+                        'password' => env('DB_PASSWORD', ''),
+                        'charset' => 'utf8',
+                        'prefix' => '',
+                        'prefix_indexes' => true,
+                        'encrypt' => env('DB_ENCRYPT', 'yes'),
+                        'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
+                        ],
+
+Create Model & Migration = php artisan make:model Crm -m
+
+Create Migration = php artisan make:migration create_crm_header_table
+
+ migrate:fresh     Drop all tables and re-run all migrations
+  migrate:install   Create the migration repository
+  migrate:refresh   Reset and re-run all migrations
+  migrate:reset     Rollback all database migrations
+  migrate:rollback  Rollback the last database migration
+  migrate:status    Show the status of each migration
+
+  php artisan make:livewire ComponentName
+
+/* ==============================================================
+    Dispatch Multi Parameter
+/* ==============================================================
+wire:click.prevent="$dispatch('select-customer',[
+        {id:{{ "'" . $customer->CustomerCode . "'" }}},
+        {name_eng:{{ "'" . $customer->CustomerNameEng . "'" }}},
+        {name_thi:{{ "'" . $customer->CustomerNameThi . "'" }}}
+    ])"
+
+$custCode_obj = (object)$id;
+$custNameEng_obj = (object)$name_eng;
+$custNameThi_obj = (object)$name_thi;
+
+dd($custNameEng_obj);
+
+$this->customerCode = $custCode_obj->id;
+$this->customerNameEng = $custNameEng_obj->name_eng;
+$this->customerNameThi = $custNameThi_obj->name_thi;
+
+// ** Note
+// foreach ($name as $key => $value) {
+//     dd("Key: " . $key . ", Value: " . $value);
+// }
+
+// ** Note
+// $product = (object)$id;
+// dd($product->id);
+/* ==============================================================
+
+// Sun 20/10/2025
+php --ini
+php artisan make:enum Enums/CustomerEnum
+php artisan make:enum CustomerEnum
+  
+php artisan make:enum ConnectionSRVEnum
+php artisan make:enum Enums/ConnectionSRVEnum
+php artisan make:model TestConnect
+php artisan make:observer CrmHeaderObserver --model=CrmHeader
+php artisan livewire:form CRMCreateForm
+
+php artisan migrate:ref --path=database\migrations\2025_09_11_062344_create_crm_headers_table.php

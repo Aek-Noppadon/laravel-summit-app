@@ -1,0 +1,84 @@
+=================================================================================
+*** Sun สอน และช่วยเพิ่ม และแก้ไข Code วันที่ 21/10/2025 ***
+=================================================================================
+
+1. สอนเรื่อง Created code Eloquent join table ที่ Model Customer, User
+
+2. สอนเรื่อง Created code Eloquent livewire/Customer/CustomerLists.php
+    - คำสั่ง where แบบ function แบบซ้อนกัน where, orWhere, whereHas, when, with, select column
+
+3. สอนเรื่อง แนะนำแก้ไขบางคำสั่ง เป็นเรื่องของ Performance เช่น
+    - Auth::user()->id; แก้ไขเป็น auth()->user()->id;
+
+4. สอนเรื่อง try catch การดักข้อผิดพลาดในขณะ บันทึก หรือ ลบรายการที่มี Transaction อยู่แล้ว
+
+5. สอนเรื่อง return view โดยใช้คำสั่ง compact กรณีไม่ส่งค่าตัวแปรหลายค่า ให้ใช้วิธีนี้
+
+    ใช้คำสั่งนี้ในการโยนค่าตัวแปร customer ไปที่ view เพิ่มแสดงผล
+    - return view('livewire.customer.customer-lists', [
+            'customers' => $customers
+        ]);
+    
+    คิดว่าคำสั่ง compact ใช้ไม่ได้ใน livewire สามารถใช้ได้เหมือนกัน
+    - return view('livewire.customer.customer-lists', compact('customers'));
+
+5. สอนเรื่องการสร้าง Enums เป็นการตั้งค่าคงที่ไว้ตรงส่วนนี้ ทำให้เรียกใช้งานได้ทุกไฟล์ในโปรเจค ลดข้อผิดพลาดในเรื่องของชื่อ
+    - php artisan make:enum Enums/ConnectionSRVEnum
+    - app/Enums/ConnectionSRVEnum.php
+
+6. สอนเรื่อง Observers สร้างไฟล์ และให้โค้ดสร้างเลข Document Number
+    - php artisan make:observer CrmHeaderObserver --model=CrmHeader
+    - app/Observers/CrmHeaderObserver.php
+    - ลงทะเบียนโค๊ดที่ app/Providers/AppserviceProvider.php
+    - public function boot(): void
+      {
+        CrmHeader::observe(CrmHeaderObserver::class);
+      }
+
+7. สอนเรื่องการสร้าง Component Form เพื่อแยกการ Validate input form ออกจาก Code controller
+    - php artisan livewire:form CRMCreateForm
+    - app/livewire/Forms/CRMCreateForm.php
+
+8. สอนเรื่องการสร้างไฟล์ Migration กรณีต้องการเพิ่มเฉพาะบาง Field
+    - php artisan make:migration alter_users_add_role_column
+    - php artisan make:migration alter_crm_headers_add_crm_document_column --table=crm_headers
+
+9. สอนเรื่องการทำ SoftDeleted ยังไม่เสร็จ
+
+
+==============================================================================================
+// stack , heap
+// function =  stack
+// String string , Integer int ,
+// wraper class 
+// DI dependentcy injection
+// data tranfet object
+
+// Product
+// Item
+// Product --> m Item
+// Product ->item  price>500
+// Product::whereHas('items',function($query){$query->where('price',">",500)})->get();
+
+// 1. use SoftDeleted on model 
+// 2. edit migration file
+
+
+
+php artisan make:migration alter_users_add_role_column
+
+php artisan migrate:rollback --path=database\migrations\2025_10_17_093036_alter
+
+php artisan make:migration alter_users_add_role_column
+
+roles
+permissions
+role_has_permission
+permission_has_role
+...
+
+user create , user create,edit
+
+id : 7
+view-product,view-customer
+==============================================================================================

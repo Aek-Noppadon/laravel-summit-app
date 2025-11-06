@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class CrmHeader extends Model
+{
+    use SoftDeletes;
+
+    protected $fillable = [
+        'customer_id',
+        'doc_no',
+        'started_visit_date',
+        'month_estimate_date',
+        'original_month_estimate_date',
+        'customer_type_id',
+        'customer_group_id',
+        'contact',
+        'purpose',
+        'detail',
+        'created_user_id',
+        'updated_user_id',
+    ];
+
+    // public function items()
+    // {
+    //     return $this->hasMany(CrmDetail::class, 'crm_id');
+    // }
+}
