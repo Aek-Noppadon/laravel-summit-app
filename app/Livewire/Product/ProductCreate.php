@@ -22,6 +22,25 @@ class ProductCreate extends Component
     {
         // dd("Save Product");
 
+        $departmentId = auth()->user()->department_id;
+
+        /*
+         * ==================================================
+         Create by Sun 06/11/2025
+         Validate unique product and department befor save
+         * ==================================================
+        */
+        $exists = Product::where('product_name', $this->product_name)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('product_name', 'This Product name has already been taken in your department.');
+            return;
+        }
+        // * ================================================
+
         $this->product_name = Str::trim(Str::upper($this->product_name));
         $this->brand = Str::trim($this->brand);
         $this->supplier_rep = Str::trim($this->supplier_rep);
@@ -29,7 +48,8 @@ class ProductCreate extends Component
 
         $this->validate(
             [
-                'product_name' => 'required|unique:products',
+                // 'product_name' => 'required|unique:products',
+                'product_name' => ['required'],
                 'brand' => 'required',
             ],
             [
