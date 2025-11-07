@@ -30,13 +30,16 @@ class ProductCreate extends Component
          Validate unique product and department befor save
          * ==================================================
         */
+
         $exists = Product::where('product_name', $this->product_name)
+            ->where('source', '0')
+            ->orWhere('product_name', $this->product_name)
             ->whereHas('userCreated', function ($query) use ($departmentId) {
                 $query->where('department_id', $departmentId);
             })->exists();
 
         if ($exists) {
-            $this->addError('product_name', 'This Product name has already been taken in your department.');
+            $this->addError('product_name', 'This Product has already been taken.');
             return;
         }
         // * ================================================
@@ -49,13 +52,14 @@ class ProductCreate extends Component
         $this->validate(
             [
                 // 'product_name' => 'required|unique:products',
-                'product_name' => ['required'],
+                'product_name' => 'required',
                 'brand' => 'required',
             ],
             [
                 'required' => 'The :attribute field is required !!',
                 'unique' => 'The :attribute has already been taken !!',
             ]
+
         );
 
         Product::create(
