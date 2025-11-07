@@ -36,7 +36,6 @@ class CustomerEdit extends Component
         $this->validate(
             [
                 'name_english' => 'required|unique:customers,name_english,' . $this->id,
-                'name_thai' => 'unique:customers,name_thai,' . $this->id,
             ],
             [
                 'required' => 'The customer :attribute field is required !!',
@@ -49,7 +48,7 @@ class CustomerEdit extends Component
         $customer->update([
             'name_english' => $this->name_english,
             'name_thai' => $this->name_thai,
-            'updated_user_id' => Auth::user()->id,
+            'updated_user_id' => auth()->user()->id,
         ]);
 
         $this->dispatch(

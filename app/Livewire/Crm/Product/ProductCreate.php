@@ -19,7 +19,10 @@ class ProductCreate extends Component
 
     public function save()
     {
-        $departmentId = auth()->user()->department_id;
+        $this->product_name = Str::trim(Str::upper($this->product_name));
+        $this->brand = Str::trim($this->brand);
+        $this->supplier_rep = Str::trim($this->supplier_rep);
+        $this->principal = Str::trim($this->principal);
 
         /*
          * =================================================================
@@ -27,6 +30,8 @@ class ProductCreate extends Component
          Validate unique AX product & product and department befor save
          * =================================================================
         */
+
+        $departmentId = auth()->user()->department_id;
 
         $exists = Product::where('product_name', $this->product_name)
             ->where('source', '0')
@@ -39,12 +44,7 @@ class ProductCreate extends Component
             $this->addError('product_name', 'The product has already been taken.');
             return;
         }
-        // * ================================================
-
-        $this->product_name = Str::trim(Str::upper($this->product_name));
-        $this->brand = Str::trim($this->brand);
-        $this->supplier_rep = Str::trim($this->supplier_rep);
-        $this->principal = Str::trim($this->principal);
+        // * ================================================        
 
         $this->validate(
             [

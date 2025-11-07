@@ -3,7 +3,6 @@
 namespace App\Livewire\Crm\Customer;
 
 use App\Models\Customer;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -23,14 +22,33 @@ class CustomerCreate extends Component
         $this->name_english = Str::trim(Str::upper($this->name_english));
         $this->name_thai = Str::trim($this->name_thai);
 
+        /*
+         * =================================================================
+         Create by Aek 06/11/2025
+         Validate unique AX customer & customer and department befor save
+         * =================================================================
+        */
+
+        $departmentId = auth()->user()->department_id;
+
+        $exists = Customer::where('name_english', $this->name_english)
+            ->where('source', '0')
+            ->orWhere('name_english', $this->name_english)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name_english', 'This Customer has already been taken.');
+            return;
+        }
+
         $this->validate(
             [
-                'name_english' => 'required|unique:customers',
-                'name_thai' => 'unique:customers',
+                'name_english' => 'required',
             ],
             [
-                'required' => 'The customer :attribute field is required !!',
-                'unique' => 'The customer :attribute has already been taken !!',
+                'required' => 'The customer :attribute field is required.',
             ]
         );
 
@@ -39,8 +57,8 @@ class CustomerCreate extends Component
                 'name_english' => $this->name_english,
                 'name_thai' => $this->name_thai,
                 'source' => $this->source,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]
         );
 

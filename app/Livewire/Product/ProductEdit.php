@@ -3,7 +3,6 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -56,7 +55,7 @@ class ProductEdit extends Component
             'brand' => $this->brand,
             'supplier_rep' => $this->supplier_rep,
             'principal' => $this->principal,
-            'updated_user_id' => Auth::user()->id,
+            'updated_user_id' => auth()->user()->id,
         ]);
 
         $this->dispatch(

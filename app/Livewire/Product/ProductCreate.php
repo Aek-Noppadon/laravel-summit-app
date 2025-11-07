@@ -3,7 +3,6 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -20,14 +19,19 @@ class ProductCreate extends Component
 
     public function save()
     {
-        $departmentId = auth()->user()->department_id;
+        $this->product_name = Str::trim(Str::upper($this->product_name));
+        $this->brand = Str::trim($this->brand);
+        $this->supplier_rep = Str::trim($this->supplier_rep);
+        $this->principal = Str::trim($this->principal);
 
         /*
          * =================================================================
-         Create by Sun 06/11/2025
+         Create by Aek 06/11/2025
          Validate unique AX product & product and department befor save
          * =================================================================
         */
+
+        $departmentId = auth()->user()->department_id;
 
         $exists = Product::where('product_name', $this->product_name)
             ->where('source', '0')
@@ -40,12 +44,7 @@ class ProductCreate extends Component
             $this->addError('product_name', 'This Product has already been taken.');
             return;
         }
-        // * ================================================
-
-        $this->product_name = Str::trim(Str::upper($this->product_name));
-        $this->brand = Str::trim($this->brand);
-        $this->supplier_rep = Str::trim($this->supplier_rep);
-        $this->principal = Str::trim($this->principal);
+        // * ================================================   
 
         $this->validate(
             [
@@ -54,7 +53,6 @@ class ProductCreate extends Component
             ],
             [
                 'required' => 'The :attribute field is required !!',
-                'unique' => 'The :attribute has already been taken !!',
             ]
 
         );
@@ -67,8 +65,8 @@ class ProductCreate extends Component
                 'principal' => $this->principal,
                 'status' => $this->status,
                 'source' => $this->source,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]
         );
 
