@@ -20,15 +20,13 @@ class ProductCreate extends Component
 
     public function save()
     {
-        // dd("Save Product");
-
         $departmentId = auth()->user()->department_id;
 
         /*
-         * ==================================================
+         * =================================================================
          Create by Sun 06/11/2025
-         Validate unique product and department befor save
-         * ==================================================
+         Validate unique AX product & product and department befor save
+         * =================================================================
         */
 
         $exists = Product::where('product_name', $this->product_name)
@@ -51,7 +49,6 @@ class ProductCreate extends Component
 
         $this->validate(
             [
-                // 'product_name' => 'required|unique:products',
                 'product_name' => 'required',
                 'brand' => 'required',
             ],

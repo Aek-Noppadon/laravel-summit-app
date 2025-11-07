@@ -3,9 +3,7 @@
 namespace App\Livewire\Crm\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -21,54 +19,42 @@ class ProductCreate extends Component
 
     public function save()
     {
-        // dd("Save ");
+        $departmentId = auth()->user()->department_id;
+
+        /*
+         * =================================================================
+         Create by Sun 06/11/2025
+         Validate unique AX product & product and department befor save
+         * =================================================================
+        */
+
+        $exists = Product::where('product_name', $this->product_name)
+            ->where('source', '0')
+            ->orWhere('product_name', $this->product_name)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('product_name', 'The product has already been taken.');
+            return;
+        }
+        // * ================================================
 
         $this->product_name = Str::trim(Str::upper($this->product_name));
         $this->brand = Str::trim($this->brand);
         $this->supplier_rep = Str::trim($this->supplier_rep);
         $this->principal = Str::trim($this->principal);
 
-        $departmentId = auth()->user()->department_id;
-        // dd($departmentId);
-
-        // $this->id = auth()->user()->id;
-        // $this->created_user_id = "";
-
-        // dd($this->product_name . $this->brand . $this->supplier_rep . $this->principal);
-
-
-        // dd($product);
-
-        $unique_rule = Rule::unique('products')
-            ->where(function ($productQuery) use ($departmentId) {
-                $productQuery
-                    ->where('product_name', $this->product_name)
-                    ->whereHas('userCreated.department', function ($query) use ($departmentId) {
-                        $query->where('id', $departmentId);
-                    });
-            });
-
         $this->validate(
             [
-                'product_name' => ['required', $unique_rule],
+                'product_name' => 'required',
                 'brand' => 'required',
             ],
             [
-                'required' => 'The :attribute field is required !!',
-                'unique' => 'The :attribute has already been taken !!',
+                'required' => 'The :attribute field is required.',
             ]
         );
-
-        // $this->validate(
-        //     [
-        //         'product_name' => 'required|unique:products',
-        //         'brand' => 'required',
-        //     ],
-        //     [
-        //         'required' => 'The :attribute field is required !!',
-        //         'unique' => 'The :attribute has already been taken !!',
-        //     ]
-        // );
 
         Product::create(
             [
@@ -78,8 +64,8 @@ class ProductCreate extends Component
                 'principal' => $this->principal,
                 'status' => $this->status,
                 'source' => $this->source,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]
         );
 

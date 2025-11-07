@@ -26,7 +26,7 @@
                                         <input id="product_name" wire:model="product_name" type="text"
                                             class="form-control @error('product_name') is-invalid @enderror">
                                         @error('product_name')
-                                            <span class="text-danger">{{ $message }} - </span>
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                         @error('id')
                                             <span class="text-danger">{{ $message }}</span>
