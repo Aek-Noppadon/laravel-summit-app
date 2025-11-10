@@ -27,4 +27,9 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'updated_user_id');
     }
+
+    // public function setProductNameAttribute($value)
+    // {
+    //     $this->attributes['product_name'] = strtoupper(trim($value));
+    // }
 }

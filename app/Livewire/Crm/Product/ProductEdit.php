@@ -30,12 +30,10 @@ class ProductEdit extends Component
 
     public function save()
     {
-        // dd("Save edit");
-
-        $this->product_name = Str::trim(Str::upper($this->product_name));
-        $this->brand = Str::trim($this->brand);
-        $this->supplier_rep = Str::trim($this->supplier_rep);
-        $this->principal = Str::trim($this->principal);
+        $this->product_name = strtoupper(trim($this->product_name));
+        $this->brand = strtoupper(trim($this->brand));
+        $this->supplier_rep = strtoupper(trim($this->supplier_rep));
+        $this->principal = strtoupper(trim($this->principal));
 
         $this->validate(
             [
