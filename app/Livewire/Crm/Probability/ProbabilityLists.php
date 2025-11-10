@@ -13,6 +13,7 @@ class ProbabilityLists extends Component
     public $search;
     public $pagination = 20;
 
+    #[On('refresh-probability')]
     public function render()
     {
         if (is_null($this->search)) {
