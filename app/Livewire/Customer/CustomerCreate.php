@@ -21,8 +21,8 @@ class CustomerCreate extends Component
 
     public function save()
     {
-        $this->name_english = Str::trim(Str::upper($this->name_english));
-        $this->name_thai = Str::trim($this->name_thai);
+        $this->name_english = strtoupper(trim($this->name_english));
+        $this->name_thai = strtoupper(trim($this->name_thai));
 
         /*
          * =================================================================
