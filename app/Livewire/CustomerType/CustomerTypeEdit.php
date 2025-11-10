@@ -3,8 +3,6 @@
 namespace App\Livewire\CustomerType;
 
 use App\Models\CustomerType;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -28,7 +26,7 @@ class CustomerTypeEdit extends Component
 
     public function save()
     {
-        $this->name = Str::trim($this->name);
+        $this->name = trim($this->name);
 
         $this->validate(
             [
@@ -44,7 +42,7 @@ class CustomerTypeEdit extends Component
 
         $customer_type->update([
             'name' => $this->name,
-            'updated_user_id' => Auth::user()->id,
+            'updated_user_id' => auth()->user()->id,
         ]);
 
         $this->dispatch(
