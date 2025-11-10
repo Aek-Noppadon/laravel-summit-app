@@ -28,7 +28,7 @@ class ApplicationEdit extends Component
 
     public function save()
     {
-        $this->name = Str::trim($this->name);
+        $this->name = trim($this->name);
 
         $this->validate(
             [
@@ -44,7 +44,7 @@ class ApplicationEdit extends Component
 
         $application->update([
             'name' => $this->name,
-            'updated_user_id' => Auth::user()->id,
+            'updated_user_id' => auth()->user()->id,
         ]);
 
         $this->dispatch(

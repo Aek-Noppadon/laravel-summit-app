@@ -3,8 +3,6 @@
 namespace App\Livewire\Application;
 
 use App\Models\Application;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -19,9 +17,7 @@ class ApplicationCreate extends Component
 
     public function save()
     {
-        // dd("Save");
-
-        $this->name = Str::trim($this->name);
+        $this->name = trim($this->name);
 
         $this->validate(
             [
@@ -36,8 +32,8 @@ class ApplicationCreate extends Component
         Application::create(
             [
                 'name' => $this->name,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]
         );
 
