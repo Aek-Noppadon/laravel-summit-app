@@ -3,8 +3,6 @@
 namespace App\Livewire\Probability;
 
 use App\Models\Probability;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
