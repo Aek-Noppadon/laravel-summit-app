@@ -707,6 +707,9 @@
                 @livewire('crm.application.application-lists')
                 <!-- ./Application List Component -->
 
+                <!-- Probability List Component -->
+                @livewire('crm.probability.probability-lists')
+                <!-- ./Probability List Component -->
 
             </form>
 
