@@ -30,4 +30,24 @@ class CRMCreateForm extends Form
 
     #[Validate('required', message: 'Purpose field is required.')]
     public $purpose;
+
+    public $productName;
+
+    public $inputs = [
+        [
+            'productName' => '',
+            'updateVisit' => '',
+            'salesStage' => '',
+        ]
+
+    ];
+
+    public function rules(): array
+    {
+        return [
+            'inputs.*.productName' => 'required',
+            'inputs.*.updateVisit' => 'required',
+            'inputs.*.salesStage' => 'required',
+        ];
+    }
 }

@@ -31,12 +31,6 @@
                 <!-- Customer Header -->
                 <div class="card-body">
 
-                    {{-- @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif --}}
-
                     <!-- CRM Header ID, Created Date, Updated Date -->
                     @isset($crmHeader_id)
                         <div class="row">
@@ -79,18 +73,18 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label for="customerCode" class="form-label">Customer Code</label>
-                                <input id="customerCode" wire:model="crmCreateForm.customerCode" type="text"
-                                    class="form-control" disabled readonly>
+                                <input id="customerCode" wire:model="customerCode" type="text" class="form-control"
+                                    disabled readonly>
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="form-group">
                                 <label for="customerNameEng" class="form-label">Customer Name ENG.</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="customerNameEng" wire:model="crmCreateForm.customerNameEng" type="text"
-                                    class="form-control @error('crmCreateForm.customerNameEng') is-invalid @enderror"
-                                    disabled readonly>
-                                @error('crmCreateForm.customerNameEng')
+                                <input id="customerNameEng" wire:model="customerNameEng" type="text"
+                                    class="form-control @error('customerNameEng') is-invalid @enderror" disabled
+                                    readonly>
+                                @error('customerNameEng')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
 
@@ -99,7 +93,7 @@
                         <div class="col-5">
                             <div class="form-group">
                                 <label for="customerNameThi" class="form-label">Customer Name THI.</label>
-                                <input id="customerNameThi" wire:model='crmCreateForm.customerNameThi' type="text"
+                                <input id="customerNameThi" wire:model='customerNameThi' type="text"
                                     class="form-control" disabled readonly>
                             </div>
                         </div>
@@ -112,9 +106,9 @@
                             <div class="form-group">
                                 <label for="startVisit" class="form-label">Start Visit</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="startVisit" wire:model="crmCreateForm.startVisit" type="date"
-                                    class="form-control @error('crmCreateForm.startVisit') is-invalid @enderror">
-                                @error('crmCreateForm.startVisit')
+                                <input id="startVisit" wire:model="startVisit" type="date"
+                                    class="form-control @error('startVisit') is-invalid @enderror">
+                                @error('startVisit')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -123,9 +117,9 @@
                             <div class="form-group">
                                 <label for="monthEstimate" class="form-label">Month Estimate</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="monthEstimate" wire:model="crmCreateForm.monthEstimate" type="date"
-                                    class="form-control @error('crmCreateForm.monthEstimate') is-invalid @enderror">
-                                @error('crmCreateForm.monthEstimate')
+                                <input id="monthEstimate" wire:model="monthEstimate" type="date"
+                                    class="form-control @error('monthEstimate') is-invalid @enderror">
+                                @error('monthEstimate')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -145,15 +139,15 @@
                                 <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
                                     style="width: 1.2rem;height:1.2rem" role="status">
                                 </div>
-                                <select id="customerType" wire:model="crmCreateForm.customerType"
+                                <select id="customerType" wire:model="customerType"
                                     wire:focus.debounce.1000ms="selectedCustomerType"
-                                    class="form-control @error('crmCreateForm.customerType') is-invalid @enderror">
+                                    class="form-control @error('customerType') is-invalid @enderror">
                                     <option value="">-- Select --</option>
                                     @foreach ($customerTypes as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('crmCreateForm.customerType')
+                                @error('customerType')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -174,7 +168,7 @@
                                     class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                     role="status">
                                 </div>
-                                <select id="customerGroup" wire:model="crmCreateForm.customerGroup"
+                                <select id="customerGroup" wire:model="customerGroup"
                                     wire:focus.debounce.1000ms="selectedCustomerGroup" class="form-control">
                                     <option value="">-- Select --</option>
                                     @foreach ($customerGroups as $item)
@@ -192,9 +186,9 @@
                             <div class="form-group">
                                 <label for="contact" class="form-label">Contact Person</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="contact" wire:model="crmCreateForm.contact" type="text"
-                                    class="form-control @error('crmCreateForm.contact') is-invalid @enderror">
-                                @error('crmCreateForm.contact')
+                                <input id="contact" wire:model="contact" type="text"
+                                    class="form-control @error('contact') is-invalid @enderror">
+                                @error('contact')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -208,9 +202,9 @@
                             <div class="form-group">
                                 <label for="purpose" class="form-label">Purpose</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <textarea id="purpose" wire:model="crmCreateForm.purpose"
-                                    class="form-control @error('crmCreateForm.purpose') is-invalid @enderror" cols="30" rows="5"></textarea>
-                                @error('crmCreateForm.purpose')
+                                <textarea id="purpose" wire:model="purpose" class="form-control @error('purpose') is-invalid @enderror"
+                                    cols="30" rows="5"></textarea>
+                                @error('purpose')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -219,7 +213,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="detail" class="form-label">Detail</label>
-                                <textarea id="detail" wire:model="crmCreateForm.detail" class="form-control" cols="30" rows="5"></textarea>
+                                <textarea id="detail" wire:model="detail" class="form-control" cols="30" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -374,10 +368,12 @@
                                         class="form-control" disabled readonly>
                                 </div>
                             </div> --}}
+                            {{-- wire:model="form.inputs.{{ $index }}.productName" --}}
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.productName" class="form-label">Product
-                                        Name</label>
+                                    <label for="inputs.{{ $key }}.productName" class="form-label">
+                                        Product Name
+                                    </label>
                                     <span class="text-danger font-weight-bold">*</span>
                                     <input id="inputs.{{ $key }}.productName"
                                         wire:model="inputs.{{ $key }}.productName" type="text"
@@ -395,8 +391,9 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.productBrand" class="form-label">Brand
-                                        Name</label>
+                                    <label for="inputs.{{ $key }}.productBrand" class="form-label">
+                                        Brand Name
+                                    </label>
                                     <span class="text-danger font-weight-bold">*</span>
                                     <input id="inputs.{{ $key }}.productBrand"
                                         wire:model="inputs.{{ $key }}.productBrand" type="text"
@@ -409,8 +406,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.supplierRep" class="form-label">Supplier
-                                        Rep.</label>
+                                    <label for="inputs.{{ $key }}.supplierRep" class="form-label">
+                                        Supplier Rep.
+                                    </label>
                                     <input id="inputs.{{ $key }}.supplierRep"
                                         wire:model="inputs.{{ $key }}.supplierRep" type="text"
                                         class="form-control" disabled readonly>
@@ -418,8 +416,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.principal"
-                                        class="form-label">Principle</label>
+                                    <label for="inputs.{{ $key }}.principal" class="form-label">
+                                        Principle
+                                    </label>
                                     <input id="inputs.{{ $key }}.principal"
                                         wire:model="inputs.{{ $key }}.principal" type="text"
                                         class="form-control" disabled readonly>
@@ -432,8 +431,9 @@
                         <div class="row">
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.updateVisit" class="form-label">Update
-                                        Visit</label>
+                                    <label for="inputs.{{ $key }}.updateVisit" class="form-label">
+                                        Update Visit
+                                    </label>
                                     <span class="text-danger font-weight-bold">*</span>
                                     <input id="inputs.{{ $key }}.updateVisit"
                                         wire:model="inputs.{{ $key }}.updateVisit" type="date"
@@ -533,8 +533,9 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.quantity"
-                                        class="form-label">Quantity</label>
+                                    <label for="inputs.{{ $key }}.quantity" class="form-label">
+                                        Quantity
+                                    </label>
                                     <input id="inputs.{{ $key }}.quantity"
                                         wire:model="inputs.{{ $key }}.quantity" step="any"
                                         wire:keyup.debounce.1000ms="sumRow({{ $key }})"
@@ -544,8 +545,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.unitPrice" class="form-label">Unit
-                                        Price</label>
+                                    <label for="inputs.{{ $key }}.unitPrice" class="form-label">
+                                        Unit Price
+                                    </label>
                                     <input id="inputs.{{ $key }}.unitPrice"
                                         wire:model="inputs.{{ $key }}.unitPrice" step="any"
                                         wire:keyup.debounce.1000ms="sumRow({{ $key }})"
@@ -555,8 +557,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.totalPrice" class="form-label">Total
-                                        Price</label>
+                                    <label for="inputs.{{ $key }}.totalPrice" class="form-label">
+                                        Total Price
+                                    </label>
                                     <input id="inputs.{{ $key }}.totalPrice"
                                         wire:model="inputs.{{ $key }}.totalPrice" type="text"
                                         class="form-control" disabled readonly>
@@ -569,8 +572,9 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.packingUnit" class="form-label">Packing
-                                        Unit</label>
+                                    <label for="inputs.{{ $key }}.packingUnit" class="form-label">
+                                        Packing Unit
+                                    </label>
                                     <div wire:loading wire:target="selectedPackingUnit"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
@@ -587,8 +591,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.volumnQty" class="form-label">Volumn
-                                        QTY.</label>
+                                    <label for="inputs.{{ $key }}.volumnQty" class="form-label">
+                                        Volumn QTY.
+                                    </label>
                                     <input id="inputs.{{ $key }}.volumnQty" type="number"
                                         class="form-control" step="any"
                                         wire:model="inputs.{{ $key }}.volumnQty">
@@ -596,8 +601,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.volumnUnit" class="form-label">Volumn
-                                        Unit</label>
+                                    <label for="inputs.{{ $key }}.volumnUnit" class="form-label">
+                                        Volumn Unit
+                                    </label>
                                     <div wire:loading wire:target="selectedVolumnUnit"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
@@ -619,22 +625,20 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.additional" class="form-label">Additional
-                                        Information</label>
-                                    {{-- <span class="text-danger">*</span> --}}
+                                    <label for="inputs.{{ $key }}.additional" class="form-label">
+                                        Additional Information
+                                    </label>
                                     <textarea id="inputs.{{ $key }}.additional" wire:model="inputs.{{ $key }}.additional"
                                         class="form-control @error('inputs.' . $key . '.additional') is-invalid @enderror" cols="30"
                                         rows="5"></textarea>
-                                    {{-- @error('inputs.' . $key . '.additional')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror --}}
                                 </div>
                             </div>
 
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.competitor" class="form-label">Competitor
-                                        Situation</label>
+                                    <label for="inputs.{{ $key }}.competitor" class="form-label">
+                                        Competitor Situation
+                                    </label>
                                     <textarea id="inputs.{{ $key }}.competitor" wire:model="inputs.{{ $key }}.competitor"
                                         class="form-control" cols="30" rows="5"></textarea>
                                 </div>

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Crm;
 
-use App\Livewire\Forms\CRMCreateForm;
+// use App\Livewire\Forms\CRMCreateForm;
 use App\Models\Application;
 use App\Models\CrmDetail;
 use App\Models\CrmHeader;
@@ -25,7 +25,7 @@ use Livewire\Component;
 
 class CrmCreate extends Component
 {
-    public CRMCreateForm $crmCreateForm;
+    // public CRMCreateForm $crmCreateForm;
     // Variables for fetching values ​​from the database
     public $customerTypes, $customerGroups, $salesStages, $probabilities, $applications, $packingUnits, $volumnUnits;
     // Variables for form inputs
@@ -114,8 +114,8 @@ class CrmCreate extends Component
 
             // dd($this->inputs);
         } else {
-            $this->crmCreateForm->startVisit = Carbon::now()->toDateString();
-            $this->crmCreateForm->monthEstimate = Carbon::now()->toDateString();
+            $this->startVisit = Carbon::now()->toDateString();
+            $this->monthEstimate = Carbon::now()->toDateString();
         }
 
         $this->salesStages = SalesStage::all();
@@ -157,9 +157,9 @@ class CrmCreate extends Component
             ]);
         }
 
-        $this->crmCreateForm->customerCode = $customer->code;
-        $this->crmCreateForm->customerNameEng = $customer->name_english;
-        $this->crmCreateForm->customerNameThi = $customer->name_thai;
+        $this->customerCode = $customer->code;
+        $this->customerNameEng = $customer->name_english;
+        $this->customerNameThi = $customer->name_thai;
 
         $this->dispatch(
             "toastr.success",
@@ -291,6 +291,11 @@ class CrmCreate extends Component
         $this->productBrand = $product->brand;
         $this->supplierRep = $product->supplier_rep;
         $this->principal = $product->principal;
+
+        // $this->productName = $product->product_name;
+        // $this->productBrand = $product->brand;
+        // $this->supplierRep = $product->supplier_rep;
+        // $this->principal = $product->principal;
 
         if (!empty($this->checkProduct) && in_array($this->productName, $this->checkProduct)) {
             $this->dispatch(
@@ -530,46 +535,40 @@ class CrmCreate extends Component
     public function save()
     {
 
-        $this->crmCreateForm->validate();
+        // $this->crmCreateForm->validate();
 
-        // $this->validate(
-        //     [
-        //         // Customers header
-        //         // 'customerCode' => 'required',
-        //         'customerNameEng' => 'required',
-        //         // 'customerNameThi' => 'required',
-        //         'startVisit' => 'required',
-        //         'monthEstimate' => 'required',
-        //         'customerType' => 'required',
-        //         'contact' => 'required',
-        //         'purpose' => 'required',
-        //         // Products detail
-        //         'inputs.*.productName' => 'required',
-        //         'inputs.*.productBrand' => 'required',
-        //         'inputs.*.updateVisit' => 'required',
-        //         'inputs.*.salesStage' => 'required',
-        //         'inputs.*.probability' => 'required',
-        //         // 'inputs.*.additional' => 'required',
-        //     ],
-        //     [
-        //         // Customers header
-        //         // 'customerCode' => 'Customer code field is required',
-        //         'customerNameEng' => 'Customer name Eng. field is required',
-        //         // 'customerNameThi' => 'Customer name Thi. field is required',
-        //         'startVisit' => 'Start visit date field is required',
-        //         'monthEstimate' => 'Month estimate field is required',
-        //         'customerType' => 'Customer type field is required',
-        //         'contact' => 'Contact field is required',
-        //         'purpose' => 'Purpose field is required',
-        //         // Products detail
-        //         'inputs.*.productName.required' => 'Product name field is required',
-        //         'inputs.*.productBrand.required' => 'Product brand field is required',
-        //         'inputs.*.updateVisit.required' => 'Update visit date field is required',
-        //         'inputs.*.salesStage.required' => 'Sales state field is required',
-        //         'inputs.*.probability.required' => 'Probability field is required',
-        //         // 'inputs.*.additional.required' => 'Additional field is required',
-        //     ]
-        // );
+        $this->validate(
+            [
+                // Validate CRM Headers.                
+                'customerNameEng' => 'required',
+                'startVisit' => 'required',
+                'monthEstimate' => 'required',
+                'customerType' => 'required',
+                'contact' => 'required',
+                'purpose' => 'required',
+                // Validate CRM Details
+                'inputs.*.productName' => 'required',
+                'inputs.*.productBrand' => 'required',
+                'inputs.*.updateVisit' => 'required',
+                'inputs.*.salesStage' => 'required',
+                'inputs.*.probability' => 'required',
+            ],
+            [
+                // Validate message CRM Headers.               
+                'customerNameEng' => 'Customer name Eng. field is required.',
+                'startVisit' => 'Start visit date field is required.',
+                'monthEstimate' => 'Month estimate field is required.',
+                'customerType' => 'Customer type field is required.',
+                'contact' => 'Contact person field is required.',
+                'purpose' => 'Purpose field is required.',
+                // Validate CRM Details message.
+                'inputs.*.productName.required' => 'Product name field is required.',
+                'inputs.*.productBrand.required' => 'Brand name field is required.',
+                'inputs.*.updateVisit.required' => 'Update visit date field is required.',
+                'inputs.*.salesStage.required' => 'Sales stage field is required.',
+                'inputs.*.probability.required' => 'Probability field is required.',
+            ]
+        );
 
         // dd($this->startVisit . " " . date('H:i:s'));
 
