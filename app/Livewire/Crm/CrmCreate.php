@@ -308,9 +308,6 @@ class CrmCreate extends Component
 
         $this->inputs[] = [
             'crmDetail_id' => $this->crmDetail_id,
-            // 'productName' => $product->productName,
-            // 'productBrand' => $product->productBrand,
-            // 'supplierRep' => $product->supplierRep,
             'productName' => $this->productName,
             'productBrand' => $this->productBrand,
             'supplierRep' => $this->supplierRep,
