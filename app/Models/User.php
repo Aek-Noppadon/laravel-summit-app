@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class, 'department_id');
     }
 
+    public function customers()
+    {
+        return $this->hasMany(Customer::class, 'created_user_id');
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class, 'created_user_id');

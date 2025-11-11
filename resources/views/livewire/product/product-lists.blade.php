@@ -82,42 +82,48 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($products as $product)
+                        @foreach ($products as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($product->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($product->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}</small>
+                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                                        , {{ $item->userCreated->name }}
+                                    </small>
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($product->updated_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($product->updated_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($product->updated_at)->diffForHumans() }}</small>
+                                <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
+                                    {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
+                                        , {{ $item->userUpdated->name }}
+                                    </small>
                                 </td>
                                 <td>
-                                    @if ($product->source === '0')
+                                    @if ($item->source === '0')
                                         <span class="badge badge-pill badge-info">
                                             AX
                                         </span>
                                     @endif
                                 </td>
-                                <td>{{ $product->id }}</td>
-                                <td>{{ $product->code }}</td>
-                                <td>{{ $product->product_name }}</td>
-                                <td>{{ $product->brand }}</td>
-                                <td>{{ $product->supplier_rep }}</td>
-                                <td>{{ $product->principal }}</td>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->product_name }}</td>
+                                <td>{{ $item->brand }}</td>
+                                <td>{{ $item->supplier_rep }}</td>
+                                <td>{{ $item->principal }}</td>
                                 <td>
-                                    @if ($product->source === '1')
-                                        <button wire:click.prevent="$dispatch('edit-product',{id:{{ $product->id }}})"
+                                    @if ($item->source === '1')
+                                        <button wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                             data-target="#modal-edit-product">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button
-                                            wire:click.prevent="deleteProduct({{ $product->id }},{{ "'" . str_replace("'", '', $product->product_name) . "'" }})"
-                                            {{-- wire:click.prevent="deleteProduct({{ $product->id }},{{ "'" . $product->product_name . "'" }})" --}} class="btn btn-sm btn-danger">
+                                            wire:click.prevent="deleteProduct({{ $item->id }},{{ "'" . str_replace("'", '', $item->product_name) . "'" }})"
+                                            {{-- wire:click.prevent="deleteitem({{ $item->id }},{{ "'" . $item->product_name . "'" }})" --}} class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     @endif
