@@ -114,8 +114,8 @@ class CrmCreate extends Component
 
             // dd($this->inputs);
         } else {
-            $this->startVisit = Carbon::now()->toDateString();
-            $this->monthEstimate = Carbon::now()->toDateString();
+            $this->crmCreateForm->startVisit = Carbon::now()->toDateString();
+            $this->crmCreateForm->monthEstimate = Carbon::now()->toDateString();
         }
 
         $this->salesStages = SalesStage::all();
@@ -149,17 +149,17 @@ class CrmCreate extends Component
 
         if ($customer_ax) {
             $customer->update([
-                'name_english' => Str::upper($customer_ax->CustomerNameEng),
+                'name_english' => strtoupper($customer_ax->CustomerNameEng),
                 'name_thai' => $customer_ax->CustomerNameThi,
                 'parent_code' => $customer_ax->ParentCode,
-                'parent_name' => Str::upper($customer_ax->ParentName),
+                'parent_name' => strtoupper($customer_ax->ParentName),
                 'updated_user_id' => Auth::user()->id,
             ]);
         }
 
-        $this->customerCode = $customer->code;
-        $this->customerNameEng = $customer->name_english;
-        $this->customerNameThi = $customer->name_thai;
+        $this->crmCreateForm->customerCode = $customer->code;
+        $this->crmCreateForm->customerNameEng = $customer->name_english;
+        $this->crmCreateForm->customerNameThi = $customer->name_thai;
 
         $this->dispatch(
             "toastr.success",
@@ -181,8 +181,6 @@ class CrmCreate extends Component
 
         $customer_ax = SrvCustomer::where('CustomerCode', $id)
             ->first();
-
-        // dd($customer_ax);
 
         // ตรวจสอบรหัสลูกค้าว่ามีใน Database ไหม
         $customer = Customer::where('code', $id)
@@ -532,45 +530,46 @@ class CrmCreate extends Component
     public function save()
     {
 
-        // $this->crmCreateForm->validate();
-        $this->validate(
-            [
-                // Customers header
-                // 'customerCode' => 'required',
-                'customerNameEng' => 'required',
-                // 'customerNameThi' => 'required',
-                'startVisit' => 'required',
-                'monthEstimate' => 'required',
-                'customerType' => 'required',
-                'contact' => 'required',
-                'purpose' => 'required',
-                // Products detail
-                'inputs.*.productName' => 'required',
-                'inputs.*.productBrand' => 'required',
-                'inputs.*.updateVisit' => 'required',
-                'inputs.*.salesStage' => 'required',
-                'inputs.*.probability' => 'required',
-                // 'inputs.*.additional' => 'required',
-            ],
-            [
-                // Customers header
-                // 'customerCode' => 'Customer code field is required',
-                'customerNameEng' => 'Customer name Eng. field is required',
-                // 'customerNameThi' => 'Customer name Thi. field is required',
-                'startVisit' => 'Start visit date field is required',
-                'monthEstimate' => 'Month estimate field is required',
-                'customerType' => 'Customer type field is required',
-                'contact' => 'Contact field is required',
-                'purpose' => 'Purpose field is required',
-                // Products detail
-                'inputs.*.productName.required' => 'Product name field is required',
-                'inputs.*.productBrand.required' => 'Product brand field is required',
-                'inputs.*.updateVisit.required' => 'Update visit date field is required',
-                'inputs.*.salesStage.required' => 'Sales state field is required',
-                'inputs.*.probability.required' => 'Probability field is required',
-                // 'inputs.*.additional.required' => 'Additional field is required',
-            ]
-        );
+        $this->crmCreateForm->validate();
+
+        // $this->validate(
+        //     [
+        //         // Customers header
+        //         // 'customerCode' => 'required',
+        //         'customerNameEng' => 'required',
+        //         // 'customerNameThi' => 'required',
+        //         'startVisit' => 'required',
+        //         'monthEstimate' => 'required',
+        //         'customerType' => 'required',
+        //         'contact' => 'required',
+        //         'purpose' => 'required',
+        //         // Products detail
+        //         'inputs.*.productName' => 'required',
+        //         'inputs.*.productBrand' => 'required',
+        //         'inputs.*.updateVisit' => 'required',
+        //         'inputs.*.salesStage' => 'required',
+        //         'inputs.*.probability' => 'required',
+        //         // 'inputs.*.additional' => 'required',
+        //     ],
+        //     [
+        //         // Customers header
+        //         // 'customerCode' => 'Customer code field is required',
+        //         'customerNameEng' => 'Customer name Eng. field is required',
+        //         // 'customerNameThi' => 'Customer name Thi. field is required',
+        //         'startVisit' => 'Start visit date field is required',
+        //         'monthEstimate' => 'Month estimate field is required',
+        //         'customerType' => 'Customer type field is required',
+        //         'contact' => 'Contact field is required',
+        //         'purpose' => 'Purpose field is required',
+        //         // Products detail
+        //         'inputs.*.productName.required' => 'Product name field is required',
+        //         'inputs.*.productBrand.required' => 'Product brand field is required',
+        //         'inputs.*.updateVisit.required' => 'Update visit date field is required',
+        //         'inputs.*.salesStage.required' => 'Sales state field is required',
+        //         'inputs.*.probability.required' => 'Probability field is required',
+        //         // 'inputs.*.additional.required' => 'Additional field is required',
+        //     ]
+        // );
 
         // dd($this->startVisit . " " . date('H:i:s'));
 

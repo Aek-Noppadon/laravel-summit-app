@@ -79,36 +79,28 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label for="customerCode" class="form-label">Customer Code</label>
-                                <span class="text-danger font-weight-bold">*</span>
-                                <input id="customerCode" wire:model="customerCode" type="text"
-                                    class="form-control @error('customerCode') is-invalid @enderror" disabled readonly>
-                                @error('customerCode')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <input id="customerCode" wire:model="crmCreateForm.customerCode" type="text"
+                                    class="form-control" disabled readonly>
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="form-group">
                                 <label for="customerNameEng" class="form-label">Customer Name ENG.</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="customerNameEng" wire:model="customerNameEng" type="text"
-                                    class="form-control @error('customerNameEng') is-invalid @enderror" disabled
-                                    readonly>
-                                @error('customerNameEng')
+                                <input id="customerNameEng" wire:model="crmCreateForm.customerNameEng" type="text"
+                                    class="form-control @error('crmCreateForm.customerNameEng') is-invalid @enderror"
+                                    disabled readonly>
+                                @error('crmCreateForm.customerNameEng')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="form-group">
                                 <label for="customerNameThi" class="form-label">Customer Name THI.</label>
-                                <span class="text-danger font-weight-bold">*</span>
-                                <input id="customerNameThi" wire:model='customerNameThi' type="text"
-                                    class="form-control @error('customerNameThi') is-invalid @enderror" disabled
-                                    readonly>
-                                @error('customerNameThi')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <input id="customerNameThi" wire:model='crmCreateForm.customerNameThi' type="text"
+                                    class="form-control" disabled readonly>
                             </div>
                         </div>
                     </div>
@@ -120,9 +112,9 @@
                             <div class="form-group">
                                 <label for="startVisit" class="form-label">Start Visit</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="startVisit" wire:model="startVisit" type="date"
-                                    class="form-control @error('startVisit') is-invalid @enderror">
-                                @error('startVisit')
+                                <input id="startVisit" wire:model="crmCreateForm.startVisit" type="date"
+                                    class="form-control @error('crmCreateForm.startVisit') is-invalid @enderror">
+                                @error('crmCreateForm.startVisit')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -131,9 +123,9 @@
                             <div class="form-group">
                                 <label for="monthEstimate" class="form-label">Month Estimate</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="monthEstimate" wire:model="monthEstimate" type="date"
-                                    class="form-control @error('monthEstimate') is-invalid @enderror">
-                                @error('monthEstimate')
+                                <input id="monthEstimate" wire:model="crmCreateForm.monthEstimate" type="date"
+                                    class="form-control @error('crmCreateForm.monthEstimate') is-invalid @enderror">
+                                @error('crmCreateForm.monthEstimate')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -153,15 +145,15 @@
                                 <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
                                     style="width: 1.2rem;height:1.2rem" role="status">
                                 </div>
-                                <select id="customerType" wire:model="customerType"
+                                <select id="customerType" wire:model="crmCreateForm.customerType"
                                     wire:focus.debounce.1000ms="selectedCustomerType"
-                                    class="form-control @error('customerType') is-invalid @enderror">
+                                    class="form-control @error('crmCreateForm.customerType') is-invalid @enderror">
                                     <option value="">-- Select --</option>
                                     @foreach ($customerTypes as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('customerType')
+                                @error('crmCreateForm.customerType')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -182,7 +174,7 @@
                                     class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                     role="status">
                                 </div>
-                                <select id="customerGroup" wire:model="customerGroup"
+                                <select id="customerGroup" wire:model="crmCreateForm.customerGroup"
                                     wire:focus.debounce.1000ms="selectedCustomerGroup" class="form-control">
                                     <option value="">-- Select --</option>
                                     @foreach ($customerGroups as $item)
@@ -200,9 +192,9 @@
                             <div class="form-group">
                                 <label for="contact" class="form-label">Contact Person</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="contact" wire:model="contact" type="text"
-                                    class="form-control @error('contact') is-invalid @enderror">
-                                @error('contact')
+                                <input id="contact" wire:model="crmCreateForm.contact" type="text"
+                                    class="form-control @error('crmCreateForm.contact') is-invalid @enderror">
+                                @error('crmCreateForm.contact')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -216,9 +208,9 @@
                             <div class="form-group">
                                 <label for="purpose" class="form-label">Purpose</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <textarea id="purpose" wire:model="purpose" class="form-control @error('purpose') is-invalid @enderror"
-                                    cols="30" rows="5"></textarea>
-                                @error('purpose')
+                                <textarea id="purpose" wire:model="crmCreateForm.purpose"
+                                    class="form-control @error('crmCreateForm.purpose') is-invalid @enderror" cols="30" rows="5"></textarea>
+                                @error('crmCreateForm.purpose')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -227,7 +219,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="detail" class="form-label">Detail</label>
-                                <textarea id="detail" wire:model="detail" class="form-control" cols="30" rows="5"></textarea>
+                                <textarea id="detail" wire:model="crmCreateForm.detail" class="form-control" cols="30" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
