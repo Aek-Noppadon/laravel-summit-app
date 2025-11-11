@@ -292,11 +292,6 @@ class CrmCreate extends Component
         $this->supplierRep = $product->supplier_rep;
         $this->principal = $product->principal;
 
-        // $this->productName = $product->product_name;
-        // $this->productBrand = $product->brand;
-        // $this->supplierRep = $product->supplier_rep;
-        // $this->principal = $product->principal;
-
         if (!empty($this->checkProduct) && in_array($this->productName, $this->checkProduct)) {
             $this->dispatch(
                 "sweet.success",
