@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Product::class, 'created_user_id');
     }
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'created_user_id');
+    }
+
     // Created by Sun 20/10/2025
     // public function createdCustomers()
     // {
