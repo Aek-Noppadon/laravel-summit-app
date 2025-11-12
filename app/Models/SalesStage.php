@@ -11,4 +11,14 @@ class SalesStage extends Model
         'created_user_id',
         'updated_user_id',
     ];
+
+    public function userCreated()
+    {
+        return $this->belongsTo(User::class, 'created_user_id');
+    }
+
+    public function userUpdated()
+    {
+        return $this->belongsTo(User::class, 'updated_user_id');
+    }
 }

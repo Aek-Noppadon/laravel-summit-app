@@ -82,13 +82,19 @@
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
                                     {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                                        , {{ $item->userCreated->name }}
+                                    </small>
                                 </td>
                                 <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
                                     {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
+                                        , {{ $item->userUpdated->name }}
+                                    </small>
                                 </td>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
