@@ -37,6 +37,7 @@ class CrmCreate extends Component
     public $product_id, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
     public $source = '0';
+    public $departmentId;
 
     public function mount($id = null)
     {
@@ -118,13 +119,31 @@ class CrmCreate extends Component
             $this->monthEstimate = Carbon::now()->toDateString();
         }
 
+        $this->departmentId = auth()->user()->department_id;
+
         $this->salesStages = SalesStage::all();
         $this->probabilities  = Probability::all();
         $this->packingUnits = PackingUnit::all();
         $this->volumnUnits = VolumnUnit::all();
-        $this->applications = Application::orderBy('name')->get();
+        // $this->applications = Application::orderBy('name')->get();
         $this->customerTypes = CustomerType::all();
         $this->customerGroups = CustomerGroup::all();
+
+        /*
+        =======================================================
+        Created : Aek Noppadon
+        Date    : 12/11/2025
+        =======================================================
+        Description :                    
+        Show applications data by user & department 
+        =======================================================
+        */
+
+        $this->applications = Application::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
+
+        // ====================================================
     }
 
     public function render()
@@ -510,9 +529,11 @@ class CrmCreate extends Component
 
     public function selectedApplication()
     {
-        $this->applications = Application::orderBy('name')->get();
+        $this->applications = Application::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
 
-        // $this->applications = Application::all();
+        // $this->applications = Application::orderBy('name')->get();
     }
 
     public function sumRow($index)

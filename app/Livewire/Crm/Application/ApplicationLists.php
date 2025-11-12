@@ -16,19 +16,42 @@ class ApplicationLists extends Component
     #[On('refresh-application')]
     public function render()
     {
-        if (is_null($this->search)) {
-            $applications = Application::orderBy('name', 'asc')
-                ->paginate($this->pagination);
-        } else {
-            $applications = Application::Where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('name', 'asc')
-                ->paginate($this->pagination);
-        }
+        /*
+        =======================================================
+        Created : Aek Noppadon
+        Date    : 12/11/2025
+        =======================================================
+        Discription :                    
+        Show applications data by user & department 
+        =======================================================
+        */
+
+        $departmentId = auth()->user()->department_id;
+
+        $applications = Application::whereHas('userCreated.department', function ($query) use ($departmentId) {
+            $query->where('department_id', $departmentId);
+        })
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->paginate();
+        // ====================================================
+
+        return view('livewire.crm.application.application-lists', compact('applications'));
+
+        // if (is_null($this->search)) {
+        //     $applications = Application::orderBy('name', 'asc')
+        //         ->paginate($this->pagination);
+        // } else {
+        //     $applications = Application::Where('name', 'like', '%' . $this->search . '%')
+        //         ->orderBy('name', 'asc')
+        //         ->paginate($this->pagination);
+        // }
 
 
-        return view('livewire.crm.application.application-lists', [
-            'applications' => $applications
-        ]);
+        // return view('livewire.crm.application.application-lists', [
+        //     'applications' => $applications
+        // ]);
     }
 
     public function deleteApplication($id, $name)

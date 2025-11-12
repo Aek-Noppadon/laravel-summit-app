@@ -36,6 +36,8 @@ class ApplicationLists extends Component
             })
             ->paginate();
 
+        // ====================================================
+
         return view('livewire.application.application-lists', compact('applications'));
     }
 
