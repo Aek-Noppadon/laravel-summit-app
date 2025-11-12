@@ -130,7 +130,8 @@
                                 <span class="text-danger font-weight-bold">*</span>
 
                                 <!-- Modal Customer Type List -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                <button wire:click="$dispatch('refresh-customer-type')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal"
                                     data-target="#modal-customer-type">
                                     <i class="fas fa-plus"></i>
                                 </button>

@@ -126,7 +126,7 @@ class CrmCreate extends Component
         $this->packingUnits = PackingUnit::all();
         $this->volumnUnits = VolumnUnit::all();
         // $this->applications = Application::orderBy('name')->get();
-        $this->customerTypes = CustomerType::all();
+        // $this->customerTypes = CustomerType::all();
         $this->customerGroups = CustomerGroup::all();
 
         /*
@@ -135,11 +135,15 @@ class CrmCreate extends Component
         Date    : 12/11/2025
         =======================================================
         Description :                    
-        Show applications data by user & department 
+        Show data by user & department 
         =======================================================
         */
 
         $this->applications = Application::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
+
+        $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
         })->get();
 
@@ -487,11 +491,11 @@ class CrmCreate extends Component
 
     public function selectedCustomerType()
     {
-        // info("call Customer group");
+        $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
 
-        $this->customerTypes = CustomerType::all();
-
-        // dd($this->customerType);
+        // $this->customerTypes = CustomerType::all();
     }
 
     public function selectedCustomerGroup()
