@@ -16,18 +16,27 @@ class ApplicationLists extends Component
     #[On('refresh-application')]
     public function render()
     {
-        if (is_null($this->search)) {
-            $applications = Application::orderBy('name', 'asc')
-                ->paginate($this->pagination);
-        } else {
-            $applications = Application::Where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('name', 'asc')
-                ->paginate($this->pagination);
-        }
+        /*
+        =======================================================
+        Created : Aek Noppadon
+        Date    : 12/11/2025
+        =======================================================
+        Discription :                    
+        Show applications data by user & department 
+        =======================================================
+        */
 
-        return view('livewire.application.application-lists', [
-            'applications' => $applications
-        ]);
+        $departmentId = auth()->user()->department_id;
+
+        $applications = Application::whereHas('userCreated.department', function ($query) use ($departmentId) {
+            $query->where('department_id', $departmentId);
+        })
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->paginate();
+
+        return view('livewire.application.application-lists', compact('applications'));
     }
 
     public function deleteApplication($id, $name)
