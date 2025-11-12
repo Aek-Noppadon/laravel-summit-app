@@ -17,17 +17,26 @@ class ApplicationCreate extends Component
 
     public function save()
     {
-        // dd("Save");
-
         $this->name = trim($this->name);
+
+        $departmentId = auth()->user()->department_id;
+
+        $exists = Application::where('name', $this->name)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'This application name has already been taken.');
+            return;
+        }
 
         $this->validate(
             [
-                'name' => 'required|unique:applications',
+                'name' => 'required',
             ],
             [
-                'required' => 'The application :attribute field is required !!',
-                'unique' => 'The application :attribute has already been taken !!',
+                'required' => 'The application :attribute field is required.',
             ]
         );
 
