@@ -147,6 +147,10 @@ class CrmCreate extends Component
             $query->where('department_id', $this->departmentId);
         })->get();
 
+        $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
+
         // ====================================================
     }
 
@@ -500,11 +504,11 @@ class CrmCreate extends Component
 
     public function selectedCustomerGroup()
     {
-        // info("call customer type");
+        $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
 
-        $this->customerGroups = CustomerGroup::all();
-
-        // dd($this->customerGroups);
+        // $this->customerGroups = CustomerGroup::all();
     }
 
     public function selectedSalesStage()

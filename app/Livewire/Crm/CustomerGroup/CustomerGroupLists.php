@@ -16,18 +16,41 @@ class CustomerGroupLists extends Component
     #[On('refresh-customer-group')]
     public function render()
     {
-        if (is_null($this->search)) {
-            $customer_groups = CustomerGroup::orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        } else {
-            $customer_groups = CustomerGroup::Where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        }
+        /*
+        =======================================================
+        Created : Aek Noppadon
+        Date    : 12/11/2025
+        =======================================================
+        Discription :                    
+        Show customer group data by user & department 
+        =======================================================
+        */
 
-        return view('livewire.crm.customer-group.customer-group-lists', [
-            'customer_groups' => $customer_groups
-        ]);
+        $departmentId = auth()->user()->department_id;
+
+        $customer_groups = CustomerGroup::whereHas('userCreated', function ($query) use ($departmentId) {
+            $query->where('department_id', $departmentId);
+        })
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->paginate();
+        // ====================================================
+
+        return view('livewire.crm.customer-group.customer-group-lists', compact('customer_groups'));
+
+        // if (is_null($this->search)) {
+        //     $customer_groups = CustomerGroup::orderBy('id', 'asc')
+        //         ->paginate($this->pagination);
+        // } else {
+        //     $customer_groups = CustomerGroup::Where('name', 'like', '%' . $this->search . '%')
+        //         ->orderBy('id', 'asc')
+        //         ->paginate($this->pagination);
+        // }
+
+        // return view('livewire.crm.customer-group.customer-group-lists', [
+        //     'customer_groups' => $customer_groups
+        // ]);
     }
 
     public function deleteCustomerGroup($id, $name)

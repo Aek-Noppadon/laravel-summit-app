@@ -159,7 +159,8 @@
                                 <label for="customerGroup" class="form-label">Customer Group</label>
 
                                 <!-- Modal Customer Group List -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                <button wire:click="$dispatch('refresh-customer-group')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal"
                                     data-target="#modal-customer-group">
                                     <i class="fas fa-plus"></i>
                                 </button>
