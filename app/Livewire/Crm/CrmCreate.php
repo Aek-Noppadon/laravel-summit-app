@@ -119,15 +119,9 @@ class CrmCreate extends Component
             $this->monthEstimate = Carbon::now()->toDateString();
         }
 
-        $this->departmentId = auth()->user()->department_id;
-
         $this->salesStages = SalesStage::all();
-        $this->probabilities  = Probability::all();
         $this->packingUnits = PackingUnit::all();
         $this->volumnUnits = VolumnUnit::all();
-        // $this->applications = Application::orderBy('name')->get();
-        // $this->customerTypes = CustomerType::all();
-        $this->customerGroups = CustomerGroup::all();
 
         /*
         =======================================================
@@ -139,9 +133,8 @@ class CrmCreate extends Component
         =======================================================
         */
 
-        $this->applications = Application::whereHas('userCreated.department', function ($query) {
-            $query->where('department_id', $this->departmentId);
-        })->get();
+        $this->departmentId = auth()->user()->department_id;
+
 
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
@@ -151,6 +144,13 @@ class CrmCreate extends Component
             $query->where('department_id', $this->departmentId);
         })->get();
 
+        $this->applications = Application::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
+
+        $this->probabilities = Probability::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
         // ====================================================
     }
 
@@ -520,9 +520,11 @@ class CrmCreate extends Component
 
     public function selectedProbability()
     {
-        $this->probabilities  = Probability::all();
+        $this->probabilities = Probability::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
 
-        // dd($this->probabilities);
+        // $this->probabilities  = Probability::all();
     }
 
     public function selectedPackingUnit()

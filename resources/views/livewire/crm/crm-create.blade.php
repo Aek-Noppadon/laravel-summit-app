@@ -504,7 +504,8 @@
                                     <span class="text-danger font-weight-bold">*</span>
 
                                     <!-- Modal Probability List -->
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                    <button wire:click="$dispatch('refresh-probability')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#modal-probability">
                                         <i class="fas fa-plus"></i>
                                     </button>

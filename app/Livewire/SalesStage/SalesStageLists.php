@@ -16,18 +16,26 @@ class SalesStageLists extends Component
     #[On('refresh-sales-stage')]
     public function render()
     {
-        if (is_null($this->search)) {
-            $sales_stages = SalesStage::orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        } else {
-            $sales_stages = SalesStage::Where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        }
+        $sales_stages = SalesStage::orderBy('id', 'asc')
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->paginate();
 
-        return view('livewire.sales-stage.sales-stage-lists', [
-            'sales_stages' => $sales_stages
-        ]);
+        return view('livewire.sales-stage.sales-stage-lists', compact('sales_stages'));
+
+        // if (is_null($this->search)) {
+        //     $sales_stages = SalesStage::orderBy('id', 'asc')
+        //         ->paginate($this->pagination);
+        // } else {
+        //     $sales_stages = SalesStage::Where('name', 'like', '%' . $this->search . '%')
+        //         ->orderBy('id', 'asc')
+        //         ->paginate($this->pagination);
+        // }
+
+        // return view('livewire.sales-stage.sales-stage-lists', [
+        //     'sales_stages' => $sales_stages
+        // ]);
     }
 
     public function deleteSalesStage($id, $name)
