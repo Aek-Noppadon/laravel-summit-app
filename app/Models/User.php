@@ -86,6 +86,11 @@ class User extends Authenticatable
         return $this->hasMany(SalesStage::class, 'created_user_id');
     }
 
+    public function probabilities()
+    {
+        return $this->hasMany(Probability::class, 'created_user_id');
+    }
+
     // Created by Sun 20/10/2025
     // public function createdCustomers()
     // {
