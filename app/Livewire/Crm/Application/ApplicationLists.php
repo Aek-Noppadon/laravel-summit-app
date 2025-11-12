@@ -48,7 +48,6 @@ class ApplicationLists extends Component
         //         ->paginate($this->pagination);
         // }
 
-
         // return view('livewire.crm.application.application-lists', [
         //     'applications' => $applications
         // ]);
