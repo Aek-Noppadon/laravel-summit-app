@@ -36,7 +36,7 @@ class CustomerTypeCreate extends Component
                 'name' => 'required',
             ],
             [
-                'required' => 'The application :attribute field is required.',
+                'required' => 'The customer type :attribute field is required.',
             ]
         );
 

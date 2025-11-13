@@ -28,15 +28,37 @@ class CustomerGroupEdit extends Component
     {
         $this->name = trim($this->name);
 
+        $departmentId = auth()->user()->department_id;
+
+        $exists = CustomerGroup::where('name', $this->name)
+            ->where('id', '<>', $this->id)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'This customer group name has already been taken.');
+            return;
+        }
+
         $this->validate(
             [
-                'name' => 'required|unique:customer_groups,name,' . $this->id
+                'name' => 'required',
             ],
             [
-                'required' => 'The customer type :attribute field is required !!',
-                'unique' => 'The customer type :attribute has already been taken !!',
+                'required' => 'The customer group :attribute field is required.',
             ]
         );
+
+        // $this->validate(
+        //     [
+        //         'name' => 'required|unique:customer_groups,name,' . $this->id
+        //     ],
+        //     [
+        //         'required' => 'The customer type :attribute field is required !!',
+        //         'unique' => 'The customer type :attribute has already been taken !!',
+        //     ]
+        // );
 
         $customer_group = CustomerGroup::findOrFail($this->id);
 

@@ -17,18 +17,38 @@ class CustomerGroupCreate extends Component
 
     public function save()
     {
-
         $this->name = trim($this->name);
+
+        $departmentId = auth()->user()->department_id;
+
+        $exists = CustomerGroup::where('name', $this->name)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'This customer group name has already been taken.');
+            return;
+        }
 
         $this->validate(
             [
-                'name' => 'required|unique:customer_groups',
+                'name' => 'required',
             ],
             [
-                'required' => 'The customer group :attribute field is required !!',
-                'unique' => 'The customer group :attribute has already been taken !!',
+                'required' => 'The customer group :attribute field is required.',
             ]
         );
+
+        // $this->validate(
+        //     [
+        //         'name' => 'required|unique:customer_groups',
+        //     ],
+        //     [
+        //         'required' => 'The customer group :attribute field is required !!',
+        //         'unique' => 'The customer group :attribute has already been taken !!',
+        //     ]
+        // );
 
         CustomerGroup::create(
             [
