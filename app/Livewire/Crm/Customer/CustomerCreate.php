@@ -38,7 +38,7 @@ class CustomerCreate extends Component
             })->exists();
 
         if ($exists) {
-            $this->addError('name_english', 'This Customer has already been taken.');
+            $this->addError('name_english', 'The customer name has already been taken.');
             return;
         }
 
