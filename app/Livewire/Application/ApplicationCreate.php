@@ -32,7 +32,6 @@ class ApplicationCreate extends Component
             return;
         }
 
-
         $this->validate(
             [
                 'name' => 'required',

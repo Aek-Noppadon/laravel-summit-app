@@ -146,7 +146,7 @@ class CrmCreate extends Component
 
         $this->applications = Application::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
+        })->orderBy('name')->get();
 
         $this->probabilities = Probability::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
@@ -541,9 +541,7 @@ class CrmCreate extends Component
     {
         $this->applications = Application::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
-
-        // $this->applications = Application::orderBy('name')->get();
+        })->orderBy('name')->get();
     }
 
     public function sumRow($index)
