@@ -138,15 +138,21 @@ class CrmCreate extends Component
 
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
+        })
+            ->orderBy('name')
+            ->get();
 
         $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
+        })
+            ->orderBy('name')
+            ->get();
 
         $this->applications = Application::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->orderBy('name')->get();
+        })
+            ->orderBy('name')
+            ->get();
 
         $this->probabilities = Probability::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
@@ -497,7 +503,9 @@ class CrmCreate extends Component
     {
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
+        })
+            ->orderBy('name')
+            ->get();
 
         // $this->customerTypes = CustomerType::all();
     }
@@ -506,7 +514,9 @@ class CrmCreate extends Component
     {
         $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
-        })->get();
+        })
+            ->orderBy('name')
+            ->get();
 
         // $this->customerGroups = CustomerGroup::all();
     }
