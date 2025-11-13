@@ -40,7 +40,7 @@ class ProductCreate extends Component
             })->exists();
 
         if ($exists) {
-            $this->addError('product_name', 'This Product has already been taken.');
+            $this->addError('product_name', 'The product name has already been taken.');
             return;
         }
         // * ================================================   
@@ -51,7 +51,7 @@ class ProductCreate extends Component
                 'brand' => 'required',
             ],
             [
-                'required' => 'The :attribute field is required !!',
+                'required' => 'The :attribute field is required.',
             ]
 
         );

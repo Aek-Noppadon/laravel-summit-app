@@ -34,16 +34,50 @@ class ProductEdit extends Component
         $this->supplier_rep = strtoupper(trim($this->supplier_rep));
         $this->principal = strtoupper(trim($this->principal));
 
+        /*
+         * =================================================================
+         Create by Aek 06/11/2025
+         Validate unique AX product & product and department befor save
+         * =================================================================
+        */
+
+        $departmentId = auth()->user()->department_id;
+
+        $exists = Product::where('product_name', $this->product_name)
+            ->where('source', '0')
+            ->orWhere('product_name', $this->product_name)
+            ->where('id', '<>', $this->id)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('product_name', 'The product name has already been taken.');
+            return;
+        }
+        // * ================================================   
+
         $this->validate(
             [
-                'product_name' => 'required|unique:products,product_name,' . $this->id,
+                'product_name' => 'required',
                 'brand' => 'required',
             ],
             [
-                'required' => 'The :attribute field is required !!',
-                'unique' => 'The :attribute has already been taken !!',
+                'required' => 'The :attribute field is required.',
             ]
+
         );
+
+        // $this->validate(
+        //     [
+        //         'product_name' => 'required|unique:products,product_name,' . $this->id,
+        //         'brand' => 'required',
+        //     ],
+        //     [
+        //         'required' => 'The :attribute field is required !!',
+        //         'unique' => 'The :attribute has already been taken !!',
+        //     ]
+        // );
 
         $product = Product::findOrFail($this->id);
 

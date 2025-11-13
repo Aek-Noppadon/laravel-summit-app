@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Product New</h4>
+                <h4 class="modal-title">Edit Product</h4>
                 <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
