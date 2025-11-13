@@ -30,15 +30,37 @@ class ApplicationEdit extends Component
     {
         $this->name = trim($this->name);
 
+        $departmentId = auth()->user()->department_id;
+
+        $exists = Application::where('name', $this->name)
+            ->where('id', '<>', $this->id)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'This application name has already been taken.');
+            return;
+        }
+
         $this->validate(
             [
-                'name' => 'required|unique:applications,name,' . $this->id
+                'name' => 'required',
             ],
             [
-                'required' => 'The application :attribute field is required !!',
-                'unique' => 'The application :attribute has already been taken !!',
+                'required' => 'The application :attribute field is required.',
             ]
         );
+
+        // $this->validate(
+        //     [
+        //         'name' => 'required|unique:applications,name,' . $this->id
+        //     ],
+        //     [
+        //         'required' => 'The application :attribute field is required !!',
+        //         'unique' => 'The application :attribute has already been taken !!',
+        //     ]
+        // );
 
         $application = Application::findOrFail($this->id);
 
