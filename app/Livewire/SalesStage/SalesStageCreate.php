@@ -3,8 +3,6 @@
 namespace App\Livewire\SalesStage;
 
 use App\Models\SalesStage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -19,25 +17,44 @@ class SalesStageCreate extends Component
 
     public function save()
     {
-        // dd("Save");
+        $this->name = trim($this->name);
 
-        $this->name = Str::trim($this->name);
+        $departmentId = auth()->user()->department_id;
+
+        $exists = SalesStage::where('name', $this->name)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'The sales stage name has already been taken.');
+            return;
+        }
 
         $this->validate(
             [
-                'name' => 'required|unique:sales_stages',
+                'name' => 'required',
             ],
             [
-                'required' => 'The sales state :attribute field is required !!',
-                'unique' => 'The sales state :attribute has already been taken !!',
+                'required' => 'The sales stage :attribute field is required.',
             ]
         );
+
+        // $this->validate(
+        //     [
+        //         'name' => 'required|unique:sales_stages',
+        //     ],
+        //     [
+        //         'required' => 'The sales state :attribute field is required !!',
+        //         'unique' => 'The sales state :attribute has already been taken !!',
+        //     ]
+        // );
 
         SalesStage::create(
             [
                 'name' => $this->name,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]
         );
 
