@@ -28,15 +28,37 @@ class ProbabilityEdit extends Component
     {
         $this->name = trim($this->name);
 
+        $departmentId = auth()->user()->department_id;
+
+        $exists = Probability::where('name', $this->name)
+            ->where('id', '<>', $this->id)
+            ->whereHas('userCreated', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            })->exists();
+
+        if ($exists) {
+            $this->addError('name', 'The probability name has already been taken.');
+            return;
+        }
+
         $this->validate(
             [
-                'name' => 'required|unique:probabilities,name,' . $this->id
+                'name' => 'required',
             ],
             [
-                'required' => 'The probability :attribute field is required !!',
-                'unique' => 'The probability :attribute has already been taken !!',
+                'required' => 'The probability :attribute field is required.',
             ]
         );
+
+        // $this->validate(
+        //     [
+        //         'name' => 'required|unique:probabilities,name,' . $this->id
+        //     ],
+        //     [
+        //         'required' => 'The probability :attribute field is required !!',
+        //         'unique' => 'The probability :attribute has already been taken !!',
+        //     ]
+        // );
 
         $probability = Probability::findOrFail($this->id);
 
