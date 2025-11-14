@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SalesStageTableSeeder::class);
         $this->call(ProbabilityTableSeeder::class);
         $this->call(PackingUnitTableSeeder::class);
-        $this->call(VolumnUnitTableSeeder::class);
+        $this->call(VolumeUnitTableSeeder::class);
 
         // User::factory(10)->create();
 
