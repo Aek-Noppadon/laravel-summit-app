@@ -37,7 +37,7 @@ class CustomerGroupEdit extends Component
             })->exists();
 
         if ($exists) {
-            $this->addError('name', 'This customer group name has already been taken.');
+            $this->addError('name', 'The customer group name has already been taken.');
             return;
         }
 
