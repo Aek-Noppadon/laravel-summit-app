@@ -27,7 +27,7 @@ class CustomerTypeCreate extends Component
             })->exists();
 
         if ($exists) {
-            $this->addError('name', 'This customer type name has already been taken.');
+            $this->addError('name', 'The customer type name has already been taken.');
             return;
         }
 
