@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('volume_units', function (Blueprint $table) {
-            $table->id();
+            $table->tinyIncrements('id')->comment('Volume Unit ID');
+            $table->string('name', '50')->comment('Volume Unit Name');
+            $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
+            $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
             $table->timestamps();
         });
     }
