@@ -16,11 +16,17 @@ class VolumeUnitLists extends Component
     #[On('refresh-volume-unit')]
     public function render()
     {
-        $volume_units = VolumeUnit::orderBy('id', 'asc')
+        $departmentId = auth()->user()->department_id;
+
+        $volume_units = VolumeUnit::whereHas('userCreated.department', function ($query) use ($departmentId) {
+            $query->where('department_id', $departmentId);
+        })
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
+            ->orderBy('name')
             ->paginate();
+
 
         return view('livewire.volume-unit.volume-unit-lists', compact('volume_units'));
     }
