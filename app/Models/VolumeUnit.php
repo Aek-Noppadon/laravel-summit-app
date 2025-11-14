@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class VolumeUnit extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'created_user_id',
+        'updated_user_id',
+    ];
 }
