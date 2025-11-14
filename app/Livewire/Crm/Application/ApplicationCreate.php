@@ -27,7 +27,7 @@ class ApplicationCreate extends Component
             })->exists();
 
         if ($exists) {
-            $this->addError('name', 'This application name has already been taken.');
+            $this->addError('name', 'The application name has already been taken.');
             return;
         }
 
