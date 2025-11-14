@@ -56,8 +56,6 @@ class ApplicationLists extends Component
 
     public function deleteApplication($id, $name)
     {
-        // dd("Confirm delete");
-
         $this->dispatch("confirm-delete-application", id: $id, name: $name);
     }
 
