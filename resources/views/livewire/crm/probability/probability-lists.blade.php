@@ -90,7 +90,7 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button
-                                            wire:click.prevent="deleteProbability({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                            wire:click.prevent="deleteConfirm({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
                                             {{-- wire:click.prevent="deleteProbability({{ $item->id }},{{ "'" . $item->name . "'" }})" --}} class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -137,7 +137,7 @@
                 confirmButtonText: "Yes, Delete"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $wire.dispatch("destroy-Probability", {
+                    $wire.dispatch("destroy-probability", {
                         id: event.id,
                         name: event.name,
                     })

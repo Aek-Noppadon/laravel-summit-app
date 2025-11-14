@@ -39,19 +39,27 @@ class ProbabilityLists extends Component
         // ====================================================
 
         return view('livewire.crm.probability.probability-lists', compact('probabilities'));
+    }
 
-        // if (is_null($this->search)) {
-        //     $probabilities = Probability::orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // } else {
-        //     $probabilities = Probability::Where('name', 'like', '%' . $this->search . '%')
-        //         ->orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // }
+    public function deleteConfirm($id, $name)
+    {
+        $this->dispatch("confirm-delete-probability", id: $id, name: $name);
+    }
 
+    #[On('destroy-probability')]
+    public function destroy($id, $name)
+    {
+        Probability::find($id)->delete();
 
-        // return view('livewire.crm.probability.probability-lists', [
-        //     'probabilities' => $probabilities
-        // ]);
+        $this->dispatch(
+            "sweet.success",
+            position: "center",
+            title: "Deleted Successfully !!",
+            text: "Sales Stage : " . $name,
+            icon: "success",
+            timer: 3000,
+        );
+
+        $this->dispatch('close-modal-volume-unit');
     }
 }
