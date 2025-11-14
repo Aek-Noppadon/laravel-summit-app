@@ -22,8 +22,7 @@
                     class="img-circle elevation-2" alt="{{ Auth::user()->first_name }}">
             </div> --}}
             <div class="info">
-                <p class="d-block text-light">{{ auth()->user()->name }} {{ auth()->user()->last_name }}</p>
-                <p class="d-block text-light">{{ auth()->user()->department->name }}</p>
+                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
                 {{-- <a href="#" class="d-block">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a> --}}
             </div>
         </div>
@@ -114,28 +113,6 @@
                         </li>
                     </ul>
 
-                    <!-- Customer Type Lists -->
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('customer-type.list') }}"
-                                class="nav-link {{ request()->is('customer-types*') ? 'active' : '' }}">
-                                <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>Customer Type Lists</p>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Customer Group Lists -->
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('customer-group.list') }}"
-                                class="nav-link {{ request()->is('customer-groups*') ? 'active' : '' }}">
-                                <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>Customer Group Lists</p>
-                            </a>
-                        </li>
-                    </ul>
-
                     <!-- Product Lists -->
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -154,6 +131,28 @@
                                 class="nav-link {{ request()->is('applications*') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
                                 <p>Application Lists</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Customer Type Lists -->
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('customer-type.list') }}"
+                                class="nav-link {{ request()->is('customer-types*') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                <p>Customer Type Lists</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Customer Group Lists -->
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('customer-group.list') }}"
+                                class="nav-link {{ request()->is('customer-groups*') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                <p>Customer Group Lists</p>
                             </a>
                         </li>
                     </ul>
@@ -180,16 +179,6 @@
                         </li>
                     </ul>
 
-                    <!-- Volume Unit Lists -->
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('volume-unit.list') }}"
-                                class="nav-link {{ request()->is('volume-units*') ? 'active' : '' }}">
-                                <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>Volume Unit Lists</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </nav>
