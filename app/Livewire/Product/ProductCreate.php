@@ -19,9 +19,9 @@ class ProductCreate extends Component
     public function save()
     {
         $this->product_name = strtoupper(trim($this->product_name));
-        $this->brand = strtoupper(trim($this->brand));
-        $this->supplier_rep = strtoupper(trim($this->supplier_rep));
-        $this->principal = strtoupper(trim($this->principal));
+        $this->brand = trim($this->brand);
+        $this->supplier_rep = trim($this->supplier_rep);
+        $this->principal = trim($this->principal);
 
         /*
          * =================================================================
