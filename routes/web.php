@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Application\ApplicationCreate;
-use App\Livewire\Application\ApplicationEdit;
 use App\Livewire\Application\ApplicationLists;
 use App\Livewire\Crm\CrmCreate;
 use App\Livewire\Crm\CrmLists;
@@ -21,7 +20,8 @@ use App\Livewire\Product\ProductLists;
 use App\Livewire\SalesStage\SalesStageCreate;
 use App\Livewire\SalesStage\SalesStageLists;
 use App\Livewire\User\UserProfile;
-use App\Models\Probability;
+use App\Livewire\VolumeUnit\VolumeUnitCreate;
+use App\Livewire\VolumeUnit\VolumeUnitLists;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -150,4 +150,15 @@ Route::group([
     Route::get('/create', ProbabilityCreate::class)->name('create');
     Route::get('/update/{id}', ProbabilityCreate::class)->name('update');
     Route::get('/delete/{id}', ProbabilityCreate::class)->name('delete');
+});
+
+Route::group([
+    'prefix' => 'volume-units',
+    'as' => 'volume-unit.',
+    'middleware' => ['auth']
+], function () {
+    Route::get('/', VolumeUnitLists::class)->name('list');
+    Route::get('/create', VolumeUnitCreate::class)->name('create');
+    Route::get('/update/{id}', VolumeUnitCreate::class)->name('update');
+    Route::get('/delete/{id}', VolumeUnitCreate::class)->name('delete');
 });
