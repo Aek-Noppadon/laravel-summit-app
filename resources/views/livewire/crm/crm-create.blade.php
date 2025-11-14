@@ -515,6 +515,7 @@
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
                                     </div>
+
                                     <select id="inputs.{{ $key }}.probability"
                                         wire:model="inputs.{{ $key }}.probability"
                                         wire:focus.debounce.1000ms="selectedProbability"
@@ -524,6 +525,7 @@
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
+
                                     @error('inputs.' . $key . '.probability')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -571,7 +573,7 @@
                         </div>
                         <!-- ./Quantity, Unit Price, Total Price -->
 
-                        <!--Packing Unit, Volumn Qty, Volumn Unit -->
+                        <!--Packing Unit, Volumn Qty, Volume Unit -->
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -605,8 +607,17 @@
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.volumnUnit" class="form-label">
-                                        Volumn Unit
+                                        Volume Unit
                                     </label>
+
+                                    <!-- Modal Volume Unit List -->
+                                    <button wire:click="$dispatch('refresh-volume-unit')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-volume-unit">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <!-- ./Modal Volume Unit List -->
+
                                     <div wire:loading wire:target="selectedVolumnUnit"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
@@ -622,7 +633,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ./Packing Unit, Volumn Qty, Volumn Unit -->
+                        <!-- ./Packing Unit, Volumn Qty, Volume Unit -->
 
                         <!-- Additional Information, Competitor Situation -->
                         <div class="row">
@@ -709,6 +720,10 @@
                 <!-- Probability List Component -->
                 @livewire('crm.probability.probability-lists')
                 <!-- ./Probability List Component -->
+
+                <!-- Volume Unit List Component -->
+                @livewire('crm.volume-unit.volume-unit-lists')
+                <!-- ./Volume Unit List Component -->
 
             </form>
 
