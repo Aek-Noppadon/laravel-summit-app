@@ -86,20 +86,28 @@ class ProductLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
-        // dd($id, $name);        
+        try {
 
-        Product::find($id)->delete();
+            Product::find($id)->delete();
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfuly !!",
-            text: "Product : " . $name,
-            // text: "Product Id : " . $id . ", Name : " . $name,
-            icon: "success",
-            timer: 3000,
-            // url: route('product.list'),
-        );
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfuly !!",
+                text: "Product : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Product : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+                // timer: 3000,
+            );
+        }
 
         $this->dispatch('close-modal-product');
     }
