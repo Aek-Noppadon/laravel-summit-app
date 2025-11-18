@@ -88,18 +88,28 @@ class CustomerLists extends Component
     #[On('destroy-customer')]
     public function destroy($id, $name)
     {
-        Customer::find($id)->delete();
+        try {
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfuly !!",
-            text: "Customer : " . $name,
-            // text: "Customer : " . $id . " - " . $name,
-            icon: "success",
-            timer: 3000,
-            // url: route('customer.list'),
-        );
+            Customer::find($id)->delete();
+
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfuly !!",
+                text: "Customer : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Customer : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+                // timer: 3000,
+            );
+        }
 
         $this->dispatch('close-modal-customer');
     }

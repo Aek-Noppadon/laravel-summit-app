@@ -87,21 +87,17 @@ class CustomerLists extends Component
                 position: "center",
                 title: "Deleted Successfuly !!",
                 text: "Customer : " . $name,
-                // text: "Customer Id : " . $id . ", Name : " . $name,
                 icon: "success",
                 timer: 3000,
-                // url: route('customer.list'),
             );
         } catch (\Throwable $th) {
             $this->dispatch(
                 "sweet.error",
                 position: "center",
                 title: "Can not Deleted !!",
-                text: "Customer : " . $name,
-                // text: "Customer Id : " . $id . ", Name : " . $name,
+                text: "Customer : " . $name . " there is a transaction in CRM.",
                 icon: "error",
-                timer: 3000,
-                // url: route('customer.list'),
+                // timer: 3000,
             );
         }
 
