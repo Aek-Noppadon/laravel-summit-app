@@ -11,7 +11,7 @@ class CrmHeader extends Model
 
     protected $fillable = [
         'customer_id',
-        // 'doc_no',
+        'document_no',
         'started_visit_date',
         'month_estimate_date',
         'original_month_estimate_date',
