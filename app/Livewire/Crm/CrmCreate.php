@@ -15,7 +15,7 @@ use App\Models\Product;
 use App\Models\SalesStage;
 use App\Models\SrvCustomer;
 use App\Models\SrvProduct;
-use App\Models\VolumnUnit;
+use App\Models\VolumeUnit;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,10 +27,10 @@ class CrmCreate extends Component
 {
     // public CRMCreateForm $crmCreateForm;
     // Variables for fetching values ​​from the database
-    public $customerTypes, $customerGroups, $salesStages, $probabilities, $applications, $packingUnits, $volumnUnits;
+    public $customerTypes, $customerGroups, $salesStages, $probabilities, $applications, $packingUnits, $volumeUnits;
     // Variables for form inputs
     public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $monthEstimate,  $customerType, $customerGroup, $contact, $purpose, $detail;
-    public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumnUnit, $additional, $competitor;
+    public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumeUnit, $additional, $competitor;
     public $quantity, $unitPrice, $totalPrice;
     public $crmHeader_id, $originalMonthEstimate, $crmHeader_created_at, $crmHeader_updated_at;
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
@@ -99,7 +99,7 @@ class CrmCreate extends Component
                     'totalPrice' => number_format($value->total_price, 2),
                     'packingUnit' => $value->packing_unit_id,
                     'volumnQty' => $value->volumn_qty,
-                    'volumnUnit' => $value->volumn_unit_id,
+                    'volumeUnit' => $value->volumn_unit_id,
                     'additional' => $value->additional,
                     'competitor' => $value->competitor,
                     'created_at' => $value->created_at,
@@ -121,7 +121,7 @@ class CrmCreate extends Component
 
         $this->salesStages = SalesStage::all();
         $this->packingUnits = PackingUnit::all();
-        $this->volumnUnits = VolumnUnit::all();
+        $this->volumeUnits = VolumeUnit::all();
 
         /*
         =======================================================
@@ -355,7 +355,7 @@ class CrmCreate extends Component
             'totalPrice' => $this->totalPrice,
             'packingUnit' => $this->packingUnit,
             'volumnQty' => $this->volumnQty,
-            'volumnUnit' => $this->volumnUnit,
+            'volumeUnit' => $this->volumeUnit,
             'additional' => $this->additional,
             'competitor' => $this->competitor,
         ];
@@ -542,9 +542,9 @@ class CrmCreate extends Component
         $this->packingUnits = PackingUnit::all();
     }
 
-    public function selectedVolumnUnit()
+    public function selectedVolumeUnit()
     {
-        $this->volumnUnits = VolumnUnit::all();
+        $this->volumeUnits = VolumeUnit::all();
     }
 
     public function selectedApplication()
@@ -686,7 +686,7 @@ class CrmCreate extends Component
                         'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
                         'packing_unit_id' => $value['packingUnit'],
                         'volumn_qty' => $value['volumnQty'],
-                        'volumn_unit_id' => $value['volumnUnit'],
+                        'volumn_unit_id' => $value['volumeUnit'],
                         'additional' => $value['additional'],
                         'competitor' => $value['competitor'],
                         'created_user_id' => Auth::user()->id,
@@ -718,7 +718,7 @@ class CrmCreate extends Component
                         'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
                         'packing_unit_id' => $value['packingUnit'],
                         'volumn_qty' => $value['volumnQty'],
-                        'volumn_unit_id' => $value['volumnUnit'],
+                        'volumn_unit_id' => $value['volumeUnit'],
                         'additional' => $value['additional'],
                         'competitor' => $value['competitor'],
                         'updated_user_id' => Auth::user()->id,
