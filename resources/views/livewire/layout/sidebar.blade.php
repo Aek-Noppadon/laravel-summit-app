@@ -83,9 +83,9 @@
 
                 <!-- CRM Menu -->
                 <li
-                    class="nav-item {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*') ? 'menu-open' : '' }}">
+                    class="nav-item {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*') ? 'menu-open' : '' }}">
                     <a href="#"
-                        class="nav-link {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*') ? 'active' : '' }}">
                         {{-- <i class="fab fa-wordpress-simple nav-icon"></i> --}}
                         <i class="fas fa-bars nav-icon"></i>
                         <p>
