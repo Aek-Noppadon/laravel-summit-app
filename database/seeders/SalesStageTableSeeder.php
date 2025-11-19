@@ -13,7 +13,7 @@ class SalesStageTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('sales_stage')->insert(
+        DB::table('sales_stages')->insert(
             array(
                 [
                     'name' => 'Identification',

@@ -13,7 +13,7 @@ class VolumeUnitTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('volumn_units')->insert(
+        DB::table('volume_units')->insert(
             array(
                 [
                     'name' => 'Gram',

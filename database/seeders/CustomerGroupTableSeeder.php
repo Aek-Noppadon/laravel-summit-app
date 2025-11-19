@@ -13,7 +13,7 @@ class CustomerGroupTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('customer_types')->insert(
+        DB::table('customer_groups')->insert(
             array(
                 [
                     'name' => 'Personal Care',

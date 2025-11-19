@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProbabilityTableSeeder::class);
         $this->call(PackingUnitTableSeeder::class);
         $this->call(VolumeUnitTableSeeder::class);
+        $this->call(DepartmentTableSeeder::class);
 
         // User::factory(10)->create();
 

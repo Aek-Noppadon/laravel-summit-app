@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('last_name', '100')->nullable()->comment('Last Name');
             $table->string('sales_id', '3')->nullable()->comment('Sales ID');
             $table->string('employee_id', '4')->nullable()->comment('Employee ID');
+            $table->unsignedTinyInteger('department_id')->nullable()->comment('Department ID');
             $table->string('email')->unique()->comment('Email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->comment('Password');

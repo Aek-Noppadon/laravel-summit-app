@@ -23,7 +23,10 @@
             </div> --}}
             <div class="info">
                 <p class="d-block text-light">{{ auth()->user()->name }} {{ auth()->user()->last_name }}</p>
-                <p class="d-block text-light">{{ auth()->user()->department->name }}</p>
+                @isset(auth()->user()->department->name)
+                    <p class="d-block text-light">{{ auth()->user()->department->name }}</p>
+                @endisset
+
                 {{-- <a href="#" class="d-block">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a> --}}
             </div>
         </div>

@@ -6,32 +6,32 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class VolumnUnitTableSeeder extends Seeder
+class DepartmentTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('volumn_units')->insert(
+        DB::table('departments')->insert(
             array(
                 [
-                    'name' => 'Gram',
+                    'name' => 'PERSONAL & HOME CARE',
                     'created_at' => '2025-11-10',
                     'updated_at' => '2025-11-10',
                 ],
                 [
-                    'name' => 'Kilogram',
+                    'name' => 'INDUSTRIAL CHEMICALS',
                     'created_at' => '2025-11-10',
                     'updated_at' => '2025-11-10',
                 ],
                 [
-                    'name' => 'Can',
+                    'name' => 'NUTRITIONAL INGREDIENTS',
                     'created_at' => '2025-11-10',
                     'updated_at' => '2025-11-10',
                 ],
                 [
-                    'name' => 'Liter',
+                    'name' => 'PHARMA & ACTIVES',
                     'created_at' => '2025-11-10',
                     'updated_at' => '2025-11-10',
                 ],
