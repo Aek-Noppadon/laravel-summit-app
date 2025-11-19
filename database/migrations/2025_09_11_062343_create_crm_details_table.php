@@ -50,8 +50,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('crm_details');
 
-        // Schema::table('crm_details', function (Blueprint $table) {
-        //     $table->dropSoftDeletes();
-        // });
+        Schema::table('crm_details', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
