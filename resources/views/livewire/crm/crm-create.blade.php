@@ -606,7 +606,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="inputs.{{ $key }}.volumnUnit" class="form-label">
+                                    <label for="inputs.{{ $key }}.volumeUnit" class="form-label">
                                         Volume Unit
                                     </label>
 
@@ -618,15 +618,15 @@
                                     </button>
                                     <!-- ./Modal Volume Unit List -->
 
-                                    <div wire:loading wire:target="selectedVolumnUnit"
+                                    <div wire:loading wire:target="selectedVolumeUnit"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
                                     </div>
-                                    <select id="inputs.{{ $key }}.volumnUnit"
-                                        wire:model="inputs.{{ $key }}.volumnUnit" step="any"
-                                        wire:focus.debounce.1000ms="selectedVolumnUnit" class="form-control">
+                                    <select id="inputs.{{ $key }}.volumeUnit"
+                                        wire:model="inputs.{{ $key }}.volumeUnit" step="any"
+                                        wire:focus.debounce.1000ms="selectedVolumeUnit" class="form-control">
                                         <option value="">-- Select --</option>
-                                        @foreach ($volumnUnits as $item)
+                                        @foreach ($volumeUnits as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
