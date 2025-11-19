@@ -12,25 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crm_headers', function (Blueprint $table) {
-            // $table->id()->comment('CRM Header ID');
-            // $table->string('idwithformat')->primary()->comment('CRM Header ID');
-
             $table->mediumIncrements('id')->comment('CRM Header ID');
-            // $table->string('customer_code')->comment('Customer Code');
-            // $table->string('customer_eng')->comment('Customer Name Eng');
-            // $table->string('customer_thi')->comment('Customer Name Thi');
+            $table->string('document_no', '12')->comment('Document Number');
             $table->unsignedSmallInteger('customer_id')->comment('Customer ID');
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->date('started_visit_date')->comment('Start Visit Date');
             $table->date('month_estimate_date')->comment('Month Estimate Date');
             $table->date('original_month_estimate_date')->comment('Original Month Estimate Date');
             $table->unsignedTinyInteger('customer_type_id')->comment('Customer Type');
+            $table->foreign('customer_type_id')->references('id')->on('customer_types');
             $table->unsignedTinyInteger('customer_group_id')->nullable()->comment('Customer Group');
+            $table->foreign('customer_group_id')->references('id')->on('customer_groups');
             $table->string('contact')->comment('Customer Contact');
             $table->text('purpose')->comment('Purpose');
             $table->text('detail')->nullable()->comment('Detail');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
+            $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
+            $table->foreign('updated_user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -43,8 +42,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('crm_headers');
 
-        Schema::table('crm_headers', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        // Schema::table('crm_headers', function (Blueprint $table) {
+        //     $table->dropSoftDeletes();
+        // });
     }
 };

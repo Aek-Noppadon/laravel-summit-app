@@ -15,7 +15,9 @@ return new class extends Migration
             $table->tinyIncrements('id')->comment('Volume Unit ID');
             $table->string('name', '50')->comment('Volume Unit Name');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
+            $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
+            $table->foreign('updated_user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

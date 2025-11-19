@@ -62,6 +62,8 @@ class CustomerTypeLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
+        // try {
+
         CustomerType::find($id)->delete();
 
         $this->dispatch(
@@ -69,11 +71,18 @@ class CustomerTypeLists extends Component
             position: "center",
             title: "Deleted Successfully !!",
             text: "Customer Type : " . $name,
-            // text: "Customer Type Id : " . $id . ", Name : " . $name,
             icon: "success",
             timer: 3000,
-            // url: route('customer-type.list'),
         );
+        // } catch (\Throwable $th) {
+        //     $this->dispatch(
+        //         "sweet.error",
+        //         position: "center",
+        //         title: "Can not Deleted !!",
+        //         text: "Customer type : " . $name . " there is a transaction in CRM.",
+        //         icon: "error",
+        //     );
+        // }
 
         $this->dispatch('close-modal-customer-type');
     }

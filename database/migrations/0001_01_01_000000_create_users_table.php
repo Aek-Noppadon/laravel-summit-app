@@ -11,22 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('users', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->string('email')->unique();
-        //     $table->timestamp('email_verified_at')->nullable();
-        //     $table->string('password');
-        //     $table->rememberToken();
-        //     $table->timestamps();
-        // });
         Schema::create('users', function (Blueprint $table) {
             $table->tinyIncrements('id');
             $table->string('name', '100')->nullable()->comment('First Name');
             $table->string('last_name', '100')->nullable()->comment('Last Name');
             $table->string('sales_id', '3')->nullable()->comment('Sales ID');
             $table->string('employee_id', '4')->nullable()->comment('Employee ID');
-            $table->unsignedTinyInteger('department_id')->nullable()->comment('Department');
             $table->string('email')->unique()->comment('Email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->comment('Password');

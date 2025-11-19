@@ -15,7 +15,9 @@ return new class extends Migration
             $table->tinyIncrements('id')->comment('Sales Stage ID');
             $table->string('name', '50')->nullable()->comment('Sales Stage Name');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
+            $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
+            $table->foreign('updated_user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
