@@ -121,7 +121,6 @@ class CrmCreate extends Component
 
         $this->salesStages = SalesStage::all();
         $this->packingUnits = PackingUnit::all();
-        $this->volumeUnits = VolumeUnit::all();
 
         /*
         =======================================================
@@ -157,6 +156,11 @@ class CrmCreate extends Component
         $this->probabilities = Probability::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
         })->get();
+
+        $this->volumeUnits = VolumeUnit::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
+
         // ====================================================
     }
 
@@ -544,7 +548,9 @@ class CrmCreate extends Component
 
     public function selectedVolumeUnit()
     {
-        $this->volumeUnits = VolumeUnit::all();
+        $this->volumeUnits = VolumeUnit::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })->get();
     }
 
     public function selectedApplication()
@@ -679,7 +685,7 @@ class CrmCreate extends Component
                         'product_id' => $this->product_id,
                         'update_visit' => $value['updateVisit'],
                         'application_id' => $value['application'],
-                        'sales_state_id' => $value['salesStage'],
+                        'sales_stage_id' => $value['salesStage'],
                         'probability_id' => $value['probability'],
                         'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
                         'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
