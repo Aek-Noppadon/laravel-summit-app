@@ -85,7 +85,6 @@
                                     <small class="badge badge-light">
                                         <i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                        , {{ $item->userCreated->name }}
                                     </small>
                                 </td>
                                 <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
@@ -93,7 +92,6 @@
                                     <small class="badge badge-light">
                                         <i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                        , {{ $item->userUpdated->name }}
                                     </small>
                                 </td>
                                 <td>{{ $item->id }}</td>
