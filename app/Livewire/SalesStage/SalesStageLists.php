@@ -16,26 +16,25 @@ class SalesStageLists extends Component
     #[On('refresh-sales-stage')]
     public function render()
     {
-        $sales_stages = SalesStage::orderBy('id', 'asc')
+        /*
+        =======================================================
+        Created : Aek Noppadon
+        Date    : 19/11/2025
+        =======================================================
+        Discription :                    
+        Show sales stages data by user & department 
+        =======================================================
+        */
+
+        $sales_stages = SalesStage::orderBy('id')
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->paginate();
 
+        // ====================================================
+
         return view('livewire.sales-stage.sales-stage-lists', compact('sales_stages'));
-
-        // if (is_null($this->search)) {
-        //     $sales_stages = SalesStage::orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // } else {
-        //     $sales_stages = SalesStage::Where('name', 'like', '%' . $this->search . '%')
-        //         ->orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // }
-
-        // return view('livewire.sales-stage.sales-stage-lists', [
-        //     'sales_stages' => $sales_stages
-        // ]);
     }
 
     public function deleteSalesStage($id, $name)
