@@ -19,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    // public function boot(): void
-    // {
-    //     CrmHeader::observe(CrmHeaderObserver::class);
-    // }
+    public function boot(): void
+    {
+        CrmHeader::observe(CrmHeaderObserver::class);
+    }
 }

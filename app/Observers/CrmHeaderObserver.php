@@ -30,7 +30,7 @@ class CrmHeaderObserver
             ->get();
 
         $lastId = count($crmHeaders);
-        $crmHeader->doc_no = $prefix . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+        $crmHeader->document_no = $prefix . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
     }
 
     /**
