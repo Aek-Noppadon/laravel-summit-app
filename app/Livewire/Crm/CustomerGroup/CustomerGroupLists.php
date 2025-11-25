@@ -62,18 +62,29 @@ class CustomerGroupLists extends Component
     #[On('destroy-customer-group')]
     public function destroy($id, $name)
     {
-        CustomerGroup::find($id)->delete();
+        try {
+            CustomerGroup::find($id)->delete();
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfully !!",
-            text: "Customer Group : " . $name,
-            // text: "Customer Group Id : " . $id . ", Name : " . $name,
-            icon: "success",
-            timer: 3000,
-            // url: route('customer-group.list'),
-        );
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfully !!",
+                text: "Customer Group : " . $name,
+                // text: "Customer Group Id : " . $id . ", Name : " . $name,
+                icon: "success",
+                timer: 3000,
+                // url: route('customer-group.list'),
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Customer group : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+                // timer: 3000,
+            );
+        }
 
         $this->dispatch('close-modal-customer-group');
     }
