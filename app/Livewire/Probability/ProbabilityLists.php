@@ -62,18 +62,26 @@ class ProbabilityLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
-        Probability::find($id)->delete();
+        try {
+            Probability::find($id)->delete();
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfully !!",
-            text: "Probability : " . $name,
-            // text: "Probability Id : " . $id . ", Name : " . $name,
-            icon: "success",
-            timer: 3000,
-            // url: route('probability.list'),
-        );
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfully !!",
+                text: "Sales Stage : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Probability : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+            );
+        }
 
         $this->dispatch('close-modal-probability');
     }
