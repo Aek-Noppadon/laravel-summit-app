@@ -62,27 +62,26 @@ class CustomerTypeLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
-        // try {
+        try {
+            CustomerType::find($id)->delete();
 
-        CustomerType::find($id)->delete();
-
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfully !!",
-            text: "Customer Type : " . $name,
-            icon: "success",
-            timer: 3000,
-        );
-        // } catch (\Throwable $th) {
-        //     $this->dispatch(
-        //         "sweet.error",
-        //         position: "center",
-        //         title: "Can not Deleted !!",
-        //         text: "Customer type : " . $name . " there is a transaction in CRM.",
-        //         icon: "error",
-        //     );
-        // }
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfully !!",
+                text: "Customer Type : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Customer type : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+            );
+        }
 
         $this->dispatch('close-modal-customer-type');
     }
