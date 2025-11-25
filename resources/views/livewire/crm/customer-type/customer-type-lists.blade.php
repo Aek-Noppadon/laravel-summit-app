@@ -128,7 +128,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `Customer type : ${event.name}`,
+                text: `Customer Type : ${event.name}`,
                 // text: `Customer Type Id : ${event.id}, Name : ${event.name}`,
                 icon: "warning",
                 showCancelButton: true,
