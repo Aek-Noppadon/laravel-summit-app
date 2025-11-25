@@ -80,7 +80,7 @@ class CustomerGroupLists extends Component
                 "sweet.error",
                 position: "center",
                 title: "Can not Deleted !!",
-                text: "Customer group : " . $name . " there is a transaction in CRM.",
+                text: "Customer Group : " . $name . " there is a transaction in CRM.",
                 icon: "error",
                 // timer: 3000,
             );

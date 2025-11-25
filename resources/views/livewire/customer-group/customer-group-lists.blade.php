@@ -139,7 +139,7 @@
             Swal.fire({
                 position: "center",
                 title: "Are you sure delete ?",
-                text: `Customer group : ${event.name}`,
+                text: `Customer Group : ${event.name}`,
                 // text: `Customer Group Id : ${event.id}, Name : ${event.name}`,
                 icon: "warning",
                 showCancelButton: true,
