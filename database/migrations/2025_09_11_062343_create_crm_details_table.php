@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreign('probability_id')->references('id')->on('probabilities');
             $table->integer('quantity')->comment('Quantity');
             $table->decimal('unit_price')->comment('Unit Price');
-            $table->decimal('total_price')->comment('Total Price');
+            $table->decimal('total_price', 12, 2)->comment('Total Price');
             $table->unsignedTinyInteger('packing_unit_id')->nullable()->comment('Packing Unit');
             $table->foreign('packing_unit_id')->references('id')->on('packing_units');
             $table->integer('volume_qty')->nullable()->comment('Volume Quantity');
@@ -50,8 +50,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('crm_details');
 
-        Schema::table('crm_details', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        // Schema::table('crm_details', function (Blueprint $table) {
+        //     $table->dropSoftDeletes();
+        // });
     }
 };
