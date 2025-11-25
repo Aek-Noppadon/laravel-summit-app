@@ -73,6 +73,16 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label for="customerCode" class="form-label">Customer Code</label>
+
+                                <!-- Modal Customer Type List -->
+                                <button wire:click="$dispatch('refresh-customer')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-customer">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                                @livewire('crm.customer.customer-lists')
+                                <!-- ./Modal Customer Type List -->
+
                                 <input id="customerCode" wire:model="customerCode" type="text" class="form-control"
                                     disabled readonly>
                             </div>
