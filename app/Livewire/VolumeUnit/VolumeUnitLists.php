@@ -39,16 +39,26 @@ class VolumeUnitLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
-        VolumeUnit::find($id)->delete();
+        try {
+            VolumeUnit::find($id)->delete();
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfully !!",
-            text: "Sales Stage : " . $name,
-            icon: "success",
-            timer: 3000,
-        );
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfully !!",
+                text: "Sales Stage : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Volume Unit : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+            );
+        }
 
         $this->dispatch('close-modal-volume-unit');
     }
