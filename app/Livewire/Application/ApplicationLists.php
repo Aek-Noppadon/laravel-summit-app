@@ -50,18 +50,26 @@ class ApplicationLists extends Component
     #[On('destroy')]
     public function destroy($id, $name)
     {
-        Application::find($id)->delete();
+        try {
+            Application::find($id)->delete();
 
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Deleted Successfully !!",
-            text: "Application : " . $name,
-            // text: "Application Id : " . $id . ", Name : " . $name,
-            icon: "success",
-            timer: 3000,
-            // url: route('application.list'),
-        );
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Deleted Successfully !!",
+                text: "Application : " . $name,
+                icon: "success",
+                timer: 3000,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Can not Deleted !!",
+                text: "Application : " . $name . " there is a transaction in CRM.",
+                icon: "error",
+            );
+        }
 
         $this->dispatch('close-modal-application');
     }
