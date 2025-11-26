@@ -21,43 +21,55 @@ class VolumeUnitCreate extends Component
 
         $departmentId = auth()->user()->department_id;
 
-        $exists = VolumeUnit::where('name', $this->name)
-            ->whereHas('userCreated', function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId);
-            })->exists();
+        if (empty($departmentId)) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Unable to add volume unit !!",
+                text: "Please fill in the department.",
+                icon: "error",
+                url: route('user.profile'),
+            );
+        } else {
 
-        if ($exists) {
-            $this->addError('name', 'The volume unit name has already been taken.');
-            return;
+            $exists = VolumeUnit::where('name', $this->name)
+                ->whereHas('userCreated', function ($query) use ($departmentId) {
+                    $query->where('department_id', $departmentId);
+                })->exists();
+
+            if ($exists) {
+                $this->addError('name', 'The volume unit name has already been taken.');
+                return;
+            }
+
+            $this->validate(
+                [
+                    'name' => 'required',
+                ],
+                [
+                    'required' => 'The volume unit :attribute field is required.',
+                ]
+            );
+
+            VolumeUnit::create(
+                [
+                    'name' => $this->name,
+                    'created_user_id' => auth()->user()->id,
+                    'updated_user_id' => auth()->user()->id,
+                ]
+            );
+
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Created Successfully !!",
+                text: "Volume Unit : " . $this->name,
+                icon: "success",
+                timer: 3000,
+            );
+
+            $this->dispatch('close-modal-volume-unit');
         }
-
-        $this->validate(
-            [
-                'name' => 'required',
-            ],
-            [
-                'required' => 'The volume unit :attribute field is required.',
-            ]
-        );
-
-        VolumeUnit::create(
-            [
-                'name' => $this->name,
-                'created_user_id' => auth()->user()->id,
-                'updated_user_id' => auth()->user()->id,
-            ]
-        );
-
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Created Successfully !!",
-            text: "Volume Unit : " . $this->name,
-            icon: "success",
-            timer: 3000,
-        );
-
-        $this->dispatch('close-modal-volume-unit');
     }
 
     #[On('reset-modal')]
