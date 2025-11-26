@@ -73,6 +73,7 @@
         @this.on('close-modal-customer', (event) => {
             // alert('Close Modal')
             setTimeout(() => {
+                @this.dispatch('refresh-customer')
                 $('#modal-add-customer').modal('hide')
                 @this.dispatch('reset-modal')
             }, 3000);
