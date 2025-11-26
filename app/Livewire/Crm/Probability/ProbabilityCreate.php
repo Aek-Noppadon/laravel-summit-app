@@ -21,54 +21,54 @@ class ProbabilityCreate extends Component
 
         $departmentId = auth()->user()->department_id;
 
-        $exists = Probability::where('name', $this->name)
-            ->whereHas('userCreated', function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId);
-            })->exists();
+        if (empty($departmentId)) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Unable to add probability !!",
+                text: "Please fill in the department.",
+                icon: "error",
+                url: route('user.profile'),
+            );
+        } else {
+            $exists = Probability::where('name', $this->name)
+                ->whereHas('userCreated', function ($query) use ($departmentId) {
+                    $query->where('department_id', $departmentId);
+                })->exists();
 
-        if ($exists) {
-            $this->addError('name', 'The probability name has already been taken.');
-            return;
+            if ($exists) {
+                $this->addError('name', 'The probability name has already been taken.');
+                return;
+            }
+
+            $this->validate(
+                [
+                    'name' => 'required',
+                ],
+                [
+                    'required' => 'The probability :attribute field is required.',
+                ]
+            );
+
+            Probability::create(
+                [
+                    'name' => $this->name,
+                    'created_user_id' => auth()->user()->id,
+                    'updated_user_id' => auth()->user()->id,
+                ]
+            );
+
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Created Successfully !!",
+                text: "Probability : " . $this->name,
+                icon: "success",
+                timer: 3000,
+            );
+
+            $this->dispatch('close-modal-probability');
         }
-
-        $this->validate(
-            [
-                'name' => 'required',
-            ],
-            [
-                'required' => 'The probability :attribute field is required.',
-            ]
-        );
-
-        // $this->validate(
-        //     [
-        //         'name' => 'required|unique:probabilities',
-        //     ],
-        //     [
-        //         'required' => 'The probability :attribute field is required !!',
-        //         'unique' => 'The probability :attribute has already been taken !!',
-        //     ]
-        // );
-
-        Probability::create(
-            [
-                'name' => $this->name,
-                'created_user_id' => auth()->user()->id,
-                'updated_user_id' => auth()->user()->id,
-            ]
-        );
-
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Created Successfully !!",
-            text: "Probability : " . $this->name,
-            icon: "success",
-            timer: 3000,
-            // url: route('probability.list'),
-        );
-
-        $this->dispatch('close-modal-probability');
     }
 
     #[On('reset-modal')]
