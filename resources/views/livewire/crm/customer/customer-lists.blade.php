@@ -10,19 +10,27 @@
 
             <div class="modal-body">
                 <div class="row mb-4">
-                    <div class="col-9">
+                    <div class="col-8">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search customer code or customer name">
                     </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
                     </div>
-                    <div class="col-1 d-flex justify-content-center">
-                        <div class="btn-group" role="group">
+                    <div class="col-3 d-flex justify-content-center">
+                        <div class="btn-group w-100" role="group">
+                            <button wire:click="$dispatch('refresh-customer-ax')" type="button"
+                                class="btn btn-secondary" data-toggle="modal" data-target="#modal-customer-ax">
+                                <i class="fas fa-plus"></i> AX
+                            </button>
+                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                data-target="#modal-add-customer">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
                             <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
