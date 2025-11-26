@@ -36,7 +36,7 @@ class CrmCreate extends Component
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
     public $product_id, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
-    // public $source = '0';
+    public $source = '0';
     public $departmentId;
 
     public function mount($id = null)
