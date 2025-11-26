@@ -382,129 +382,130 @@ class CrmCreate extends Component
         );
     }
 
-    #[On('save-product-ax')]
-    public function saveProductAx($name)
-    {
-        // ทำมั้ยไม่ใช่ Proudct Code ?
+    // ย้ายโค้ดไปที่ Component crm.product.ProductAxLists
+    // #[On('save-product-ax')]
+    // public function saveProductAx($name)
+    // {
+    //     // ทำมั้ยไม่ใช่ Proudct Code ?
 
-        // $product_ax = DB::connection('sqlsrv2')
-        //     ->table('SCC_CRM_PRODUCTS_NEW')
-        //     ->where('ProductName', $name)
-        //     ->first();
+    //     // $product_ax = DB::connection('sqlsrv2')
+    //     //     ->table('SCC_CRM_PRODUCTS_NEW')
+    //     //     ->where('ProductName', $name)
+    //     //     ->first();
 
-        $product_ax = SrvProduct::where('ProductName', $name)
-            ->first();
+    //     $product_ax = SrvProduct::where('ProductName', $name)
+    //         ->first();
 
-        if (empty($product_ax->ProductName)) {
-            $this->dispatch(
-                "sweet.error",
-                position: "center",
-                title: "No have product list",
-                text: "Please refresh product",
-                // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                icon: "error",
-                timer: 3000,
-            );
-        } else {
-            if (empty($product_ax->ProductCode)) {
+    //     if (empty($product_ax->ProductName)) {
+    //         $this->dispatch(
+    //             "sweet.error",
+    //             position: "center",
+    //             title: "No have product list",
+    //             text: "Please refresh product",
+    //             // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //             icon: "error",
+    //             timer: 3000,
+    //         );
+    //     } else {
+    //         if (empty($product_ax->ProductCode)) {
 
-                // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-                $product = Product::where('product_name', $product_ax->ProductName)
-                    ->first();
+    //             // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
+    //             $product = Product::where('product_name', $product_ax->ProductName)
+    //                 ->first();
 
-                if (empty($product)) {
-                    Product::create([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'created_user_id' => Auth::user()->id,
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Created Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                        // url: route('crm.create'),
-                    );
-                } else {
-                    $product->update([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Updated Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                    );
-                }
-            } else {
-                // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-                $product = Product::where('code', $product_ax->ProductCode)
-                    ->first();
+    //             if (empty($product)) {
+    //                 Product::create([
+    //                     'code' => $product_ax->ProductCode,
+    //                     'product_name' => $product_ax->ProductName,
+    //                     'brand' => $product_ax->ProductBrand,
+    //                     'supplier_rep' => $product_ax->SupplierRep,
+    //                     'principal' => $product_ax->Principal,
+    //                     'status' => $product_ax->Status,
+    //                     'source' => $this->source,
+    //                     'created_user_id' => Auth::user()->id,
+    //                     'updated_user_id' => Auth::user()->id,
+    //                 ]);
+    //                 $this->dispatch(
+    //                     "sweet.success",
+    //                     position: "center",
+    //                     title: "Created Successfully !!",
+    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     icon: "success",
+    //                     timer: 3000,
+    //                     // url: route('crm.create'),
+    //                 );
+    //             } else {
+    //                 $product->update([
+    //                     'code' => $product_ax->ProductCode,
+    //                     'product_name' => $product_ax->ProductName,
+    //                     'brand' => $product_ax->ProductBrand,
+    //                     'supplier_rep' => $product_ax->SupplierRep,
+    //                     'principal' => $product_ax->Principal,
+    //                     'status' => $product_ax->Status,
+    //                     'source' => $this->source,
+    //                     'updated_user_id' => Auth::user()->id,
+    //                 ]);
+    //                 $this->dispatch(
+    //                     "sweet.success",
+    //                     position: "center",
+    //                     title: "Updated Successfully !!",
+    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     icon: "success",
+    //                     timer: 3000,
+    //                 );
+    //             }
+    //         } else {
+    //             // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
+    //             $product = Product::where('code', $product_ax->ProductCode)
+    //                 ->first();
 
-                if (empty($product)) {
-                    Product::create([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'created_user_id' => Auth::user()->id,
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Created Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                        // url: route('crm.create'),
-                    );
-                } else {
-                    $product->update([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Updated Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                    );
-                }
-            }
-        }
-    }
+    //             if (empty($product)) {
+    //                 Product::create([
+    //                     'code' => $product_ax->ProductCode,
+    //                     'product_name' => $product_ax->ProductName,
+    //                     'brand' => $product_ax->ProductBrand,
+    //                     'supplier_rep' => $product_ax->SupplierRep,
+    //                     'principal' => $product_ax->Principal,
+    //                     'status' => $product_ax->Status,
+    //                     'source' => $this->source,
+    //                     'created_user_id' => Auth::user()->id,
+    //                     'updated_user_id' => Auth::user()->id,
+    //                 ]);
+    //                 $this->dispatch(
+    //                     "sweet.success",
+    //                     position: "center",
+    //                     title: "Created Successfully !!",
+    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     icon: "success",
+    //                     timer: 3000,
+    //                     // url: route('crm.create'),
+    //                 );
+    //             } else {
+    //                 $product->update([
+    //                     'code' => $product_ax->ProductCode,
+    //                     'product_name' => $product_ax->ProductName,
+    //                     'brand' => $product_ax->ProductBrand,
+    //                     'supplier_rep' => $product_ax->SupplierRep,
+    //                     'principal' => $product_ax->Principal,
+    //                     'status' => $product_ax->Status,
+    //                     'source' => $this->source,
+    //                     'updated_user_id' => Auth::user()->id,
+    //                 ]);
+    //                 $this->dispatch(
+    //                     "sweet.success",
+    //                     position: "center",
+    //                     title: "Updated Successfully !!",
+    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
+    //                     icon: "success",
+    //                     timer: 3000,
+    //                 );
+    //             }
+    //         }
+    //     }
+    // }
 
     public function selectedCustomerType()
     {
