@@ -34,7 +34,7 @@ class CustomerCreate extends Component
             $this->dispatch(
                 "sweet.error",
                 position: "center",
-                title: "Unable to add customers !!",
+                title: "Unable to add customer !!",
                 text: "Please fill in the department.",
                 icon: "error",
                 url: route('user.profile'),
