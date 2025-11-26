@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Products Master List New</h4>
+                <h4 class="modal-title">Products Master Lists</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,19 +10,27 @@
             <div class="modal-body">
 
                 <div class="row mb-4">
-                    <div class="col-9">
+                    <div class="col-8">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search product name or brand name">
                     </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <select wire:model.live="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
                     </div>
-                    <div class="col-1 d-flex justify-content-center">
-                        <div class="btn-group d-flex justify-content-center" role="group">
+                    <div class="col-3 d-flex justify-content-center">
+                        <div class="btn-group w-100" role="group">
+                            <button wire:click="$dispatch('refresh-product-ax')" type="button"
+                                class="btn btn-secondary" data-toggle="modal" data-target="#modal-product-ax">
+                                <i class="fas fa-plus"></i> AX
+                            </button>
+                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                data-target="#modal-add-product">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
                             <button wire:click="$dispatch('refresh-product')" type="button" class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
