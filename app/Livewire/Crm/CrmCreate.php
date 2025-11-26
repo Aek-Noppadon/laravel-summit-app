@@ -36,7 +36,7 @@ class CrmCreate extends Component
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
     public $product_id, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
-    public $source = '0';
+    // public $source = '0';
     public $departmentId;
 
     public function mount($id = null)
@@ -208,66 +208,69 @@ class CrmCreate extends Component
         );
     }
 
-    #[On('save-customer-ax')]
-    public function saveCustomerAx($id)
-    {
-        // $customer_ax = DB::connection('sqlsrv2')
-        //     ->table('SCC_CRM_CUSTOMERS')
-        //     ->Where('CustomerCode', $id)
-        //     ->first();
+    // ย้ายโค้ดไปที่ Component crm.customer.CustomerAxLists
+    // #[On('save-customer-ax')]
+    // public function saveCustomerAx($id)
+    // {
+    //     // $customer_ax = DB::connection('sqlsrv2')
+    //     //     ->table('SCC_CRM_CUSTOMERS')
+    //     //     ->Where('CustomerCode', $id)
+    //     //     ->first();
 
-        $customer_ax = SrvCustomer::where('CustomerCode', $id)
-            ->first();
+    //     $customer_ax = SrvCustomer::where('CustomerCode', $id)
+    //         ->first();
 
-        // ตรวจสอบรหัสลูกค้าว่ามีใน Database ไหม
-        $customer = Customer::where('code', $id)
-            ->first();
+    //     // ตรวจสอบรหัสลูกค้าว่ามีใน Database ไหม
+    //     $customer = Customer::where('code', $id)
+    //         ->first();
 
-        // ถ้าไม่มีรหัสลูกค้าใน Database ให้เพิ่มข้อมูล
-        if (is_null($customer)) {
-            // Insert to database
-            $customer = Customer::create([
-                'code' => $customer_ax->CustomerCode,
-                'name_english' => Str::upper($customer_ax->CustomerNameEng),
-                'name_thai' => $customer_ax->CustomerNameThi,
-                'parent_code' => $customer_ax->ParentCode,
-                'parent_name' => Str::upper($customer_ax->ParentName),
-                'source' => $this->source,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
-            ]);
+    //     // ถ้าไม่มีรหัสลูกค้าใน Database ให้เพิ่มข้อมูล
+    //     if (is_null($customer)) {
+    //         // Insert to database
+    //         $customer = Customer::create([
+    //             'code' => $customer_ax->CustomerCode,
+    //             'name_english' => Str::upper($customer_ax->CustomerNameEng),
+    //             'name_thai' => $customer_ax->CustomerNameThi,
+    //             'parent_code' => $customer_ax->ParentCode,
+    //             'parent_name' => Str::upper($customer_ax->ParentName),
+    //             'source' => $this->source,
+    //             'created_user_id' => Auth::user()->id,
+    //             'updated_user_id' => Auth::user()->id,
+    //         ]);
 
-            $this->dispatch(
-                "sweet.success",
-                position: "center",
-                title: "Created Successfully !!",
-                text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
-                // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
-                icon: "success",
-                timer: 3000,
-            );
-        } else {
-            // Update to database
-            $customer->update([
-                'code' => $customer_ax->CustomerCode,
-                'name_english' => Str::upper($customer_ax->CustomerNameEng),
-                'name_thai' => $customer_ax->CustomerNameThi,
-                'parent_code' => $customer_ax->ParentCode,
-                'parent_name' => Str::upper($customer_ax->ParentName),
-                'source' => $this->source,
-                'updated_user_id' => Auth::user()->id,
-            ]);
-            $this->dispatch(
-                "sweet.success",
-                position: "center",
-                title: "Updated Successfully !!",
-                text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
-                // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
-                icon: "success",
-                timer: 3000,
-            );
-        }
-    }
+    //         $this->dispatch(
+    //             "sweet.success",
+    //             position: "center",
+    //             title: "Created Successfully !!",
+    //             text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
+    //             // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
+    //             icon: "success",
+    //             timer: 3000,
+    //         );
+    //     } else {
+    //         // Update to database
+    //         $customer->update([
+    //             'code' => $customer_ax->CustomerCode,
+    //             'name_english' => Str::upper($customer_ax->CustomerNameEng),
+    //             'name_thai' => $customer_ax->CustomerNameThi,
+    //             'parent_code' => $customer_ax->ParentCode,
+    //             'parent_name' => Str::upper($customer_ax->ParentName),
+    //             'source' => $this->source,
+    //             'updated_user_id' => Auth::user()->id,
+    //         ]);
+    //         $this->dispatch(
+    //             "sweet.success",
+    //             position: "center",
+    //             title: "Updated Successfully !!",
+    //             text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
+    //             // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
+    //             icon: "success",
+    //             timer: 3000,
+    //         );
+    //     }
+
+    //     $this->dispatch('close-modal-customer-ax');
+    // }
 
     #[On('select-product')]
     public function selectProduct($id)
