@@ -4,8 +4,6 @@ namespace App\Livewire\Crm\Customer;
 
 use App\Models\Customer;
 use App\Models\SrvCustomer;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -86,13 +84,13 @@ class CustomerAxLists extends Component
             // Insert to database
             $customer = Customer::create([
                 'code' => $customer_ax->CustomerCode,
-                'name_english' => Str::upper($customer_ax->CustomerNameEng),
+                'name_english' => strtoupper($customer_ax->CustomerNameEng),
                 'name_thai' => $customer_ax->CustomerNameThi,
                 'parent_code' => $customer_ax->ParentCode,
-                'parent_name' => Str::upper($customer_ax->ParentName),
+                'parent_name' => strtoupper($customer_ax->ParentName),
                 'source' => $this->source,
-                'created_user_id' => Auth::user()->id,
-                'updated_user_id' => Auth::user()->id,
+                'created_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]);
 
             $this->dispatch(
@@ -109,12 +107,12 @@ class CustomerAxLists extends Component
             // Update to database
             $customer->update([
                 'code' => $customer_ax->CustomerCode,
-                'name_english' => Str::upper($customer_ax->CustomerNameEng),
+                'name_english' => strtoupper($customer_ax->CustomerNameEng),
                 'name_thai' => $customer_ax->CustomerNameThi,
                 'parent_code' => $customer_ax->ParentCode,
-                'parent_name' => Str::upper($customer_ax->ParentName),
+                'parent_name' => strtoupper($customer_ax->ParentName),
                 'source' => $this->source,
-                'updated_user_id' => Auth::user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]);
             $this->dispatch(
                 "sweet.success",
