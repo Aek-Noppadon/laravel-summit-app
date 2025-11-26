@@ -30,48 +30,59 @@ class CustomerCreate extends Component
 
         $departmentId = auth()->user()->department_id;
 
-        $exists = Customer::where('name_english', $this->name_english)
-            ->where('source', '0')
-            ->orWhere('name_english', $this->name_english)
-            ->whereHas('userCreated', function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId);
-            })->exists();
+        if (empty($departmentId)) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Unable to add customers !!",
+                text: "Please fill in the department.",
+                icon: "error",
+                url: route('user.profile'),
+            );
+        } else {
+            $exists = Customer::where('name_english', $this->name_english)
+                ->where('source', '0')
+                ->orWhere('name_english', $this->name_english)
+                ->whereHas('userCreated', function ($query) use ($departmentId) {
+                    $query->where('department_id', $departmentId);
+                })->exists();
 
-        if ($exists) {
-            $this->addError('name_english', 'The customer name has already been taken.');
-            return;
+            if ($exists) {
+                $this->addError('name_english', 'The customer name has already been taken.');
+                return;
+            }
+
+            $this->validate(
+                [
+                    'name_english' => 'required',
+                ],
+                [
+                    'required' => 'The customer :attribute field is required.',
+                ]
+            );
+
+            Customer::create(
+                [
+                    'name_english' => $this->name_english,
+                    'name_thai' => $this->name_thai,
+                    'source' => $this->source,
+                    'created_user_id' => auth()->user()->id,
+                    'updated_user_id' => auth()->user()->id,
+                ]
+            );
+
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Created Successfully !!",
+                text: "Customer : " . $this->name_english,
+                icon: "success",
+                timer: 3000,
+                // url: route('crm.create'),
+            );
+
+            $this->dispatch('close-modal-customer');
         }
-
-        $this->validate(
-            [
-                'name_english' => 'required',
-            ],
-            [
-                'required' => 'The customer :attribute field is required.',
-            ]
-        );
-
-        Customer::create(
-            [
-                'name_english' => $this->name_english,
-                'name_thai' => $this->name_thai,
-                'source' => $this->source,
-                'created_user_id' => auth()->user()->id,
-                'updated_user_id' => auth()->user()->id,
-            ]
-        );
-
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Created Successfully !!",
-            text: "Customer : " . $this->name_english,
-            icon: "success",
-            timer: 3000,
-            // url: route('crm.create'),
-        );
-
-        $this->dispatch('close-modal-customer');
     }
 
     #[On('reset-modal')]
