@@ -73,16 +73,6 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label for="customerCode" class="form-label">Customer Code</label>
-
-                                <!-- Modal Customer Type List -->
-                                <button wire:click="$dispatch('refresh-customer')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-customer">
-                                    <i class="fas fa-search"></i>
-                                </button>
-
-                                @livewire('crm.customer.customer-lists')
-                                <!-- ./Modal Customer Type List -->
-
                                 <input id="customerCode" wire:model="customerCode" type="text" class="form-control"
                                     disabled readonly>
                             </div>
@@ -237,7 +227,7 @@
                     <div class="row">
 
                         <!-- Customer Modal -->
-                        <div class="col-5">
+                        <div class="col-4">
                             <!-- Search Customer Modal -->
                             <div class="btn-group w-100" role="group">
                                 <button wire:click="$dispatch('refresh-customer')" type="button"
@@ -247,35 +237,16 @@
 
                                 @livewire('crm.customer.customer-lists')
 
-                                {{-- @livewire('crm.select-customer') --}}
-
-                                <!-- ./Customer Modal -->
-
-                                <!-- Search Customer AX Modal -->
-                                <button wire:click="$dispatch('refresh-customer-ax')" type="button"
-                                    class="btn btn-secondary" data-toggle="modal" data-target="#modal-customer-ax">
-                                    <i class="fas fa-plus"></i> Customers AX
-                                </button>
-
                                 @livewire('crm.customer.customer-ax-lists')
-                                {{-- @livewire('crm.select-customer-ax') --}}
-                                <!-- ./Customer Modal AX -->
-
-                                <!-- Add Customer Modal -->
-                                <button type="button" class="btn btn-info" data-toggle="modal"
-                                    data-target="#modal-add-customer">
-                                    <i class="fas fa-plus"></i> Customer
-                                </button>
 
                                 @livewire('crm.customer.customer-create')
-                                {{-- @livewire('crm.customer-create') --}}
-                                <!-- ./Add Customer Modal -->
+
                             </div>
                         </div>
                         <!-- ./Customer Modal -->
 
                         <!-- Product Modal -->
-                        <div class="col-5">
+                        <div class="col-4">
                             <div class="btn-group w-100" role="group">
                                 <button wire:click="$dispatch('refresh-product')" type="button"
                                     class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
@@ -284,33 +255,16 @@
 
                                 @livewire('crm.product.product-lists')
 
-                                {{-- @livewire('crm.select-product') --}}
-
-                                <button wire:click="$dispatch('refresh-product-ax')" type="button"
-                                    class="btn btn-secondary w-100" data-toggle="modal"
-                                    data-target="#modal-product-ax">
-                                    <i class="fas fa-plus"></i> Products AX
-                                </button>
-
                                 @livewire('crm.product.product-ax-lists')
 
-                                {{-- @livewire('crm.select-product-ax') --}}
-
-                                <button type="button" class="btn btn-info w-100" data-toggle="modal"
-                                    data-target="#modal-add-product">
-                                    <i class="fas fa-plus"></i> Product
-                                </button>
-
                                 @livewire('crm.product.product-create')
-
-                                {{-- @livewire('crm.product-create') --}}
 
                             </div>
                         </div>
                         <!-- ./Product Modal -->
 
                         <!-- Save CRM -->
-                        <div class="col-2">
+                        <div class="col-4">
                             {{-- <button type="submit" class="btn btn-success w-100">
                                 <i class="fas fa-save"></i> Save
                             </button> --}}
