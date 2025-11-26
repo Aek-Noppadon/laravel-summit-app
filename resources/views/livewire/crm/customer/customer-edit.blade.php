@@ -6,9 +6,6 @@
                 <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> --}}
             </div>
 
             <div class="modal-body">
