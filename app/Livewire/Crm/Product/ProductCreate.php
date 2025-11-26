@@ -32,53 +32,64 @@ class ProductCreate extends Component
 
         $departmentId = auth()->user()->department_id;
 
-        $exists = Product::where('product_name', $this->product_name)
-            ->where('source', '0')
-            ->orWhere('product_name', $this->product_name)
-            ->whereHas('userCreated', function ($query) use ($departmentId) {
-                $query->where('department_id', $departmentId);
-            })->exists();
+        if (empty($departmentId)) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Unable to add product !!",
+                text: "Please fill in the department.",
+                icon: "error",
+                url: route('user.profile'),
+            );
+        } else {
+            $exists = Product::where('product_name', $this->product_name)
+                ->where('source', '0')
+                ->orWhere('product_name', $this->product_name)
+                ->whereHas('userCreated', function ($query) use ($departmentId) {
+                    $query->where('department_id', $departmentId);
+                })->exists();
 
-        if ($exists) {
-            $this->addError('product_name', 'The product name has already been taken.');
-            return;
+            if ($exists) {
+                $this->addError('product_name', 'The product name has already been taken.');
+                return;
+            }
+            // * ================================================        
+
+            $this->validate(
+                [
+                    'product_name' => 'required',
+                    'brand' => 'required',
+                ],
+                [
+                    'required' => 'The :attribute field is required.',
+                ]
+            );
+
+            Product::create(
+                [
+                    'product_name' => $this->product_name,
+                    'brand' => $this->brand,
+                    'supplier_rep' => $this->supplier_rep,
+                    'principal' => $this->principal,
+                    'status' => $this->status,
+                    'source' => $this->source,
+                    'created_user_id' => auth()->user()->id,
+                    'updated_user_id' => auth()->user()->id,
+                ]
+            );
+
+            $this->dispatch(
+                "sweet.success",
+                position: "center",
+                title: "Created Successfully !!",
+                text: "Product : " . $this->product_name,
+                icon: "success",
+                timer: 3000,
+                // url: route('crm.create'),
+            );
+
+            $this->dispatch('close-modal-product');
         }
-        // * ================================================        
-
-        $this->validate(
-            [
-                'product_name' => 'required',
-                'brand' => 'required',
-            ],
-            [
-                'required' => 'The :attribute field is required.',
-            ]
-        );
-
-        Product::create(
-            [
-                'product_name' => $this->product_name,
-                'brand' => $this->brand,
-                'supplier_rep' => $this->supplier_rep,
-                'principal' => $this->principal,
-                'status' => $this->status,
-                'source' => $this->source,
-                'created_user_id' => auth()->user()->id,
-                'updated_user_id' => auth()->user()->id,
-            ]
-        );
-
-        $this->dispatch(
-            "sweet.success",
-            position: "center",
-            title: "Created Successfully !!",
-            text: "Product : " . $this->product_name,
-            icon: "success",
-            timer: 3000,
-            // url: route('crm.create'),
-        );
-
-        $this->dispatch('close-modal-product');
     }
 
     #[On('reset-modal')]
