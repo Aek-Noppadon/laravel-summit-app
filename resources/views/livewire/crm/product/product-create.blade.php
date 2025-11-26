@@ -102,10 +102,10 @@
         @this.on('close-modal-product', (event) => {
             // alert('Close Modal')
             setTimeout(() => {
+                @this.dispatch('refresh-product')
                 $('#modal-add-product').modal('hide')
                 @this.dispatch('reset-modal')
             }, 3000);
-
         })
     })
 </script>

@@ -93,3 +93,18 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+@script
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            @this.on('close-modal-product', (event) => {
+                // alert('Close Modal AX')
+                setTimeout(() => {
+                    @this.dispatch('refresh-product')
+                    $('#modal-product-ax').modal('hide')
+                }, 3000);
+
+            })
+        })
+    </script>
+@endscript
