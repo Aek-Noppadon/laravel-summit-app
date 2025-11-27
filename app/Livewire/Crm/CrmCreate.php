@@ -584,6 +584,7 @@ class CrmCreate extends Component
                 'customerType' => 'required',
                 'contact' => 'required',
                 'purpose' => 'required',
+
                 // Validate CRM Details
                 'inputs.*.productName' => 'required',
                 'inputs.*.productBrand' => 'required',
@@ -599,6 +600,7 @@ class CrmCreate extends Component
                 'customerType' => 'Customer type field is required.',
                 'contact' => 'Contact person field is required.',
                 'purpose' => 'Purpose field is required.',
+
                 // Validate CRM Details message.
                 'inputs.*.productName.required' => 'Product name field is required.',
                 'inputs.*.productBrand.required' => 'Brand name field is required.',
