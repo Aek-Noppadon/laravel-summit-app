@@ -17,7 +17,6 @@ use App\Models\SrvCustomer;
 use App\Models\SrvProduct;
 use App\Models\VolumeUnit;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -166,8 +165,6 @@ class CrmCreate extends Component
 
     public function render()
     {
-        // dd(Auth::user()->id);
-
         return view('livewire.crm.crm-create');
     }
 
@@ -190,7 +187,7 @@ class CrmCreate extends Component
                 'name_thai' => $customer_ax->CustomerNameThi,
                 'parent_code' => $customer_ax->ParentCode,
                 'parent_name' => strtoupper($customer_ax->ParentName),
-                'updated_user_id' => Auth::user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]);
         }
 
@@ -299,7 +296,7 @@ class CrmCreate extends Component
                     'supplier_rep' => $product_ax->SupplierRep,
                     'principal' => $product_ax->Principal,
                     'status' => $product_ax->Status,
-                    'updated_user_id' => Auth::user()->id,
+                    'updated_user_id' => auth()->user()->id,
                 ]);
             }
         } else {
@@ -323,7 +320,7 @@ class CrmCreate extends Component
                 'supplier_rep' => $product_ax->SupplierRep,
                 'principal' => $product_ax->Principal,
                 'status' => $product_ax->Status,
-                'updated_user_id' => Auth::user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]);
         }
 
@@ -611,149 +608,124 @@ class CrmCreate extends Component
             ]
         );
 
-        // dd($this->startVisit . " " . date('H:i:s'));
-
-        // dd($this->inputs);
-
-        // dd($this->monthEstimate, $this->originalMonthEstimate);
-
         // ตรวจสอบรหัสลูกค้าที่เลือกว่ามีข้อมูลใน Database ไหม ถ้ามีให้เก็บค่ารหัสลูกค้า เข้าตัวแปรเพื่อบันทึกข้อมูล
         $customer = Customer::where('code', $this->customerCode)->first();
 
         $this->customer_id = $customer->id;
 
-        // dd($this->customer_id);
-
         if ($this->inputs) {
 
-            // try {
-            //     DB::beginTransaction();
+            try {
+                DB::beginTransaction();
 
-            // info($this->customerCode);
-            // info($this->customerNameEng);
-            // info($this->customerNameThi);
-            // info($this->startVisit);
-            // info($this->monthEstimate);
-            // info($this->originalMonthEstimate);
-            // info($this->customerType);
-            // info($this->customerGroup);
-            // info($this->contact);
-            // info($this->purpose);
-            // info($this->detail);
+                $crm_header = CrmHeader::updateOrCreate(
+                    [
+                        'id' => $this->crmHeader_id
+                    ],
+                    [
+                        'customer_id' => $this->customer_id,
+                        'started_visit_date' => $this->startVisit,
+                        'month_estimate_date' => $this->monthEstimate,
+                        'original_month_estimate_date' => (is_null($this->originalMonthEstimate)) ? $this->monthEstimate : $this->originalMonthEstimate,
+                        'customer_type_id' => $this->customerType,
+                        'customer_group_id' => $this->customerGroup,
+                        'contact' => $this->contact,
+                        'purpose' => $this->purpose,
+                        'detail' => $this->detail,
+                        'created_user_id' => auth()->user()->id,
+                        'updated_user_id' => auth()->user()->id,
+                    ]
+                );
 
-            // info($this->inputs);
+                foreach ($this->inputs as $value) {
 
-            // foreach ($this->inputs as $value) {
-            //     info(($value['quantity'] != null) ? $value['quantity'] : 0);
-            //     info(($value['unitPrice'] != null) ? $value['unitPrice'] : 0);
-            //     info(($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0);
-            // }
+                    $product = Product::where('product_name', $value['productName'])->first();
 
+                    $this->product_id = $product->id;
 
-            $crm_header = CrmHeader::updateOrCreate(
-                [
-                    'id' => $this->crmHeader_id
-                ],
-                [
-                    'customer_id' => $this->customer_id,
-                    'started_visit_date' => $this->startVisit,
-                    'month_estimate_date' => $this->monthEstimate,
-                    'original_month_estimate_date' => (is_null($this->originalMonthEstimate)) ? $this->monthEstimate : $this->originalMonthEstimate,
-                    'customer_type_id' => $this->customerType,
-                    'customer_group_id' => $this->customerGroup,
-                    'contact' => $this->contact,
-                    'purpose' => $this->purpose,
-                    'detail' => $this->detail,
-                    'created_user_id' => Auth::user()->id,
-                    'updated_user_id' => Auth::user()->id,
-                ]
-            );
+                    $crm_detail = CrmDetail::where('crm_id', $this->crmHeader_id)
+                        ->where('id', $value['crmDetail_id'])
+                        ->first();
 
-            foreach ($this->inputs as $value) {
+                    if (is_null($crm_detail)) {
 
-                $product = Product::where('product_name', $value['productName'])->first();
+                        // Insert to database
+                        $crm_detail = CrmDetail::create([
+                            'crm_id' => $crm_header->id,
+                            'product_id' => $this->product_id,
+                            'update_visit' => $value['updateVisit'],
+                            'application_id' => $value['application'],
+                            'sales_stage_id' => $value['salesStage'],
+                            'probability_id' => $value['probability'],
+                            'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
+                            'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
+                            'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
+                            'packing_unit_id' => $value['packingUnit'],
+                            'volumn_qty' => $value['volumnQty'],
+                            'volume_unit_id' => $value['volumeUnit'],
+                            'additional' => $value['additional'],
+                            'competitor' => $value['competitor'],
+                            'created_user_id' => auth()->user()->id,
+                            'updated_user_id' => auth()->user()->id,
+                        ]);
 
-                $this->product_id = $product->id;
+                        $this->dispatch(
+                            "sweet.success",
+                            position: "center",
+                            title: "Created Successfully !!",
+                            text: (!empty($this->customerCode)) ? "CRM Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM Customer : " . $this->customerNameEng,
+                            icon: "success",
+                            timer: 3000,
+                            url: route('crm.list'),
+                        );
 
-                // dd($this->product_id);
-
-                $crm_detail = CrmDetail::where('crm_id', $this->crmHeader_id)
-                    ->where('id', $value['crmDetail_id'])
-                    ->first();
-
-                if (is_null($crm_detail)) {
-
-                    // Insert to database
-                    $crm_detail = CrmDetail::create([
-                        'crm_id' => $crm_header->id,
-                        'product_id' => $this->product_id,
-                        'update_visit' => $value['updateVisit'],
-                        'application_id' => $value['application'],
-                        'sales_stage_id' => $value['salesStage'],
-                        'probability_id' => $value['probability'],
-                        'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
-                        'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
-                        'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
-                        'packing_unit_id' => $value['packingUnit'],
-                        'volumn_qty' => $value['volumnQty'],
-                        'volume_unit_id' => $value['volumeUnit'],
-                        'additional' => $value['additional'],
-                        'competitor' => $value['competitor'],
-                        'created_user_id' => Auth::user()->id,
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Created Successfully !!",
-                        text: (!empty($this->customerCode)) ? "CRM Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM Customer : " . $this->customerNameEng,
-                        icon: "success",
-                        timer: 3000,
-                        url: route('crm.list'),
-                    );
-
-                    // return $this->redirect(route('crm.list'));
-                } else {
-                    // Update to database
-                    $crm_detail->update([
-                        // 'crm_id' => $crm_header->id,
-                        'product_id' => $this->product_id,
-                        'update_visit' => $value['updateVisit'],
-                        'application_id' => $value['application'],
-                        'sales_stage_id' => $value['salesStage'],
-                        'probability_id' => $value['probability'],
-                        'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
-                        'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
-                        'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
-                        'packing_unit_id' => $value['packingUnit'],
-                        'volumn_qty' => $value['volumnQty'],
-                        'volume_unit_id' => $value['volumeUnit'],
-                        'additional' => $value['additional'],
-                        'competitor' => $value['competitor'],
-                        'updated_user_id' => Auth::user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Updated Successfully !!",
-                        // text: "CRM Id : " . $this->crmHeader_id . ", Name : " . (!empty($this->customerCode)) ? "Customer : " . $this->customerCode . " - " . $this->customerNameEng : "Customer : " . $this->customerNameEng,
-                        text: (!empty($this->customerCode)) ? "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng,
-                        icon: "success",
-                        timer: 3000,
-                        url: route('crm.update', $this->crmHeader_id),
-                    );
+                        // return $this->redirect(route('crm.list'));
+                    } else {
+                        // Update to database
+                        $crm_detail->update([
+                            // 'crm_id' => $crm_header->id,
+                            'product_id' => $this->product_id,
+                            'update_visit' => $value['updateVisit'],
+                            'application_id' => $value['application'],
+                            'sales_stage_id' => $value['salesStage'],
+                            'probability_id' => $value['probability'],
+                            'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
+                            'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
+                            'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
+                            'packing_unit_id' => $value['packingUnit'],
+                            'volumn_qty' => $value['volumnQty'],
+                            'volume_unit_id' => $value['volumeUnit'],
+                            'additional' => $value['additional'],
+                            'competitor' => $value['competitor'],
+                            'updated_user_id' => auth()->user()->id,
+                        ]);
+                        $this->dispatch(
+                            "sweet.success",
+                            position: "center",
+                            title: "Updated Successfully !!",
+                            // text: "CRM Id : " . $this->crmHeader_id . ", Name : " . (!empty($this->customerCode)) ? "Customer : " . $this->customerCode . " - " . $this->customerNameEng : "Customer : " . $this->customerNameEng,
+                            text: (!empty($this->customerCode)) ? "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng,
+                            icon: "success",
+                            timer: 3000,
+                            url: route('crm.update', $this->crmHeader_id),
+                        );
+                    }
                 }
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                // return $e->getMessage();
+
+                $this->dispatch(
+                    "sweet.error",
+                    position: "center",
+                    title: "Can't add CRM data !!",
+                    text: $e->getMessage(),
+                    icon: "error",
+                    // timer: 3000,
+                );
             }
-
-
-
-            //     DB::commit();
-            // } catch (\Exception $e) {
-            //     DB::rollBack();
-            //     // dd($e);
-            //     return $e->getMessage();
-            // }
         } else {
             // Error no add item
             $this->dispatch(
