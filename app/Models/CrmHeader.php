@@ -24,8 +24,18 @@ class CrmHeader extends Model
         'updated_user_id',
     ];
 
-    // public function items()
-    // {
-    //     return $this->hasMany(CrmDetail::class, 'crm_id');
-    // }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    public function crm_items()
+    {
+        return $this->hasMany(CrmDetail::class, 'crm_id');
+    }
+
+    public function crm_details()
+    {
+        return $this->belongsTo(CrmDetail::class, 'id');
+    }
 }
