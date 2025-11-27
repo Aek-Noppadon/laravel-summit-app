@@ -613,6 +613,11 @@ class CrmCreate extends Component
 
         $this->customer_id = $customer->id;
 
+        // crm_headers remove input space
+        $this->contact = trim($this->contact);
+        $this->purpose = trim($this->purpose);
+        $this->detail = trim($this->detail);
+
         if ($this->inputs) {
 
             try {
@@ -643,13 +648,16 @@ class CrmCreate extends Component
 
                     $this->product_id = $product->id;
 
+                    // crm_headers remove input space
+                    $value['additional'] = trim($value['additional']);
+                    $value['competitor'] = trim($value['competitor']);
+
                     $crm_detail = CrmDetail::where('crm_id', $this->crmHeader_id)
                         ->where('id', $value['crmDetail_id'])
                         ->first();
 
-                    if (is_null($crm_detail)) {
-
-                        // Insert to database
+                    if (empty($crm_detail)) {
+                        // CRM data insert to database
                         $crm_detail = CrmDetail::create([
                             'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
@@ -678,10 +686,8 @@ class CrmCreate extends Component
                             timer: 3000,
                             url: route('crm.list'),
                         );
-
-                        // return $this->redirect(route('crm.list'));
                     } else {
-                        // Update to database
+                        // CRM data update to database
                         $crm_detail->update([
                             // 'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
@@ -703,8 +709,7 @@ class CrmCreate extends Component
                             "sweet.success",
                             position: "center",
                             title: "Updated Successfully !!",
-                            // text: "CRM Id : " . $this->crmHeader_id . ", Name : " . (!empty($this->customerCode)) ? "Customer : " . $this->customerCode . " - " . $this->customerNameEng : "Customer : " . $this->customerNameEng,
-                            text: (!empty($this->customerCode)) ? "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM Id : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng,
+                            text: (!empty($this->customerCode)) ? "CRM ID : " . $this->crmHeader_id . ", Customer : " . $this->customerCode . " - " . $this->customerNameEng : "CRM ID : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng,
                             icon: "success",
                             timer: 3000,
                             url: route('crm.update', $this->crmHeader_id),
@@ -720,7 +725,7 @@ class CrmCreate extends Component
                 $this->dispatch(
                     "sweet.error",
                     position: "center",
-                    title: "Can't add CRM data !!",
+                    title: "Can not add CRM data !!",
                     text: $e->getMessage(),
                     icon: "error",
                     // timer: 3000,
