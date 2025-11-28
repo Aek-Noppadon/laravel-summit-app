@@ -33,9 +33,4 @@ class CrmHeader extends Model
     {
         return $this->hasMany(CrmDetail::class, 'crm_id');
     }
-
-    public function crm_details()
-    {
-        return $this->belongsTo(CrmDetail::class, 'id');
-    }
 }
