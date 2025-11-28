@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Crm;
 
+use App\Models\CrmDetail;
 use App\Models\CrmHeader;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -10,51 +11,59 @@ use Livewire\Component;
 
 class CrmLists extends Component
 {
-    public $crmHeaders;
+    // public $crmHeaders;
 
     public function render()
     {
-        // dd(Auth::user()->id);
 
-        $this->crmHeaders = DB::table('customers')
-            ->leftJoin('crm_headers', 'customers.id', 'customer_id')
-            ->leftJoin('crm_details', 'crm_headers.id', 'crm_id')
-            ->select(
-                'crm_headers.created_at',
-                'crm_headers.updated_at',
-                'crm_headers.id',
-                'crm_headers.customer_id',
-                'customers.code',
-                'customers.name_english',
-                'customers.name_thai',
-                'crm_headers.started_visit_date',
-                'crm_headers.month_estimate_date',
-                'crm_headers.contact',
-                'crm_headers.created_at',
-                'crm_headers.updated_at',
-                DB::raw('COUNT(crm_details.id) as crm_details_count')
-            )
-            ->where('crm_headers.created_user_id', Auth::user()->id)
-            ->groupBy(
-                'crm_headers.created_at',
-                'crm_headers.updated_at',
-                'crm_headers.id',
-                'crm_headers.customer_id',
-                'customers.code',
-                'customers.name_english',
-                'customers.name_thai',
-                'crm_headers.started_visit_date',
-                'crm_headers.month_estimate_date',
-                'crm_headers.contact',
-                'crm_headers.created_at',
-                'crm_headers.updated_at',
-            )
-            ->orderByDesc('crm_headers.id')
+        $crmHeaders = CrmHeader::with('customer:id,code,name_english')
+            ->with('crm_items')
+            ->withCount('crm_items')
             ->get();
+
+        // dd($crmDetails);
+
+        // $crmDetails = CrmDetail::onlyTrashed()->get();
+
+        // $this->crmHeaders = DB::table('customers')
+        //     ->leftJoin('crm_headers', 'customers.id', 'customer_id')
+        //     ->leftJoin('crm_details', 'crm_headers.id', 'crm_id')
+        //     ->select(
+        //         'crm_headers.created_at',
+        //         'crm_headers.updated_at',
+        //         'crm_headers.id',
+        //         'crm_headers.customer_id',
+        //         'customers.code',
+        //         'customers.name_english',
+        //         'customers.name_thai',
+        //         'crm_headers.started_visit_date',
+        //         'crm_headers.month_estimate_date',
+        //         'crm_headers.contact',
+        //         'crm_headers.created_at',
+        //         'crm_headers.updated_at',
+        //         DB::raw('COUNT(crm_details.id) as crm_details_count')
+        //     )
+        //     ->where('crm_headers.created_user_id', Auth::user()->id)
+        //     ->groupBy(
+        //         'crm_headers.created_at',
+        //         'crm_headers.updated_at',
+        //         'crm_headers.id',
+        //         'crm_headers.customer_id',
+        //         'customers.code',
+        //         'customers.name_english',
+        //         'customers.name_thai',
+        //         'crm_headers.started_visit_date',
+        //         'crm_headers.month_estimate_date',
+        //         'crm_headers.contact',
+        //         'crm_headers.created_at',
+        //         'crm_headers.updated_at',
+        //     )
+        //     ->orderByDesc('crm_headers.id')
+        //     ->get();
 
         // dd($this->crmHeaders);
 
-        return view('livewire.crm.crm-lists');
+        return view('livewire.crm.crm-lists', compact('crmHeaders'));
     }
 
     public function deleteCrm($id, $customer_name)
@@ -69,11 +78,13 @@ class CrmLists extends Component
 
         CrmHeader::find($id)->delete();
 
+        CrmDetail::where('crm_id', $id)->delete();
+
         $this->dispatch(
             "sweet.success",
             position: "center",
-            title: "Deleted successfully !!",
-            text: "CRM Id : " . $id . " Customer: " . $name,
+            title: "Deleted Successfully !!",
+            text: "CRM ID : " . $id . " Customer: " . $name,
             // text: "Customer : " . $id . " - " . $name,
             icon: "success",
             timer: 3000,
