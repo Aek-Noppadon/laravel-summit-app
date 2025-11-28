@@ -16,10 +16,16 @@ class CrmLists extends Component
     public function render()
     {
 
-        $crmHeaders = CrmHeader::with('customer:id,code,name_english')
-            ->with('crm_items')
+        $crms = CrmHeader::with('customer:id,code,name_english')
+            ->with('crm_items:id,product_id')
+            ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
             ->withCount('crm_items')
             ->get();
+
+        // dd($crmHeaders);
+
+        // $crmDetails = CrmDetail::with('product')
+        //     ->get();
 
         // dd($crmDetails);
 
@@ -63,7 +69,7 @@ class CrmLists extends Component
 
         // dd($this->crmHeaders);
 
-        return view('livewire.crm.crm-lists', compact('crmHeaders'));
+        return view('livewire.crm.crm-lists', compact('crms'));
     }
 
     public function deleteCrm($id, $customer_name)
