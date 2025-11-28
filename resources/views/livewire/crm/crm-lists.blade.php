@@ -51,7 +51,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($crmHeaders as $item)
+                        @foreach ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
@@ -92,11 +92,35 @@
                                     </button>
                                 </td>
                             </tr>
-                            @foreach ($item->crm_items as $item)
+                            <tr>
+                                <td colspan="10">
+                                    <table class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Brand</th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($item->crm_items as $item)
+                                                <tr>
+                                                    <th scope="row">{{ $loop->index + 1 }}</th>
+                                                    <td>{{ $item->product_id }}</td>
+                                                    <td>{{ $item->product->product_name }}</td>
+                                                    <td>{{ $item->product->brand }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            {{-- @foreach ($item->crm_items as $item)
                                 <tr>
                                     <td>{{ $item->product_id }}</td>
+                                    <td>{{ $item->product->product_name }}</td>
+                                    <td>{{ $item->product->brand }}</td>
                                 </tr>
-                            @endforeach
+                            @endforeach --}}
                         @endforeach
                     </tbody>
 
