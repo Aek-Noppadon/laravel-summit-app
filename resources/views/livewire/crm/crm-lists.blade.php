@@ -65,8 +65,8 @@
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
                                 </td>
                                 <td>{{ $item->id }}</td>
-                                <td>{{ $item->code }}</td>
-                                <td>{{ $item->name_english }}</td>
+                                <td>{{ $item->customer->code }}</td>
+                                <td>{{ $item->customer->name_english }}</td>
                                 {{-- <td>{{ $item->customer_thi }}</td> --}}
                                 <td>
                                     {{ Carbon\Carbon::parse($item->started_visit_date)->format('d/m/Y') }}
@@ -77,7 +77,7 @@
                                 <td>{{ $item->contact }}</td>
                                 <td>
                                     <h5>
-                                        <span class="badge badge-dark">{{ $item->crm_details_count }}</span>
+                                        <span class="badge badge-dark">{{ $item->crm_items_count }}</span>
                                     </h5>
                                 </td>
                                 <td>
@@ -92,6 +92,11 @@
                                     </button>
                                 </td>
                             </tr>
+                            @foreach ($item->crm_items as $item)
+                                <tr>
+                                    <td>{{ $item->product_id }}</td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
 
