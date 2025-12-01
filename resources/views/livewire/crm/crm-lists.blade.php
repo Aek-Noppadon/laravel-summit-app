@@ -28,11 +28,15 @@
                     <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                         placeholder="Search customer code or customer name">
                 </div> --}}
-                <div class="col-4">
+                <div class="col-3">
                     <input wire:model.live.debounce.1000ms="search_customer" type="search" class="form-control"
                         placeholder="Search customer code or customer name">
                 </div>
-                <div class="col-4">
+                <div class="col-3">
+                    <input wire:model.live.debounce.1000ms="search_contact" type="search" class="form-control"
+                        placeholder="Search contact">
+                </div>
+                <div class="col-3">
                     <input wire:model.live.debounce.1000ms="search_product" type="search" class="form-control"
                         placeholder="Search product name or brand">
                 </div>
@@ -43,7 +47,7 @@
                         <option value="100">100</option>
                     </select>
                 </div>
-                <div class="col-3 d-flex justify-content-center">
+                <div class="col-2 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
                         <a href="{{ route('crm.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Add CRM
@@ -59,6 +63,8 @@
                 <div class="col-12">
                     <div class="d-flex justify-content-center">
                         {{-- <div wire:loading wire:target="search" class="spinner-border text-primary" role="status"></div> --}}
+                        <div wire:loading wire:target="search_contact" class="spinner-border text-primary"
+                            role="status"></div>
                         <div wire:loading wire:target="search_customer" class="spinner-border text-primary"
                             role="status"></div>
                         <div wire:loading wire:target="search_product" class="spinner-border text-primary"
