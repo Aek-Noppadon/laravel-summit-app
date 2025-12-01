@@ -11,18 +11,67 @@ use Livewire\Component;
 
 class CrmLists extends Component
 {
-    // public $crmHeaders;
+    // use WithPagination;
+    public $search;
+    public $pagination = 20;
+
+    public $isOpenId = null;
+
+    public function toggle($id)
+    {
+        $this->isOpenId = ($this->isOpenId === $id) ? null : $id;
+    }
 
     public function render()
     {
 
-        $crms = CrmHeader::with('customer:id,code,name_english')
-            ->with('crm_items:id,product_id')
-            ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
-            ->withCount('crm_items')
+        // $crms = CrmHeader::with('customer:id,code,name_english')
+        //     ->with('crm_items:id,product_id')
+        //     ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
+        //     ->withCount('crm_items')
+        //     ->get();
+
+        // $crms = CrmHeader::with('customer:id,code,name_english')
+        //     ->with('crm_items:id,product_id')
+        //     ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
+        //     ->withCount('crm_items')
+        //     ->when($this->search, function ($query) {
+        //         $query->whereHas('customer', function ($customerQuery) {
+        //             $customerQuery->where('customer.name', 'like', '%' . $this->search . '%');
+        //         });
+        //     })
+        //     ->get();
+
+        $userId = auth()->user()->id;
+
+        // $crms = CrmHeader::where(function ($userQuery) use ($userId) {
+        //     $userQuery->where('created_user_id', $userId);
+        // })
+        //     ->when($this->search, function ($query) use ($userId) {
+        //         $query->whereHas('customer', function ($customerQuery) {
+        //             $customerQuery->where('name_english', 'like', '%' . $this->search . '%');
+        //         });
+        //         //->orWhere
+        //     })
+
+        $crms = CrmHeader::when($this->search, function ($query) use ($userId) {
+            $query->whereHas('crm_items.product', function ($productQuery) use ($userId) {
+                $productQuery->where('product_name', 'like', '%' . $this->search . '%');
+            })->where(function ($userQuery) use ($userId) {
+                $userQuery->where('created_user_id', $userId);
+            });
+        })
+
+
+            // eager load = fetch before use
+            // control scope of model relations
+            // ->with('crm_items:id,product_id')
+            // ->with('customer')
+            // ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
+            // ->withCount('crm_items')
             ->get();
 
-        // dd($crmHeaders);
+        // dd($crms);
 
         // $crmDetails = CrmDetail::with('product')
         //     ->get();
