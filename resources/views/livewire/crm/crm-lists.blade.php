@@ -24,9 +24,17 @@
         <div class="card-header">
 
             <div class="row mb-4">
-                <div class="col-8">
+                {{-- <div class="col-8">
                     <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                         placeholder="Search customer code or customer name">
+                </div> --}}
+                <div class="col-4">
+                    <input wire:model.live.debounce.1000ms="search_customer" type="search" class="form-control"
+                        placeholder="Search customer code or customer name">
+                </div>
+                <div class="col-4">
+                    <input wire:model.live.debounce.1000ms="search_product" type="search" class="form-control"
+                        placeholder="Search product name or brand">
                 </div>
                 <div class="col-1">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
@@ -50,8 +58,11 @@
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-center">
-                        <div wire:loading wire:target="search" class="spinner-border text-primary" role="status">
-                        </div>
+                        {{-- <div wire:loading wire:target="search" class="spinner-border text-primary" role="status"></div> --}}
+                        <div wire:loading wire:target="search_customer" class="spinner-border text-primary"
+                            role="status"></div>
+                        <div wire:loading wire:target="search_product" class="spinner-border text-primary"
+                            role="status"></div>
                         <div wire:loading wire:target="pagination" class="spinner-border text-primary" role="status">
                         </div>
                     </div>
