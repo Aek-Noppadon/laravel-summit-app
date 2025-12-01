@@ -58,14 +58,16 @@ class CrmLists extends Component
         })
             ->when($this->search, function ($query) use ($userId) {
                 $query->whereHas('customer', function ($customerQuery) {
-                    $customerQuery->where('name_english', 'like', '%' . $this->search . '%');
+                    $customerQuery->where('code', 'like', '%' . $this->search . '%')
+                        ->orWhere('name_english', 'like', '%' . $this->search . '%');
                 })
                     ->where(function ($userQuery) use ($userId) {
                         $userQuery->where('created_user_id', $userId);
                     })
                     ->orWhere(function ($query) use ($userId) {
                         $query->whereHas('crm_items.product', function ($productQuery) {
-                            $productQuery->where('product_name', 'like', '%' . $this->search . '%');
+                            $productQuery->where('product_name', 'like', '%' . $this->search . '%')
+                                ->orWhere('brand', 'like', '%' . $this->search . '%');
                         })
                             ->where(function ($userQuery) use ($userId) {
                                 $userQuery->where('created_user_id', $userId);
