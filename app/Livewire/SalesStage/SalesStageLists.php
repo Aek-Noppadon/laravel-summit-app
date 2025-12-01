@@ -26,10 +26,9 @@ class SalesStageLists extends Component
         =======================================================
         */
 
-        $sales_stages = SalesStage::orderBy('id')
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
+        $sales_stages = SalesStage::when($this->search, function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        })
             ->paginate();
 
         // ====================================================
