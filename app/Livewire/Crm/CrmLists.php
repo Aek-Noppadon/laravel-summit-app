@@ -14,7 +14,6 @@ class CrmLists extends Component
     // use WithPagination;
     public $search;
     public $pagination = 20;
-
     public $isOpenId = null;
 
     public function toggle($id)
@@ -54,14 +53,25 @@ class CrmLists extends Component
         //         //->orWhere
         //     })
 
-        $crms = CrmHeader::when($this->search, function ($query) use ($userId) {
-            $query->whereHas('crm_items.product', function ($productQuery) use ($userId) {
-                $productQuery->where('product_name', 'like', '%' . $this->search . '%');
-            })->where(function ($userQuery) use ($userId) {
-                $userQuery->where('created_user_id', $userId);
-            });
+        $crms = CrmHeader::where(function ($userQuery) use ($userId) {
+            $userQuery->where('created_user_id', $userId);
         })
-
+            ->when($this->search, function ($query) use ($userId) {
+                $query->whereHas('customer', function ($customerQuery) {
+                    $customerQuery->where('name_english', 'like', '%' . $this->search . '%');
+                })
+                    ->where(function ($userQuery) use ($userId) {
+                        $userQuery->where('created_user_id', $userId);
+                    })
+                    ->orWhere(function ($query) use ($userId) {
+                        $query->whereHas('crm_items.product', function ($productQuery) {
+                            $productQuery->where('product_name', 'like', '%' . $this->search . '%');
+                        })
+                            ->where(function ($userQuery) use ($userId) {
+                                $userQuery->where('created_user_id', $userId);
+                            });
+                    });
+            })
 
             // eager load = fetch before use
             // control scope of model relations
