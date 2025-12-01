@@ -13,7 +13,7 @@ class CrmLists extends Component
 {
     // use WithPagination;
     // public $search;
-    public $search_customer, $search_product;
+    public $search_customer, $search_contact, $search_product;
     public $pagination = 20;
     public $isOpenId = null;
 
@@ -76,9 +76,34 @@ class CrmLists extends Component
         //             });
         //     })
 
+        // $crms = CrmHeader::where(function ($userQuery) use ($userId) {
+        //     $userQuery->where('created_user_id', $userId);
+        // })
+        //     ->when($this->search_customer, function ($query) use ($userId) {
+        //         $query->whereHas('customer', function ($customerQuery) {
+        //             $customerQuery->where('code', 'like', '%' . $this->search_customer . '%')
+        //                 ->orWhere('name_english', 'like', '%' . $this->search_customer . '%');
+        //         })
+        //             ->where(function ($userQuery) use ($userId) {
+        //                 $userQuery->where('created_user_id', $userId);
+        //             });
+        //     })
+        //     ->when($this->search_product, function ($query) use ($userId) {
+        //         $query->whereHas('crm_items.product', function ($productQuery) {
+        //             $productQuery->where('product_name', 'like', '%' . $this->search_product . '%')
+        //                 ->orWhere('brand', 'like', '%' . $this->search_product . '%');
+        //         })
+        //             ->where(function ($userQuery) use ($userId) {
+        //                 $userQuery->where('created_user_id', $userId);
+        //             });
+        //     })
+
         $crms = CrmHeader::where(function ($userQuery) use ($userId) {
             $userQuery->where('created_user_id', $userId);
         })
+            ->when($this->search_contact, function ($contactQuery) {
+                $contactQuery->where('contact', 'like', '%' . $this->search_contact . '%');
+            })
             ->when($this->search_customer, function ($query) use ($userId) {
                 $query->whereHas('customer', function ($customerQuery) {
                     $customerQuery->where('code', 'like', '%' . $this->search_customer . '%')
