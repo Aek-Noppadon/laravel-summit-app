@@ -22,9 +22,45 @@
     <!-- card -->
     <div class="card">
         <div class="card-header">
-            <a href="{{ route('crm.create') }}" class="btn btn-primary">
+
+            <div class="row mb-4">
+                <div class="col-8">
+                    <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
+                        placeholder="Search customer code or customer name">
+                </div>
+                <div class="col-1">
+                    <select wire:model.live.debounce.1000ms="pagination" class="form-control">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                    <div class="btn-group w-100" role="group">
+                        <a href="{{ route('crm.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add CRM
+                        </a>
+                        <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center">
+                        <div wire:loading wire:target="search" class="spinner-border text-primary" role="status">
+                        </div>
+                        <div wire:loading wire:target="pagination" class="spinner-border text-primary" role="status">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <a href="{{ route('crm.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add CRM
-            </a>
+            </a> --}}
         </div>
         @if (session('status'))
             <div class="alert alert-success">
@@ -47,7 +83,7 @@
                         <th scope="col" style="width: 135px">Month Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col">Items</th>
-                        <th style="width: 8%" scope="col">Action</th>
+                        <th scope="col" colspan="3" class="text-center">Action</th>
                     </thead>
 
                     <tbody>
@@ -84,22 +120,33 @@
                                     <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                </td>
+                                <td>
                                     <button
                                         wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         {{-- wire:confirm="Are you sure want to delete item" class="btn btn-sm btn-danger"> --}}
                                         <i class="fas fa-trash"></i>
                                     </button>
+
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" wire:click="toggle({{ $item->id }})">
+                                        {{ $isOpenId === $item->id ? 'Close Product detail' : 'Product detail' }}
+                                    </button>
                                 </td>
                             </tr>
+
+                            {{-- @if ($isOpenId == $item->id) --}}
                             <tr>
-                                <td colspan="10">
+                                <td colspan="11">
                                     <table class="table table-sm">
                                         <thead class="thead-dark">
                                             <th scope="col">#</th>
                                             <th scope="col">Id</th>
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Brand</th>
+                                            <th scope="col">Principal</th>
                                         </thead>
                                         <tbody>
                                             @foreach ($item->crm_items as $item)
@@ -108,12 +155,14 @@
                                                     <td>{{ $item->product_id }}</td>
                                                     <td>{{ $item->product->product_name }}</td>
                                                     <td>{{ $item->product->brand }}</td>
+                                                    <td>{{ $item->product->principal }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
+                            {{-- @endif --}}
                             {{-- @foreach ($item->crm_items as $item)
                                 <tr>
                                     <td>{{ $item->product_id }}</td>
