@@ -6,6 +6,7 @@ use App\Models\CrmDetail;
 use App\Models\CrmHeader;
 use App\Models\CustomerGroup;
 use App\Models\CustomerType;
+use App\Models\SalesStage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
@@ -16,11 +17,11 @@ class CrmLists extends Component
     // use WithPagination;
     // public $search;
     public $departmentId;
-    public $search_start_visit, $search_end_visit;
-    public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_product;
+    public $search_start_visit, $search_end_visit, $search_start_month_estimate, $search_end_month_estimate, $search_start_update_visit, $search_end_update_visit;
+    public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_sales_stage, $search_product;
     public $pagination = 20;
     public $isOpenId = null;
-    public $customerTypes, $customerGroups;
+    public $customerTypes, $customerGroups, $salesStages;
 
 
     public function mount()
@@ -38,6 +39,8 @@ class CrmLists extends Component
         })
             ->orderBy('name')
             ->get();
+
+        $this->salesStages = SalesStage::all();
     }
 
     public function render()
@@ -57,6 +60,11 @@ class CrmLists extends Component
             ->when($this->search_start_visit, function ($startVisitQuery) {
                 if ($this->search_start_visit && $this->search_end_visit) {
                     $startVisitQuery->whereBetween('started_visit_date', [$this->search_start_visit, $this->search_end_visit]);
+                }
+            })
+            ->when($this->search_start_month_estimate, function ($monthEstimateQuery) {
+                if ($this->search_start_month_estimate && $this->search_end_month_estimate) {
+                    $monthEstimateQuery->whereBetween('month_estimate_date', [$this->search_start_month_estimate, $this->search_end_month_estimate]);
                 }
             })
             ->when($this->search_contact, function ($contactQuery) {
@@ -81,6 +89,18 @@ class CrmLists extends Component
                     ->where(function ($userQuery) use ($userId) {
                         $userQuery->where('created_user_id', $userId);
                     });
+            })
+            ->when($this->search_start_update_visit, function ($query) {
+                if ($this->search_start_update_visit && $this->search_end_update_visit) {
+                    $query->whereHas('crm_items', function ($startVisitUpdateQuery) {
+                        $startVisitUpdateQuery->whereBetween('update_visit', [$this->search_start_update_visit, $this->search_end_update_visit]);
+                    });
+                }
+            })
+            ->when($this->search_sales_stage, function ($query) {
+                $query->whereHas('crm_items', function ($salesStageQuery) {
+                    $salesStageQuery->where('sales_stage_id', $this->search_sales_stage);
+                });
             })
             ->when($this->search_product, function ($query) use ($userId) {
                 $query->whereHas('crm_items.product', function ($productQuery) {
@@ -170,6 +190,11 @@ class CrmLists extends Component
         })
             ->orderBy('name')
             ->get();
+    }
+
+    public function selectedsalesStage()
+    {
+        $this->salesStages = SalesStage::all();
     }
 
     public function toggle($id)
