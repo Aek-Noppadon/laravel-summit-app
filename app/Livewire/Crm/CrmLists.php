@@ -4,6 +4,8 @@ namespace App\Livewire\Crm;
 
 use App\Models\CrmDetail;
 use App\Models\CrmHeader;
+use App\Models\CustomerGroup;
+use App\Models\CustomerType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
@@ -13,97 +15,64 @@ class CrmLists extends Component
 {
     // use WithPagination;
     // public $search;
-    public $search_customer, $search_contact, $search_product;
+    public $departmentId;
+    public $search_start_visit, $search_end_visit;
+    public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_product;
     public $pagination = 20;
     public $isOpenId = null;
+    public $customerTypes, $customerGroups;
 
-    public function toggle($id)
+
+    public function mount()
     {
-        $this->isOpenId = ($this->isOpenId === $id) ? null : $id;
+        $this->departmentId = auth()->user()->department_id;
+
+        $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
+
+        $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
     }
 
     public function render()
     {
 
-        // $crms = CrmHeader::with('customer:id,code,name_english')
-        //     ->with('crm_items:id,product_id')
-        //     ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
-        //     ->withCount('crm_items')
-        //     ->get();
+        // $crms = CrmHeader::with('customer_type')->get();
 
-        // $crms = CrmHeader::with('customer:id,code,name_english')
-        //     ->with('crm_items:id,product_id')
-        //     ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
-        //     ->withCount('crm_items')
-        //     ->when($this->search, function ($query) {
-        //         $query->whereHas('customer', function ($customerQuery) {
-        //             $customerQuery->where('customer.name', 'like', '%' . $this->search . '%');
-        //         });
-        //     })
-        //     ->get();
+        // dd($crms);
+
+        // dd($this->customerType);
 
         $userId = auth()->user()->id;
-
-        // $crms = CrmHeader::where(function ($userQuery) use ($userId) {
-        //     $userQuery->where('created_user_id', $userId);
-        // })
-        //     ->when($this->search, function ($query) use ($userId) {
-        //         $query->whereHas('customer', function ($customerQuery) {
-        //             $customerQuery->where('name_english', 'like', '%' . $this->search . '%');
-        //         });
-        //         //->orWhere
-        //     })
-
-        // $crms = CrmHeader::where(function ($userQuery) use ($userId) {
-        //     $userQuery->where('created_user_id', $userId);
-        // })
-        //     ->when($this->search, function ($query) use ($userId) {
-        //         $query->whereHas('customer', function ($customerQuery) {
-        //             $customerQuery->where('code', 'like', '%' . $this->search . '%')
-        //                 ->orWhere('name_english', 'like', '%' . $this->search . '%');
-        //         })
-        //             ->where(function ($userQuery) use ($userId) {
-        //                 $userQuery->where('created_user_id', $userId);
-        //             })
-        //             ->orWhere(function ($query) use ($userId) {
-        //                 $query->whereHas('crm_items.product', function ($productQuery) {
-        //                     $productQuery->where('product_name', 'like', '%' . $this->search . '%')
-        //                         ->orWhere('brand', 'like', '%' . $this->search . '%');
-        //                 })
-        //                     ->where(function ($userQuery) use ($userId) {
-        //                         $userQuery->where('created_user_id', $userId);
-        //                     });
-        //             });
-        //     })
-
-        // $crms = CrmHeader::where(function ($userQuery) use ($userId) {
-        //     $userQuery->where('created_user_id', $userId);
-        // })
-        //     ->when($this->search_customer, function ($query) use ($userId) {
-        //         $query->whereHas('customer', function ($customerQuery) {
-        //             $customerQuery->where('code', 'like', '%' . $this->search_customer . '%')
-        //                 ->orWhere('name_english', 'like', '%' . $this->search_customer . '%');
-        //         })
-        //             ->where(function ($userQuery) use ($userId) {
-        //                 $userQuery->where('created_user_id', $userId);
-        //             });
-        //     })
-        //     ->when($this->search_product, function ($query) use ($userId) {
-        //         $query->whereHas('crm_items.product', function ($productQuery) {
-        //             $productQuery->where('product_name', 'like', '%' . $this->search_product . '%')
-        //                 ->orWhere('brand', 'like', '%' . $this->search_product . '%');
-        //         })
-        //             ->where(function ($userQuery) use ($userId) {
-        //                 $userQuery->where('created_user_id', $userId);
-        //             });
-        //     })
 
         $crms = CrmHeader::where(function ($userQuery) use ($userId) {
             $userQuery->where('created_user_id', $userId);
         })
+            ->when($this->search_start_visit, function ($startVisitQuery) {
+                if ($this->search_start_visit && $this->search_end_visit) {
+                    $startVisitQuery->whereBetween('started_visit_date', [$this->search_start_visit, $this->search_end_visit]);
+                }
+            })
             ->when($this->search_contact, function ($contactQuery) {
                 $contactQuery->where('contact', 'like', '%' . $this->search_contact . '%');
             })
+            ->when($this->search_customer_type, function ($customerTypeQuery) {
+                $customerTypeQuery->where('customer_type_id', $this->search_customer_type);
+            })
+            ->when($this->search_customer_group, function ($customerGroupQuery) {
+                $customerGroupQuery->where('customer_group_id', $this->search_customer_group);
+            })
+            // ->when($this->customerType, function ($query) {
+            //     $query->whereHas('customer_type', function ($customerTypeQuery) {
+            //         $customerTypeQuery->where('name', 'like', '%' . $this->customerType . '%');
+            //     });
+            // })
             ->when($this->search_customer, function ($query) use ($userId) {
                 $query->whereHas('customer', function ($customerQuery) {
                     $customerQuery->where('code', 'like', '%' . $this->search_customer . '%')
@@ -179,6 +148,33 @@ class CrmLists extends Component
         // dd($this->crmHeaders);
 
         return view('livewire.crm.crm-lists', compact('crms'));
+    }
+
+    public function selectedCustomerType()
+    {
+        // dd("Select");
+
+        $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function selectedCustomerGroup()
+    {
+        // dd("Select");
+
+        $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function toggle($id)
+    {
+        $this->isOpenId = ($this->isOpenId === $id) ? null : $id;
     }
 
     public function deleteCrm($id, $customer_name)
