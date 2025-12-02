@@ -19,9 +19,18 @@
         </section>
     </div>
 
-    <!-- card -->
-    <div class="card">
+    <!-- Search Data -->
+    <div class="card card-default">
         <div class="card-header">
+            <h3 class="card-title">Search Data...</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body">
 
             <div class="row mb-3">
                 <div class="col-3">
@@ -32,10 +41,20 @@
                     <label for="endVisit" class="form-label">End Visit</label>
                     <input id="endVisit" wire:model.live="search_end_visit" type="date" class="form-control">
                 </div>
+                <div class="col-3">
+                    <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
+                    <input id="startMonthEstimate" wire:model.live="search_start_month_estimate" type="date"
+                        class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
+                    <input id="endMonthEstimate" wire:model.live="search_end_month_estimate" type="date"
+                        class="form-control">
+                </div>
             </div>
 
             <div class="row mb-3">
-                <div class="col-2">
+                <div class="col-3">
                     <label for="customerType" class="form-label">Customer Type</label>
                     <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
                         style="width: 1.2rem;height:1.2rem" role="status">
@@ -48,7 +67,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <label for="customerGroup" class="form-label">Customer Group</label>
                     <div wire:loading wire:target="selectedCustomerGroup" class="spinner-border text-primary"
                         style="width: 1.2rem;height:1.2rem" role="status">
@@ -71,12 +90,48 @@
                     <input wire:model.live.debounce.1000ms="search_contact" type="search" id="contact"
                         class="form-control" placeholder="Search contact">
                 </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-3">
+                    <label for="startUpdateVisit" class="form-label">Start Update Visit</label>
+                    <input id="startUpdateVisit" wire:model.live="search_start_update_visit" type="date"
+                        class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="endUpdateVisit" class="form-label">End Update Visit</label>
+                    <input id="endUpdateVisit" wire:model.live="search_end_update_visit" type="date"
+                        class="form-control">
+                </div>
+                <div class="col-3">
+                    <label for="salesStage" class="form-label">Sales Stage</label>
+                    <div wire:loading wire:target="selectedsalesStage" class="spinner-border text-primary"
+                        style="width: 1.2rem;height:1.2rem" role="status">
+                    </div>
+                    <select id="salesStage" wire:model="search_sales_stage"
+                        wire:click.debounce.1000ms="selectedsalesStage" class="form-control">
+                        <option value="">-- Select --</option>
+                        @foreach ($salesStages as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-3">
                     <label for="product" class="form-label">Product</label>
                     <input wire:model.live.debounce.1000ms="search_product" type="search" id="product"
                         class="form-control" placeholder="Search product name or brand">
                 </div>
             </div>
+
+        </div>
+
+    </div>
+    <!-- ./Search Data -->
+
+    <!-- card -->
+    <div class="card">
+        <div class="card-header">
+
 
             <div class="row mb-4">
                 <div class="col-1">
@@ -205,6 +260,8 @@
                                             <th scope="col">Product Name</th>
                                             <th scope="col">Brand</th>
                                             <th scope="col">Principal</th>
+                                            <th scope="col">Sales Stage</th>
+                                            <th scope="col">Update Visit</th>
                                         </thead>
                                         <tbody>
                                             @foreach ($item->crm_items as $item)
@@ -214,6 +271,10 @@
                                                     <td>{{ $item->product->product_name }}</td>
                                                     <td>{{ $item->product->brand }}</td>
                                                     <td>{{ $item->product->principal }}</td>
+                                                    <td>{{ $item->salesStage->name }}</td>
+                                                    <td>
+                                                        {{ Carbon\Carbon::parse($item->update_visit)->format('d/m/Y') }}
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
