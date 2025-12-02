@@ -32,4 +32,9 @@ class CrmDetail extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function salesStage()
+    {
+        return $this->belongsTo(SalesStage::class, 'sales_stage_id');
+    }
 }
