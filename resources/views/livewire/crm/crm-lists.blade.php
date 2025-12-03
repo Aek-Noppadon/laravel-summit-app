@@ -225,7 +225,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button
-                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->name_english . "'" }})"
+                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>
