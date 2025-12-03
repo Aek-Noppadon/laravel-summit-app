@@ -31,7 +31,6 @@
         </div>
 
         <div class="card-body">
-
             <div class="row mb-3">
                 <div class="col-3">
                     <label for="startVisit" class="form-label">Start Visit</label>
@@ -122,7 +121,6 @@
                         class="form-control" placeholder="Search product name or brand">
                 </div>
             </div>
-
         </div>
 
     </div>
@@ -131,10 +129,9 @@
     <!-- card -->
     <div class="card">
         <div class="card-header">
-
-
-            <div class="row mb-4">
-                <div class="col-1">
+            <div class="row">
+                <div class="offset-8"></div>
+                <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                         <option value="20">20</option>
                         <option value="50">50</option>
@@ -153,7 +150,7 @@
                 </div>
             </div>
 
-            <div class="row mb-4">
+            <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-center">
                         <div wire:loading wire:target="search_customer_type" class="spinner-border text-primary"
@@ -170,17 +167,8 @@
                     </div>
                 </div>
             </div>
-
-            {{-- <a href="{{ route('crm.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add CRM
-            </a> --}}
         </div>
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
-        <!-- /.card-header -->
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -191,12 +179,11 @@
                         <th style="width: 5%" scope="col">ID</th>
                         <th scope="col" style="width: 135px">Customer Code</th>
                         <th scope="col">Customer Name Eng.</th>
-                        {{-- <th scope="col">Customer Name Thi.</th> --}}
                         <th scope="col" style="width: 135px">Start Visit</th>
                         <th scope="col" style="width: 135px">Month Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col">Items</th>
-                        <th scope="col" colspan="3" class="text-center">Action</th>
+                        <th scope="col" style="width: 115px">Action</th>
                     </thead>
 
                     <tbody>
@@ -230,65 +217,74 @@
                                     </h5>
                                 </td>
                                 <td>
+                                    <button class="btn btn-sm btn-primary" wire:click="toggle({{ $item->id }})">
+                                        {{-- {{ $isOpenId === $item->id ? 'Close Product detail' : 'Product detail' }} --}}
+                                        @if ($isOpenId == $item->id)
+                                            <i class="fas fa-minus"></i>
+                                        @else
+                                            <i class="fas fa-plus"></i>
+                                        @endif
+                                    </button>
+                                </td>
+                                <td>
                                     <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                </td>
-                                <td>
                                     <button
                                         wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
-                                        {{-- wire:confirm="Are you sure want to delete item" class="btn btn-sm btn-danger"> --}}
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                </td>
 
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" wire:click="toggle({{ $item->id }})">
-                                        {{ $isOpenId === $item->id ? 'Close Product detail' : 'Product detail' }}
-                                    </button>
-                                </td>
                             </tr>
 
-                            {{-- @if ($isOpenId == $item->id) --}}
-                            <tr>
-                                <td colspan="11">
-                                    <table class="table table-sm">
-                                        <thead class="thead-dark">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Id</th>
-                                            <th scope="col">Product Name</th>
-                                            <th scope="col">Brand</th>
-                                            <th scope="col">Principal</th>
-                                            <th scope="col">Sales Stage</th>
-                                            <th scope="col">Update Visit</th>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($item->crm_items as $item)
-                                                <tr>
-                                                    <th scope="row">{{ $loop->index + 1 }}</th>
-                                                    <td>{{ $item->product_id }}</td>
-                                                    <td>{{ $item->product->product_name }}</td>
-                                                    <td>{{ $item->product->brand }}</td>
-                                                    <td>{{ $item->product->principal }}</td>
-                                                    <td>{{ $item->salesStage->name }}</td>
-                                                    <td>
-                                                        {{ Carbon\Carbon::parse($item->update_visit)->format('d/m/Y') }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            {{-- @endif --}}
-                            {{-- @foreach ($item->crm_items as $item)
-                                <tr>
-                                    <td>{{ $item->product_id }}</td>
-                                    <td>{{ $item->product->product_name }}</td>
-                                    <td>{{ $item->product->brand }}</td>
+                            @if ($isOpenId == $item->id)
+                                <tr wire:transition.duration.1000ms>
+                                    <td colspan="13">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead class="thead-dark">
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Application</th>
+                                                    <th scope="col">Product Id</th>
+                                                    <th scope="col">Product Name</th>
+                                                    <th scope="col">Brand</th>
+                                                    <th scope="col">Principal</th>
+                                                    <th scope="col">Qty.</th>
+                                                    <th scope="col">Unit Price</th>
+                                                    <th scope="col">Total Amt.</th>
+                                                    <th scope="col">Sales Stage</th>
+                                                    <th scope="col">Update Visit</th>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item->crm_items as $item)
+                                                        <tr>
+                                                            <th scope="row">{{ $loop->index + 1 }}</th>
+                                                            <td>
+                                                                @if ($item->application)
+                                                                    {{ $item->application->name }}
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $item->product_id }}</td>
+                                                            <td>{{ $item->product->product_name }}</td>
+                                                            <td>{{ $item->product->brand }}</td>
+                                                            <td>{{ $item->product->principal }}</td>
+                                                            <td>{{ number_format($item->quantity, 0) }}</td>
+                                                            <td>{{ number_format($item->unit_price, 2) }}</td>
+                                                            <td>{{ number_format($item->total_price, 2) }}</td>
+                                                            <td>{{ $item->salesStage->name }}</td>
+                                                            <td>
+                                                                {{ Carbon\Carbon::parse($item->update_visit)->format('d/m/Y') }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
                                 </tr>
-                            @endforeach --}}
+                            @endif
                         @endforeach
                     </tbody>
 
