@@ -21,6 +21,7 @@ class CrmLists extends Component
     public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_sales_stage, $search_product;
     public $pagination = 20;
     public $isOpenId = null;
+    public $isOpenSearch = true;
     public $customerTypes, $customerGroups, $salesStages;
 
 
@@ -76,11 +77,6 @@ class CrmLists extends Component
             ->when($this->search_customer_group, function ($customerGroupQuery) {
                 $customerGroupQuery->where('customer_group_id', $this->search_customer_group);
             })
-            // ->when($this->customerType, function ($query) {
-            //     $query->whereHas('customer_type', function ($customerTypeQuery) {
-            //         $customerTypeQuery->where('name', 'like', '%' . $this->customerType . '%');
-            //     });
-            // })
             ->when($this->search_customer, function ($query) use ($userId) {
                 $query->whereHas('customer', function ($customerQuery) {
                     $customerQuery->where('code', 'like', '%' . $this->search_customer . '%')
@@ -172,8 +168,6 @@ class CrmLists extends Component
 
     public function selectedCustomerType()
     {
-        // dd("Select");
-
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
         })
@@ -183,8 +177,6 @@ class CrmLists extends Component
 
     public function selectedCustomerGroup()
     {
-        // dd("Select");
-
         $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
         })
@@ -197,9 +189,19 @@ class CrmLists extends Component
         $this->salesStages = SalesStage::all();
     }
 
+    public function toggleSearch($value)
+    {
+        $this->isOpenSearch = ($this->isOpenSearch === $value) ? null : $value;
+
+        $this->isOpenId = null;
+    }
+
+    #[On('toggle')]
     public function toggle($id)
     {
         $this->isOpenId = ($this->isOpenId === $id) ? null : $id;
+
+        $this->isOpenSearch = true;
     }
 
     public function deleteCrm($id, $customer_name)
