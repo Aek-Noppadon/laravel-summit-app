@@ -274,21 +274,48 @@ class CrmCreate extends Component
     {
         $product = Product::findOrFail($id);
 
-        if (empty($product->code)) {
+        // dd($product);
 
-            // dd("No have product code");
+        if ($product->source == 0) {
+            if (empty($product->code)) {
 
-            // $product_ax = DB::connection('sqlsrv2')
-            //     ->table('SCC_CRM_PRODUCTS_NEW')
-            //     ->where('ProductName', $product->product_name)
-            //     ->first();
+                // dd("No have product code");
 
-            $product_ax = SrvProduct::where('ProductName', $product->product_name)
-                ->first();
+                // $product_ax = DB::connection('sqlsrv2')
+                //     ->table('SCC_CRM_PRODUCTS_NEW')
+                //     ->where('ProductName', $product->product_name)
+                //     ->first();
 
-            // dd($product_ax);
+                $product_ax = SrvProduct::where('ProductName', $product->product_name)
+                    ->first();
 
-            if ($product_ax) {
+                // dd($product_ax);
+
+                if ($product_ax) {
+                    $product->update([
+                        'code' => $product_ax->ProductCode,
+                        'product_name' => $product_ax->ProductName,
+                        'brand' => $product_ax->ProductBrand,
+                        'supplier_rep' => $product_ax->SupplierRep,
+                        'principal' => $product_ax->Principal,
+                        'status' => $product_ax->Status,
+                        'updated_user_id' => auth()->user()->id,
+                    ]);
+                }
+            } else {
+
+                // dd("Have product code");
+
+                // $product_ax = DB::connection('sqlsrv2')
+                //     ->table('SCC_CRM_PRODUCTS_NEW')
+                //     ->where('ProductCode', $product->code)
+                //     ->first();
+
+                $product_ax = SrvProduct::where('ProductCode', $product->code)
+                    ->first();
+
+                // dd($product_ax);
+
                 $product->update([
                     'code' => $product_ax->ProductCode,
                     'product_name' => $product_ax->ProductName,
@@ -299,29 +326,6 @@ class CrmCreate extends Component
                     'updated_user_id' => auth()->user()->id,
                 ]);
             }
-        } else {
-
-            // dd("Have product code");
-
-            // $product_ax = DB::connection('sqlsrv2')
-            //     ->table('SCC_CRM_PRODUCTS_NEW')
-            //     ->where('ProductCode', $product->code)
-            //     ->first();
-
-            $product_ax = SrvProduct::where('ProductCode', $product->code)
-                ->first();
-
-            // dd($product_ax);
-
-            $product->update([
-                'code' => $product_ax->ProductCode,
-                'product_name' => $product_ax->ProductName,
-                'brand' => $product_ax->ProductBrand,
-                'supplier_rep' => $product_ax->SupplierRep,
-                'principal' => $product_ax->Principal,
-                'status' => $product_ax->Status,
-                'updated_user_id' => auth()->user()->id,
-            ]);
         }
 
         $this->productName = $product->product_name;
