@@ -19,118 +19,11 @@
         </section>
     </div>
 
-    <!-- Search Data -->
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">Search Data...</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-3">
-                    <label for="startVisit" class="form-label">Start Visit</label>
-                    <input id="startVisit" wire:model.live="search_start_visit" type="date" class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="endVisit" class="form-label">End Visit</label>
-                    <input id="endVisit" wire:model.live="search_end_visit" type="date" class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
-                    <input id="startMonthEstimate" wire:model.live="search_start_month_estimate" type="date"
-                        class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
-                    <input id="endMonthEstimate" wire:model.live="search_end_month_estimate" type="date"
-                        class="form-control">
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-3">
-                    <label for="customerType" class="form-label">Customer Type</label>
-                    <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
-                        style="width: 1.2rem;height:1.2rem" role="status">
-                    </div>
-                    <select id="customerType" wire:model="search_customer_type"
-                        wire:click.debounce.1000ms="selectedCustomerType" class="form-control">
-                        <option value="">-- Select --</option>
-                        @foreach ($customerTypes as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-3">
-                    <label for="customerGroup" class="form-label">Customer Group</label>
-                    <div wire:loading wire:target="selectedCustomerGroup" class="spinner-border text-primary"
-                        style="width: 1.2rem;height:1.2rem" role="status">
-                    </div>
-                    <select id="customerGroup" wire:model="search_customer_group"
-                        wire:click.debounce.1000ms="selectedCustomerGroup" class="form-control">
-                        <option value="">-- Select --</option>
-                        @foreach ($customerGroups as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-3">
-                    <label for="customer" class="form-label">Customer</label>
-                    <input wire:model.live.debounce.1000ms="search_customer" type="search" id="customer"
-                        class="form-control" placeholder="Search customer code or customer name">
-                </div>
-                <div class="col-3">
-                    <label for="contact" class="form-label">Contact</label>
-                    <input wire:model.live.debounce.1000ms="search_contact" type="search" id="contact"
-                        class="form-control" placeholder="Search contact">
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-3">
-                    <label for="startUpdateVisit" class="form-label">Start Update Visit</label>
-                    <input id="startUpdateVisit" wire:model.live="search_start_update_visit" type="date"
-                        class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="endUpdateVisit" class="form-label">End Update Visit</label>
-                    <input id="endUpdateVisit" wire:model.live="search_end_update_visit" type="date"
-                        class="form-control">
-                </div>
-                <div class="col-3">
-                    <label for="salesStage" class="form-label">Sales Stage</label>
-                    <div wire:loading wire:target="selectedsalesStage" class="spinner-border text-primary"
-                        style="width: 1.2rem;height:1.2rem" role="status">
-                    </div>
-                    <select id="salesStage" wire:model="search_sales_stage"
-                        wire:click.debounce.1000ms="selectedsalesStage" class="form-control">
-                        <option value="">-- Select --</option>
-                        @foreach ($salesStages as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-3">
-                    <label for="product" class="form-label">Product</label>
-                    <input wire:model.live.debounce.1000ms="search_product" type="search" id="product"
-                        class="form-control" placeholder="Search product name or brand">
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <!-- ./Search Data -->
-
     <!-- card -->
     <div class="card">
         <div class="card-header">
-            <div class="row">
-                <div class="offset-8"></div>
+            <div class="row mb-3">
+                <div class="offset-7"></div>
                 <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                         <option value="20">20</option>
@@ -138,7 +31,7 @@
                         <option value="100">100</option>
                     </select>
                 </div>
-                <div class="col-2 d-flex justify-content-center">
+                <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
                         <a href="{{ route('crm.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Add CRM
@@ -146,10 +39,111 @@
                         <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
+                        <button wire:click="toggleSearch(true)" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
                     </div>
                 </div>
             </div>
+            @if ($isOpenSearch == false)
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="startVisit" class="form-label">Start Visit</label>
+                                <input id="startVisit" wire:model.live="search_start_visit" type="date"
+                                    class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="endVisit" class="form-label">End Visit</label>
+                                <input id="endVisit" wire:model.live="search_end_visit" type="date"
+                                    class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
+                                <input id="startMonthEstimate" wire:model.live="search_start_month_estimate"
+                                    type="date" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
+                                <input id="endMonthEstimate" wire:model.live="search_end_month_estimate" type="date"
+                                    class="form-control">
+                            </div>
+                        </div>
 
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="customerType" class="form-label">Customer Type</label>
+                                <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
+                                    style="width: 1.2rem;height:1.2rem" role="status">
+                                </div>
+                                <select id="customerType" wire:model="search_customer_type"
+                                    wire:click.debounce.1000ms="selectedCustomerType" class="form-control">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($customerTypes as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="customerGroup" class="form-label">Customer Group</label>
+                                <div wire:loading wire:target="selectedCustomerGroup"
+                                    class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
+                                    role="status">
+                                </div>
+                                <select id="customerGroup" wire:model="search_customer_group"
+                                    wire:click.debounce.1000ms="selectedCustomerGroup" class="form-control">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($customerGroups as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="customer" class="form-label">Customer</label>
+                                <input wire:model.live.debounce.1000ms="search_customer" type="search" id="customer"
+                                    class="form-control" placeholder="Search customer code or customer name">
+                            </div>
+                            <div class="col-3">
+                                <label for="contact" class="form-label">Contact</label>
+                                <input wire:model.live.debounce.1000ms="search_contact" type="search" id="contact"
+                                    class="form-control" placeholder="Search contact">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="startUpdateVisit" class="form-label">Start Update Visit</label>
+                                <input id="startUpdateVisit" wire:model.live="search_start_update_visit"
+                                    type="date" class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="endUpdateVisit" class="form-label">End Update Visit</label>
+                                <input id="endUpdateVisit" wire:model.live="search_end_update_visit" type="date"
+                                    class="form-control">
+                            </div>
+                            <div class="col-3">
+                                <label for="salesStage" class="form-label">Sales Stage</label>
+                                <div wire:loading wire:target="selectedsalesStage" class="spinner-border text-primary"
+                                    style="width: 1.2rem;height:1.2rem" role="status">
+                                </div>
+                                <select id="salesStage" wire:model="search_sales_stage"
+                                    wire:click.debounce.1000ms="selectedsalesStage" class="form-control">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($salesStages as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="product" class="form-label">Product</label>
+                                <input wire:model.live.debounce.1000ms="search_product" type="search" id="product"
+                                    class="form-control" placeholder="Search product name or brand">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-center">
@@ -182,7 +176,7 @@
                         <th scope="col" style="width: 135px">Start Visit</th>
                         <th scope="col" style="width: 135px">Month Estimate</th>
                         <th scope="col">Contact</th>
-                        <th scope="col">Items</th>
+                        <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 115px">Action</th>
                     </thead>
 
@@ -240,7 +234,7 @@
                             </tr>
 
                             @if ($isOpenId == $item->id)
-                                <tr wire:transition.duration.1000ms>
+                                <tr>
                                     <td colspan="13">
                                         <div class="table-responsive">
                                             <table class="table table-sm">
