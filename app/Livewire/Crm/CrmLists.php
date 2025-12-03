@@ -46,13 +46,6 @@ class CrmLists extends Component
 
     public function render()
     {
-
-        // $crms = CrmHeader::with('customer_type')->get();
-
-        // dd($crms);
-
-        // dd($this->customerType);
-
         $userId = auth()->user()->id;
 
         $crms = CrmHeader::where(function ($userQuery) use ($userId) {
@@ -116,53 +109,6 @@ class CrmLists extends Component
             ->withCount('crm_items')
             ->get();
 
-        // dd($crms);
-
-        // $crmDetails = CrmDetail::with('product')
-        //     ->get();
-
-        // dd($crmDetails);
-
-        // $crmDetails = CrmDetail::onlyTrashed()->get();
-
-        // $this->crmHeaders = DB::table('customers')
-        //     ->leftJoin('crm_headers', 'customers.id', 'customer_id')
-        //     ->leftJoin('crm_details', 'crm_headers.id', 'crm_id')
-        //     ->select(
-        //         'crm_headers.created_at',
-        //         'crm_headers.updated_at',
-        //         'crm_headers.id',
-        //         'crm_headers.customer_id',
-        //         'customers.code',
-        //         'customers.name_english',
-        //         'customers.name_thai',
-        //         'crm_headers.started_visit_date',
-        //         'crm_headers.month_estimate_date',
-        //         'crm_headers.contact',
-        //         'crm_headers.created_at',
-        //         'crm_headers.updated_at',
-        //         DB::raw('COUNT(crm_details.id) as crm_details_count')
-        //     )
-        //     ->where('crm_headers.created_user_id', Auth::user()->id)
-        //     ->groupBy(
-        //         'crm_headers.created_at',
-        //         'crm_headers.updated_at',
-        //         'crm_headers.id',
-        //         'crm_headers.customer_id',
-        //         'customers.code',
-        //         'customers.name_english',
-        //         'customers.name_thai',
-        //         'crm_headers.started_visit_date',
-        //         'crm_headers.month_estimate_date',
-        //         'crm_headers.contact',
-        //         'crm_headers.created_at',
-        //         'crm_headers.updated_at',
-        //     )
-        //     ->orderByDesc('crm_headers.id')
-        //     ->get();
-
-        // dd($this->crmHeaders);
-
         return view('livewire.crm.crm-lists', compact('crms'));
     }
 
@@ -196,7 +142,6 @@ class CrmLists extends Component
         $this->isOpenId = null;
     }
 
-    #[On('toggle')]
     public function toggle($id)
     {
         $this->isOpenId = ($this->isOpenId === $id) ? null : $id;
