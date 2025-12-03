@@ -695,6 +695,7 @@
         <!-- /.card -->
 
     </div>
+
 </section>
 
 @script
