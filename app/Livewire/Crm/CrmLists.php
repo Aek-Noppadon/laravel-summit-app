@@ -117,7 +117,7 @@ class CrmLists extends Component
             // ->with('crm_items:id,product_id')
             // ->with('customer')
             // ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
-            // ->withCount('crm_items')
+            ->withCount('crm_items')
             ->get();
 
         // dd($crms);
