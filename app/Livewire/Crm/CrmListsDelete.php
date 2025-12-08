@@ -41,31 +41,6 @@ class CrmListsDelete extends Component
 
     public function render()
     {
-
-        // $crms = CrmHeader::onlyTrashed()->get();
-
-        // $crms = CrmHeader::with(['crm_items_delete' => function ($query) {
-        //     $query->withTrashed();
-        // }])
-        //     ->withCount('crm_items_delete')
-        //     ->get();
-
-        // $crms = CrmHeader::with(['crm_items_delete'])->get();
-
-        // dd($crms);
-
-        // // Eager loading only trashed children
-        // $crmHeader = CrmHeader::with(['crm_items_delete'], function ($query) {
-        //     $query->onlyTrashed();
-        // })->get();
-
-        // $crmHeader = CrmHeader::with(['crm_items_delete' => function ($query) {
-        //     $query->withTrashed();
-        // }])->get();
-
-        // dd($crmHeader);
-
-
         $userId = auth()->user()->id;
 
         $crms = CrmHeader::onlyTrashed()
@@ -134,8 +109,6 @@ class CrmListsDelete extends Component
             ->where('created_user_id', auth()->id())
             ->get();
 
-
-
         return view('livewire.crm.crm-lists-delete', compact('crms', 'crmDetails'));
     }
 
@@ -174,6 +147,31 @@ class CrmListsDelete extends Component
             position: "center",
             title: "Restored Successfully !!",
             text: $document_no . ", Customer: " . $name_english,
+            icon: "success",
+            timer: 3000,
+            url: route('crm.list.delete'),
+        );
+    }
+
+    public function restoreCrmItem($id, $document_no, $product_name)
+    {
+        // dd("Restore CRM item: " . $id . "-" . $document_no . "-" . $product_name);
+
+        $this->dispatch("confirmRestoreCrmItem", id: $id, document_no: $document_no, product_name: $product_name);
+    }
+
+    #[On('restoreCrmItem')]
+    public function restore_crm_item($id, $document_no, $product_name)
+    {
+        CrmDetail::withTrashed()
+            ->where('id', $id)
+            ->restore();
+
+        $this->dispatch(
+            "sweet.success",
+            position: "center",
+            title: "Restored Successfully !!",
+            text: $document_no . ", Product: " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
