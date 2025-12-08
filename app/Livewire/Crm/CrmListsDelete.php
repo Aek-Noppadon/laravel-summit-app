@@ -99,7 +99,7 @@ class CrmListsDelete extends Component
             ->with(['crm_items_deleted.product'])
 
             ->withCount('crm_items_deleted')
-            ->orderByDesc('id')
+            ->orderByDesc('deleted_at')
             ->get();
 
         $crmDetails =   CrmDetail::onlyTrashed()
@@ -107,6 +107,7 @@ class CrmListsDelete extends Component
                 $q->whereNull('deleted_at');
             })
             ->where('created_user_id', auth()->id())
+            ->orderByDesc('deleted_at')
             ->get();
 
         return view('livewire.crm.crm-lists-delete', compact('crms', 'crmDetails'));
@@ -126,13 +127,13 @@ class CrmListsDelete extends Component
         $this->isOpenSearch = true;
     }
 
-    public function restoreCrm($id, $document_no, $name_english)
+    public function confirmRestoreCrm($id, $document_no, $name_english)
     {
-        $this->dispatch("confirmRestore", id: $id, document_no: $document_no, name_english: $name_english);
+        $this->dispatch("confirmRestoreCrm", id: $id, document_no: $document_no, name_english: $name_english);
     }
 
-    #[On('restore')]
-    public function restore($id, $document_no, $name_english)
+    #[On('restoreCrm')]
+    public function restoreCrm($id, $document_no, $name_english)
     {
         CrmHeader::withTrashed()
             ->where('id', $id)
@@ -153,15 +154,13 @@ class CrmListsDelete extends Component
         );
     }
 
-    public function restoreCrmItem($id, $document_no, $product_name)
+    public function confirmRestoreCrmItem($id, $document_no, $product_name)
     {
-        // dd("Restore CRM item: " . $id . "-" . $document_no . "-" . $product_name);
-
         $this->dispatch("confirmRestoreCrmItem", id: $id, document_no: $document_no, product_name: $product_name);
     }
 
     #[On('restoreCrmItem')]
-    public function restore_crm_item($id, $document_no, $product_name)
+    public function restoreCrmItem($id, $document_no, $product_name)
     {
         CrmDetail::withTrashed()
             ->where('id', $id)
@@ -178,13 +177,13 @@ class CrmListsDelete extends Component
         );
     }
 
-    public function deleteCrm($id, $document_no, $name_english)
+    public function confirmDeleteCrm($id, $document_no, $name_english)
     {
-        $this->dispatch("confirm", id: $id, document_no: $document_no, name_english: $name_english);
+        $this->dispatch("confirmCrm", id: $id, document_no: $document_no, name_english: $name_english);
     }
 
-    #[On('destroy')]
-    public function destroy($id, $document_no, $name_english)
+    #[On('destroyCrm')]
+    public function destroyCrm($id, $document_no, $name_english)
     {
         CrmHeader::withTrashed()
             ->where('id', $id)
@@ -199,7 +198,28 @@ class CrmListsDelete extends Component
             timer: 3000,
             url: route('crm.list.delete'),
         );
+    }
 
-        // return $this->redirect(route('crm.list'), navigate: true);
+    public function confirmDeleteCrmItem($id, $document_no, $product_name)
+    {
+        $this->dispatch("confirmDeleteCrmItem", id: $id, document_no: $document_no, product_name: $product_name);
+    }
+
+    #[On('destroyCrmItem')]
+    public function destroyCrmItem($id, $document_no, $product_name)
+    {
+        CrmDetail::withTrashed()
+            ->where('id', $id)
+            ->forceDelete();
+
+        $this->dispatch(
+            "sweet.success",
+            position: "center",
+            title: "Deleted Successfully !!",
+            text: $document_no . ", Customer: " . $product_name,
+            icon: "success",
+            timer: 3000,
+            url: route('crm.list.delete'),
+        );
     }
 }
