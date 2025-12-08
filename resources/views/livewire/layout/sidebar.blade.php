@@ -98,10 +98,19 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('crm.list') }}"
-                                class="nav-link {{ request()->is('crms*') ? 'active' : '' }}">
+                                class="nav-link {{ request()->is('crms/lists', 'crms/create', 'crms/update*') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
                                 {{-- <i class="far fa-circle nav-icon"></i> --}}
                                 <p>CRM Lists</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('crm.list.delete') }}"
+                                class="nav-link {{ request()->is('crms/lists/delete') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                {{-- <i class="far fa-circle nav-icon"></i> --}}
+                                <p>CRM Lists Delete</p>
                             </a>
                         </li>
                     </ul>
