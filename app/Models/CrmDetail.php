@@ -12,7 +12,7 @@ class CrmDetail extends Model
     protected $fillable = [
         'crm_id',
         'product_id',
-        'update_visit',
+        'updated_visit',
         'quantity',
         'unit_price',
         'volume_qty',
@@ -27,6 +27,12 @@ class CrmDetail extends Model
         'created_user_id',
         'updated_user_id',
     ];
+
+    public function crmHeader()
+    {
+        return $this->belongsTo(CrmHeader::class, 'crm_id');
+    }
+
 
     public function application()
     {
