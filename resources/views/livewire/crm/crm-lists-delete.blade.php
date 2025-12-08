@@ -23,7 +23,9 @@
     <div class="card">
         <div class="card-header">
             <div class="row mb-3">
-                <div class="offset-7"></div>
+                <div class="col-7">
+                    <h4>CRM Number Delete</h4>
+                </div>
                 <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                         <option value="20">20</option>
@@ -33,9 +35,6 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <a href="{{ route('crm.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add CRM
-                        </a>
                         <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
@@ -170,13 +169,13 @@
                 <table class="table table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        <th scope="col" style="width: 165px">Created</th>
-                        <th scope="col" style="width: 165px">Deleted</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Deleted</th>
                         <th scope="col">Number</th>
-                        <th scope="col" style="width: 135px">Customer Code</th>
-                        <th scope="col">Customer Name Eng.</th>
-                        <th scope="col" style="width: 135px">Start Visit</th>
-                        <th scope="col" style="width: 135px">Month Estimate</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Start Visit</th>
+                        <th scope="col">Month Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 115px">Action</th>
@@ -213,7 +212,6 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" wire:click="toggle({{ $item->id }})">
-                                        {{-- {{ $isOpenId === $item->id ? 'Close Product detail' : 'Product detail' }} --}}
                                         @if ($isOpenId == $item->id)
                                             <i class="fas fa-minus"></i>
                                         @else
@@ -222,13 +220,15 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
                                     <button
-                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->customer->name_english . "'" }})"
+                                        wire:click.prevent="restoreCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
+                                        class="btn btn-sm btn-primary">
+                                        <i class="fas fa-trash-restore"></i>
+                                    </button>
+                                    <button
+                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="far fa-trash-alt"></i>
                                     </button>
                                 </td>
 
@@ -284,68 +284,156 @@
                     </tbody>
 
                 </table>
-
-
-                <table class="table">
-                    <thead class="thead-dark">
-                        <th scope="col">#</th>
-                        <th scope="col">Application</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Supplier Rep.</th>
-                        <th scope="col">Principal</th>
-                        <th scope="col">Qty.</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">Total Amt.</th>
-                        <th scope="col">Sales Stage</th>
-                        <th scope="col">Update Visit</th>
-                    </thead>
-                    <tbody>
-                        @forelse ($crmDetails as $item)
-                            <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>
-                                    @if ($item->application)
-                                        {{ $item->application->name }}
-                                    @endif
-                                </td>
-                                <td>{{ $item->product->product_name }}</td>
-                                <td>{{ $item->product->brand }}</td>
-                                <td>{{ $item->product->supplier_rep }}</td>
-                                <td>{{ $item->product->principal }}</td>
-                                <td>{{ number_format($item->quantity, 0) }}</td>
-                                <td>{{ number_format($item->unit_price, 2) }}</td>
-                                <td>{{ number_format($item->total_price, 2) }}</td>
-                                <td>{{ $item->salesStage->name }}</td>
-                                <td>
-                                    {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3">No Data</td>
-                            </tr>
-                        @endforelse
-
-                    </tbody>
-                </table>
             </div>
         </div>
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row mb-3">
+                <div class="col-7">
+                    <h4>CRM Items Delete</h4>
+                </div>
+                <div class="col-2">
+                    <select wire:model.live.debounce.1000ms="pagination" class="form-control">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="col-3 d-flex justify-content-center">
+                    <div class="btn-group w-100" role="group">
+                        <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button wire:click="toggleSearch(true)" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-dark">
+                    <th scope="col">#</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Application</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Supplier Rep.</th>
+                    <th scope="col">Principal</th>
+                    <th scope="col">Qty.</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Total Amt.</th>
+                    <th scope="col">Sales Stage</th>
+                    <th scope="col">Update Visit</th>
+                    <th scope="col" style="width: 115px">Action</th>
+                </thead>
+                <tbody>
+                    @forelse ($crmDetails as $item)
+                        <tr>
+                            <th scope="row">{{ $loop->index + 1 }}</th>
+                            <td>{{ $item->crmHeader->document_no }}</td>
+                            <td>
+                                @if ($item->application)
+                                    {{ $item->application->name }}
+                                @endif
+                            </td>
+                            <td>{{ $item->product->product_name }}</td>
+                            <td>{{ $item->product->brand }}</td>
+                            <td>{{ $item->product->supplier_rep }}</td>
+                            <td>{{ $item->product->principal }}</td>
+                            <td>{{ number_format($item->quantity, 0) }}</td>
+                            <td>{{ number_format($item->unit_price, 2) }}</td>
+                            <td>{{ number_format($item->total_price, 2) }}</td>
+                            <td>{{ $item->salesStage->name }}</td>
+                            <td>
+                                {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
+                            </td>
+                            <td>
+                                <button
+                                    wire:click.prevent="restoreCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                    class="btn btn-sm btn-primary">
+                                    <i class="fas fa-trash-restore"></i>
+                                </button>
+                                <button
+                                    wire:click.prevent="deleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                    class="btn btn-sm btn-danger">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="11" class="text-center">No Data</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </section>
 
 @script
     <script>
+        $wire.on("confirmRestore", (event) => {
+
+            // alert("Resotre " + event.name);
+
+            Swal.fire({
+                title: "Are you sure restore ?",
+                text: `${event.document_no}, Customer : ${event.name_english}`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Restore"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch("restore", {
+                        id: event.id,
+                        document_no: event.document_no,
+                        name_english: event.name_english,
+                    })
+
+                }
+            });
+        });
+
+        $wire.on("confirmRestoreCrmItem", (event) => {
+            Swal.fire({
+                title: "Are you sure restore ?",
+                text: `${event.document_no}, Product : ${event.product_name}`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Restore"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch("restoreCrmItem", {
+                        id: event.id,
+                        document_no: event.document_no,
+                        product_name: event.product_name,
+                    })
+
+                }
+            });
+        });
+
         $wire.on("confirm", (event) => {
 
             // alert(event.name);
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `CRM Id : ${event.id}, Customer : ${event.name}`,
-                // text: `ID : ${event.id}, Customer : ${event.name}`,
+                text: `${event.document_no}, Customer : ${event.name_english}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -355,7 +443,8 @@
                 if (result.isConfirmed) {
                     $wire.dispatch("destroy", {
                         id: event.id,
-                        name: event.name,
+                        document_no: event.document_no,
+                        name_english: event.name_english,
                     })
 
                 }
