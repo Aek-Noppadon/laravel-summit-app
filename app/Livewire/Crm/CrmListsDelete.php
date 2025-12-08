@@ -153,26 +153,50 @@ class CrmListsDelete extends Component
         $this->isOpenSearch = true;
     }
 
-    public function deleteCrm($id, $customer_name)
+    public function restoreCrm($id, $document_no, $name_english)
     {
-        $this->dispatch("confirm", id: $id, name: $customer_name);
+        $this->dispatch("confirmRestore", id: $id, document_no: $document_no, name_english: $name_english);
+    }
+
+    #[On('restore')]
+    public function restore($id, $document_no, $name_english)
+    {
+        CrmHeader::withTrashed()
+            ->where('id', $id)
+            ->restore();
+
+        CrmDetail::withTrashed()
+            ->where('crm_id', $id)
+            ->restore();
+
+        $this->dispatch(
+            "sweet.success",
+            position: "center",
+            title: "Restored Successfully !!",
+            text: $document_no . ", Customer: " . $name_english,
+            icon: "success",
+            timer: 3000,
+            url: route('crm.list.delete'),
+        );
+    }
+
+    public function deleteCrm($id, $document_no, $name_english)
+    {
+        $this->dispatch("confirm", id: $id, document_no: $document_no, name_english: $name_english);
     }
 
     #[On('destroy')]
-    public function destroy($id, $name)
+    public function destroy($id, $document_no, $name_english)
     {
-        // dd($id, $name);        
-
-        CrmHeader::find($id)->delete();
-
-        CrmDetail::where('crm_id', $id)->delete();
+        CrmHeader::withTrashed()
+            ->where('id', $id)
+            ->forceDelete();
 
         $this->dispatch(
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            text: "CRM ID : " . $id . " Customer: " . $name,
-            // text: "Customer : " . $id . " - " . $name,
+            text: $document_no . ", Customer: " . $name_english,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
