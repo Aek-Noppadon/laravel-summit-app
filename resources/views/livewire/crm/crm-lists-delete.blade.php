@@ -182,7 +182,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($crms as $item)
+                        @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
@@ -236,9 +236,9 @@
 
                             @if ($isOpenId == $item->id)
                                 <tr>
-                                    <td colspan="13">
+                                    <td>
                                         <div class="table-responsive">
-                                            <table class="table table-sm">
+                                            <table class="table table-sm table-hover">
                                                 <thead class="thead-dark">
                                                     <th scope="col">#</th>
                                                     <th scope="col">Application</th>
@@ -280,7 +280,12 @@
                                     </td>
                                 </tr>
                             @endif
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td>No Data</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
 
                 </table>
@@ -317,64 +322,67 @@
         </div>
 
         <div class="card-body">
-            <table class="table">
-                <thead class="thead-dark">
-                    <th scope="col">#</th>
-                    <th scope="col">Number</th>
-                    <th scope="col">Application</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Brand</th>
-                    <th scope="col">Supplier Rep.</th>
-                    <th scope="col">Principal</th>
-                    <th scope="col">Qty.</th>
-                    <th scope="col">Unit Price</th>
-                    <th scope="col">Total Amt.</th>
-                    <th scope="col">Sales Stage</th>
-                    <th scope="col">Update Visit</th>
-                    <th scope="col" style="width: 115px">Action</th>
-                </thead>
-                <tbody>
-                    @forelse ($crmDetails as $item)
-                        <tr>
-                            <th scope="row">{{ $loop->index + 1 }}</th>
-                            <td>{{ $item->crmHeader->document_no }}</td>
-                            <td>
-                                @if ($item->application)
-                                    {{ $item->application->name }}
-                                @endif
-                            </td>
-                            <td>{{ $item->product->product_name }}</td>
-                            <td>{{ $item->product->brand }}</td>
-                            <td>{{ $item->product->supplier_rep }}</td>
-                            <td>{{ $item->product->principal }}</td>
-                            <td>{{ number_format($item->quantity, 0) }}</td>
-                            <td>{{ number_format($item->unit_price, 2) }}</td>
-                            <td>{{ number_format($item->total_price, 2) }}</td>
-                            <td>{{ $item->salesStage->name }}</td>
-                            <td>
-                                {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
-                            </td>
-                            <td>
-                                <button
-                                    wire:click.prevent="restoreCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
-                                    class="btn btn-sm btn-primary">
-                                    <i class="fas fa-trash-restore"></i>
-                                </button>
-                                <button
-                                    wire:click.prevent="deleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
-                                    class="btn btn-sm btn-danger">
-                                    <i class="far fa-trash-alt"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="11" class="text-center">No Data</td>
-                        </tr>
-                    @endforelse
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-dark">
+                        <th scope="col">#</th>
+                        <th scope="col">Number</th>
+                        <th scope="col">Application</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Supplier Rep.</th>
+                        <th scope="col">Principal</th>
+                        <th scope="col">Qty.</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Total Amt.</th>
+                        <th scope="col">Sales Stage</th>
+                        <th scope="col">Update Visit</th>
+                        <th scope="col" style="width: 115px">Action</th>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                        @forelse ($crmDetails as $item)
+                            <tr>
+                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td>{{ $item->crmHeader->document_no }}</td>
+                                <td>
+                                    @if ($item->application)
+                                        {{ $item->application->name }}
+                                    @endif
+                                </td>
+                                <td>{{ $item->product->product_name }}</td>
+                                <td>{{ $item->product->brand }}</td>
+                                <td>{{ $item->product->supplier_rep }}</td>
+                                <td>{{ $item->product->principal }}</td>
+                                <td>{{ number_format($item->quantity, 0) }}</td>
+                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ number_format($item->total_price, 2) }}</td>
+                                <td>{{ $item->salesStage->name }}</td>
+                                <td>
+                                    {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
+                                </td>
+                                <td>
+                                    <button
+                                        wire:click.prevent="restoreCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                        class="btn btn-sm btn-primary">
+                                        <i class="fas fa-trash-restore"></i>
+                                    </button>
+                                    <button
+                                        wire:click.prevent="deleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                        class="btn btn-sm btn-danger">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td>No Data</td>
+                            </tr>
+                        @endforelse
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
