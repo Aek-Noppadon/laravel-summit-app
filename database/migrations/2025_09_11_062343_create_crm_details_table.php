@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('crm_details', function (Blueprint $table) {
             $table->mediumIncrements('id')->comment('CRM Detail ID');
+            // $table->foreignId('crm_id')->constrained('crm_headers')->cascadeOnDelete();
             $table->unsignedMediumInteger('crm_id')->comment('CRM Header ID');
             $table->foreign('crm_id')->references('id')->on('crm_headers')->cascadeOnDelete()->comment('CRM Header ID');
             $table->unsignedSmallInteger('product_id')->comment('Product ID');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->date('update_visit')->comment('Update Visit');
+            $table->date('updated_visit')->comment('Updated Visit');
             $table->unsignedTinyInteger('application_id')->nullable()->comment('Application');
             $table->foreign('application_id')->references('id')->on('applications');
             $table->unsignedTinyInteger('sales_stage_id')->comment('Sales Stages');
@@ -50,8 +51,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('crm_details');
 
-        // Schema::table('crm_details', function (Blueprint $table) {
-        //     $table->dropSoftDeletes();
-        // });
+        Schema::table('crm_details', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
