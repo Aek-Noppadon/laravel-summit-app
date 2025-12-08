@@ -107,6 +107,7 @@ class CrmLists extends Component
             // ->with('customer')
             // ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
             ->withCount('crm_items')
+            ->orderByDesc('id')
             ->get();
 
         return view('livewire.crm.crm-lists', compact('crms'));
