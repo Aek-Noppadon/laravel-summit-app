@@ -29,7 +29,7 @@ class ProductEdit extends Component
 
     public function save()
     {
-        $this->product_name = strtoupper(trim($this->product_name));
+        $this->product_name = trim($this->product_name);
         $this->brand = trim($this->brand);
         $this->supplier_rep = trim($this->supplier_rep);
         $this->principal = trim($this->principal);
