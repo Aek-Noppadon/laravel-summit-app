@@ -173,10 +173,10 @@
                         <th scope="col">Created</th>
                         <th scope="col">updated</th>
                         <th scope="col">Number</th>
-                        <th scope="col" style="width: 135px">Customer Code</th>
+                        <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
-                        <th scope="col" style="width: 135px">Start Visit</th>
-                        <th scope="col" style="width: 135px">Month Estimate</th>
+                        <th scope="col">Start Visit</th>
+                        <th scope="col">Month Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 115px">Action</th>
@@ -226,7 +226,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button
-                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->customer->name_english . "'" }})"
+                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -299,8 +299,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `CRM Id : ${event.id}, Customer : ${event.name}`,
-                // text: `ID : ${event.id}, Customer : ${event.name}`,
+                text: `${event.document_no}, Customer : ${event.name_english}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -310,7 +309,8 @@
                 if (result.isConfirmed) {
                     $wire.dispatch("destroy", {
                         id: event.id,
-                        name: event.name,
+                        document_no: event.document_no,
+                        name_english: event.name_english,
                     })
 
                 }
