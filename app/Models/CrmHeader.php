@@ -34,6 +34,11 @@ class CrmHeader extends Model
         return $this->hasMany(CrmDetail::class, 'crm_id');
     }
 
+    public function crm_items_deleted()
+    {
+        return $this->hasMany(CrmDetail::class, 'crm_id')->withTrashed();
+    }
+
     public function customer_type()
     {
         return $this->belongsTo(CustomerType::class, 'customer_type_id');
