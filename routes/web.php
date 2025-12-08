@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Application\ApplicationCreate;
 use App\Livewire\Application\ApplicationLists;
 use App\Livewire\Crm\CrmCreate;
+use App\Livewire\Crm\CrmDeleteLists;
 use App\Livewire\Crm\CrmLists;
+use App\Livewire\Crm\CrmListsDelete;
 use App\Livewire\Customer\CustomerCreate;
 use App\Livewire\Customer\CustomerLists;
 use App\Livewire\CustomerGroup\CustomerGroupCreate;
@@ -69,10 +71,11 @@ Route::group([
     'as' => 'crm.',
     'middleware' => ['auth']
 ], function () {
-    Route::get('/', CrmLists::class)->name('list');
+    Route::get('/lists', CrmLists::class)->name('list');
     Route::get('/create', CrmCreate::class)->name('create');
     Route::get('/update/{id}', CrmCreate::class)->name('update');
-    Route::get('/delete/{id}', CrmCreate::class)->name('delete');
+    // Route::get('/delete/{id}', CrmCreate::class)->name('delete');
+    Route::get('/lists/delete', CrmListsDelete::class)->name('list.delete');
 });
 
 Route::group([
