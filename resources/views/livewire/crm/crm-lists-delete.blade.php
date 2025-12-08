@@ -169,8 +169,8 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        <th scope="col">Created</th>
                         <th scope="col">Deleted</th>
+                        <th scope="col">Created</th>
                         <th scope="col">Number</th>
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
@@ -178,22 +178,22 @@
                         <th scope="col">Month Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
-                        <th scope="col" style="width: 115px">Action</th>
+                        <th scope="col" style="width: 90px">Action</th>
                     </thead>
 
                     <tbody>
                         @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
-                                </td>
                                 <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }},
                                     {{ Carbon\Carbon::parse($item->deleted_at)->format('H:i:s') }}<br>
                                     <small class="badge badge-light"><i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                </td>
+                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
+                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
+                                    <small class="badge badge-light"><i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
                                 </td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
@@ -326,24 +326,31 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-dark">
                         <th scope="col">#</th>
+                        <th scope="col">Deleted</th>
                         <th scope="col">Number</th>
                         <th scope="col">Application</th>
                         <th scope="col">Product Name</th>
                         <th scope="col">Brand</th>
-                        <th scope="col">Supplier Rep.</th>
-                        <th scope="col">Principal</th>
+                        {{-- <th scope="col">Supplier Rep.</th> --}}
+                        {{-- <th scope="col">Principal</th> --}}
                         <th scope="col">Qty.</th>
                         <th scope="col">Unit Price</th>
                         <th scope="col">Total Amt.</th>
                         <th scope="col">Sales Stage</th>
                         <th scope="col">Update Visit</th>
-                        <th scope="col" style="width: 115px">Action</th>
+                        <th scope="col" style="width: 90px">Action</th>
                     </thead>
                     <tbody>
 
                         @forelse ($crmDetails as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }},
+                                    {{ Carbon\Carbon::parse($item->deleted_at)->format('H:i:s') }}<br>
+                                    <small class="badge badge-light"><i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
+                                    </small>
+                                </td>
                                 <td>{{ $item->crmHeader->document_no }}</td>
                                 <td>
                                     @if ($item->application)
@@ -352,8 +359,8 @@
                                 </td>
                                 <td>{{ $item->product->product_name }}</td>
                                 <td>{{ $item->product->brand }}</td>
-                                <td>{{ $item->product->supplier_rep }}</td>
-                                <td>{{ $item->product->principal }}</td>
+                                {{-- <td>{{ $item->product->supplier_rep }}</td> --}}
+                                {{-- <td>{{ $item->product->principal }}</td> --}}
                                 <td>{{ number_format($item->quantity, 0) }}</td>
                                 <td>{{ number_format($item->unit_price, 2) }}</td>
                                 <td>{{ number_format($item->total_price, 2) }}</td>
