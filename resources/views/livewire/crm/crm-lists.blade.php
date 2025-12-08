@@ -11,7 +11,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">CRM</li>
+                            <li class="breadcrumb-item active">CRM Lists</li>
                         </ol>
                     </div>
                 </div>
@@ -144,6 +144,7 @@
                     </div>
                 </div>
             @endif
+
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-center">
@@ -161,6 +162,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="card-body">
@@ -168,11 +170,11 @@
                 <table class="table table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        <th scope="col" style="width: 165px">Created</th>
-                        <th scope="col" style="width: 165px">updated</th>
-                        <th style="width: 5%" scope="col">ID</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">updated</th>
+                        <th scope="col">Number</th>
                         <th scope="col" style="width: 135px">Customer Code</th>
-                        <th scope="col">Customer Name Eng.</th>
+                        <th scope="col">Customer Name</th>
                         <th scope="col" style="width: 135px">Start Visit</th>
                         <th scope="col" style="width: 135px">Month Estimate</th>
                         <th scope="col">Contact</th>
@@ -194,10 +196,9 @@
                                     <small class="badge badge-light"><i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
                                 </td>
-                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
                                 <td>{{ $item->customer->name_english }}</td>
-                                {{-- <td>{{ $item->customer_thi }}</td> --}}
                                 <td>
                                     {{ Carbon\Carbon::parse($item->started_visit_date)->format('d/m/Y') }}
                                 </td>
@@ -241,7 +242,6 @@
                                                 <thead class="thead-dark">
                                                     <th scope="col">#</th>
                                                     <th scope="col">Application</th>
-                                                    <th scope="col">Product Id</th>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col">Brand</th>
                                                     <th scope="col">Supplier Rep.</th>
@@ -261,7 +261,6 @@
                                                                     {{ $item->application->name }}
                                                                 @endif
                                                             </td>
-                                                            <td>{{ $item->product_id }}</td>
                                                             <td>{{ $item->product->product_name }}</td>
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
@@ -271,7 +270,7 @@
                                                             <td>{{ number_format($item->total_price, 2) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
                                                             <td>
-                                                                {{ Carbon\Carbon::parse($item->update_visit)->format('d/m/Y') }}
+                                                                {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
