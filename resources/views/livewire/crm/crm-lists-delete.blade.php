@@ -24,7 +24,7 @@
         <div class="card-header">
             <div class="row mb-3">
                 <div class="col-7">
-                    <h4>CRM Number Delete</h4>
+                    <h4>Number Delete</h4>
                 </div>
                 <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
@@ -166,7 +166,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-sm table-hover">
                     <thead>
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
@@ -221,12 +221,12 @@
                                 </td>
                                 <td>
                                     <button
-                                        wire:click.prevent="restoreCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
+                                        wire:click.prevent="confirmRestoreCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-primary">
                                         <i class="fas fa-trash-restore"></i>
                                     </button>
                                     <button
-                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
+                                        wire:click.prevent="confirmDeleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
@@ -236,7 +236,7 @@
 
                             @if ($isOpenId == $item->id)
                                 <tr>
-                                    <td>
+                                    <td colspan="13">
                                         <div class="table-responsive">
                                             <table class="table table-sm table-hover">
                                                 <thead class="thead-dark">
@@ -299,7 +299,7 @@
         <div class="card-header">
             <div class="row mb-3">
                 <div class="col-7">
-                    <h4>CRM Items Delete</h4>
+                    <h4>Items Delete</h4>
                 </div>
                 <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
@@ -363,12 +363,12 @@
                                 </td>
                                 <td>
                                     <button
-                                        wire:click.prevent="restoreCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                        wire:click.prevent="confirmRestoreCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
                                         class="btn btn-sm btn-primary">
                                         <i class="fas fa-trash-restore"></i>
                                     </button>
                                     <button
-                                        wire:click.prevent="deleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
+                                        wire:click.prevent="confirmDeleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="far fa-trash-alt"></i>
                                     </button>
@@ -390,9 +390,9 @@
 
 @script
     <script>
-        $wire.on("confirmRestore", (event) => {
+        $wire.on("confirmRestoreCrm", (event) => {
 
-            // alert("Resotre " + event.name);
+            // alert("Restore " + event.name_english);
 
             Swal.fire({
                 title: "Are you sure restore ?",
@@ -404,7 +404,7 @@
                 confirmButtonText: "Yes, Restore"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $wire.dispatch("restore", {
+                    $wire.dispatch("restoreCrm", {
                         id: event.id,
                         document_no: event.document_no,
                         name_english: event.name_english,
@@ -435,9 +435,9 @@
             });
         });
 
-        $wire.on("confirm", (event) => {
+        $wire.on("confirmCrm", (event) => {
 
-            // alert(event.name);
+            // alert(event.name_english);
 
             Swal.fire({
                 title: "Are you sure delete ?",
@@ -449,10 +449,34 @@
                 confirmButtonText: "Yes, Delete"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $wire.dispatch("destroy", {
+                    $wire.dispatch("destroyCrm", {
                         id: event.id,
                         document_no: event.document_no,
                         name_english: event.name_english,
+                    })
+
+                }
+            });
+        });
+
+        $wire.on("confirmDeleteCrmItem", (event) => {
+
+            // alert(event.product_name);
+
+            Swal.fire({
+                title: "Are you sure delete ?",
+                text: `${event.document_no}, Customer : ${event.product_name}`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Delete"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch("destroyCrmItem", {
+                        id: event.id,
+                        document_no: event.document_no,
+                        product_name: event.product_name,
                     })
 
                 }
