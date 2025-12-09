@@ -216,7 +216,7 @@ class CrmListsDelete extends Component
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            text: $document_no . ", Customer: " . $product_name,
+            text: $document_no . ", Product : " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
