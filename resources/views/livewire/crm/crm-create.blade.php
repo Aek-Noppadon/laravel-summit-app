@@ -36,9 +36,9 @@
                         <div class="row">
                             <div class="col-2">
                                 <div class="form-group">
-                                    <div class="mb-2 font-weight-bold">CRM ID</div>
+                                    <div class="mb-2 font-weight-bold">Number</div>
                                     <div class="form-control bg-light">
-                                        {{ $crmHeader_id }}
+                                        {{ $crmHeader_number }}
                                     </div>
                                 </div>
                             </div>
@@ -288,15 +288,7 @@
                         <!-- CRM Detail ID, Created Date, Updated Date -->
                         @isset($crm_detail_id)
                             <div class="row">
-                                <div class="col-2">
-                                    <div class="form-group">
-                                        <div class="mb-2 font-weight-bold">Item ID</div>
-                                        <div class="form-control bg-light">
-                                            {{ $crm_detail_id }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-5">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <div class="mb-2 font-weight-bold">Created</div>
                                         <div class="form-control bg-light">
@@ -307,7 +299,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <div class="mb-2 font-weight-bold">updated</div>
                                         <div class="form-control bg-light">
@@ -639,9 +631,9 @@
                                 </div>
                                 <div class="col-6">
                                     <button
-                                        wire:click.prevent="deleteItem({{ $crm_detail_id }},{{ "'" . str_replace("'", '', $product_name) . "'" }})"
+                                        wire:click.prevent="deleteItem({{ $crm_detail_id }},{{ "'" . $crmHeader_number . "'" }},{{ "'" . str_replace("'", '', $product_name) . "'" }})"
                                         {{-- wire:click.prevent="deleteItem({{ $crm_detail_id }},{{ "'" . $product_name . "'" }})" --}} {{-- wire:confirm="Are you sure want to delete item"  --}} class="btn btn-danger w-100">
-                                        <i class="fas fa-trash"></i> Delete Item from Database
+                                        <i class="fas fa-trash"></i> Delete Item
                                     </button>
                                 </div>
                             @else
@@ -707,7 +699,8 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `Item id : ${event.id}, Product : ${event.name}`,
+                //text: `Item id : ${event.id}, Product : ${event.name}`,
+                text: `${event.document_no}, Product : ${event.product_name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -717,7 +710,8 @@
                 if (result.isConfirmed) {
                     $wire.dispatch("destroy", {
                         id: event.id,
-                        name: event.name,
+                        document_no: event.document_no,
+                        product_name: event.product_name,
                     })
 
                 }
