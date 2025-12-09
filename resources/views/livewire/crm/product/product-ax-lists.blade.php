@@ -68,7 +68,7 @@
                                     <td>{{ $product->Principal }}</td>
                                     <td>
                                         <button
-                                            wire:click.prevent="$dispatch('save-product-ax',{name:{{ "'" . $product->ProductName . "'" }}})"
+                                            wire:click.prevent="$dispatch('save-product-ax',{product_code:{{ "'" . $product->ProductCode . "'" }},product_name:{{ "'" . $product->ProductName . "'" }}})"
                                             class="btn btn-success btn-sm">
                                             <i class="fas fa-save"></i>
                                         </button>
