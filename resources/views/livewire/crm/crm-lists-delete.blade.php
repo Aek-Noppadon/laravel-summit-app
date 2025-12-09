@@ -472,7 +472,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `${event.document_no}, Customer : ${event.product_name}`,
+                text: `${event.document_no}, Product : ${event.product_name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
