@@ -183,7 +183,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($crms as $item)
+                        @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
@@ -280,7 +280,12 @@
                                     </td>
                                 </tr>
                             @endif
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td>No Data</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
 
                 </table>
