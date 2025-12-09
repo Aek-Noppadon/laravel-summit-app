@@ -50,8 +50,8 @@ class ProductLists extends Component
                 });
             })
             ->orderBy('code')
-            ->orderBy('product_name', 'asc')
-            ->orderBy('brand', 'asc')
+            ->orderBy('product_name')
+            ->orderBy('brand')
             ->with(['userCreated:id,name,department_id', 'userCreated.department:id,name'])
             ->paginate($this->pagination);
 
