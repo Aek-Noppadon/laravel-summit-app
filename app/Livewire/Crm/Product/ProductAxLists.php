@@ -52,19 +52,15 @@ class ProductAxLists extends Component
     }
 
     #[On('save-product-ax')]
-    public function saveProductAx($name)
+    public function saveProductAx($product_code, $product_name)
     {
-        // dd("Save AX");
-
-        // ทำมั้ยไม่ใช่ Proudct Code ?
-
-        // $product_ax = DB::connection('sqlsrv2')
-        //     ->table('SCC_CRM_PRODUCTS_NEW')
-        //     ->where('ProductName', $name)
-        //     ->first();
-
-        $product_ax = SrvProduct::where('ProductName', $name)
-            ->first();
+        if ($product_code) {
+            $product_ax = SrvProduct::where('ProductCode', $product_code)
+                ->first();
+        } else {
+            $product_ax = SrvProduct::where('ProductName', $product_name)
+                ->first();
+        }
 
         if (empty($product_ax->ProductName)) {
             $this->dispatch(
