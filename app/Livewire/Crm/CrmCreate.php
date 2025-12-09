@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CrmCreate extends Component
 {
@@ -31,7 +32,7 @@ class CrmCreate extends Component
     public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $monthEstimate,  $customerType, $customerGroup, $contact, $purpose, $detail;
     public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumeUnit, $additional, $competitor;
     public $quantity, $unitPrice, $totalPrice;
-    public $crmHeader_id, $originalMonthEstimate, $crmHeader_created_at, $crmHeader_updated_at;
+    public $crmHeader_number, $crmHeader_id, $originalMonthEstimate, $crmHeader_created_at, $crmHeader_updated_at;
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
     public $product_id, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
@@ -40,79 +41,71 @@ class CrmCreate extends Component
 
     public function mount($id = null)
     {
-        // dd(Auth::user()->id);
-
         // Variable crmHeader_id ใช้สำหรับตอนลบ แล้วอ้างค่าตอนรีเฟรชเพจ
         $this->crmHeader_id = $id;
 
-        // dd($this->crmHeader_id);
-
         if ($id) {
-            // $crmHeader = CrmHeader::findOrFail($id);
-            $crmHeader = CrmHeader::join('customers', 'crm_headers.customer_id', '=', 'customers.id')
-                ->select('crm_headers.*', 'customers.code', 'customers.name_english', 'customers.name_thai')
-                ->where('crm_headers.id', $id)
+
+            $crmHeader = CrmHeader::where('id', $id)
+                ->where('created_user_id', auth()->user()->id)
                 ->first();
 
-            // dd($crmHeader);
+            try {
+                $this->customer_id = $crmHeader->customer_id; // Add code 09/12/2025
+                $this->crmHeader_number = $crmHeader->document_no;
+                $this->customerCode = $crmHeader->customer->code;
+                $this->customerNameEng = $crmHeader->customer->name_english;
+                $this->customerNameThi = $crmHeader->customer->name_thai;
+                $this->startVisit = $crmHeader->started_visit_date;
+                $this->monthEstimate = $crmHeader->month_estimate_date;
+                $this->originalMonthEstimate = $crmHeader->original_month_estimate_date;
+                $this->customerType = $crmHeader->customer_type_id;
+                $this->customerGroup = $crmHeader->customer_group_id;
+                $this->contact = $crmHeader->contact;
+                $this->purpose = $crmHeader->purpose;
+                $this->detail = $crmHeader->detail;
+                $this->crmHeader_created_at = $crmHeader->created_at;
+                $this->crmHeader_updated_at = $crmHeader->updated_at;
 
-            $this->crmHeader_id = $crmHeader->id;
-            $this->customerCode = $crmHeader->code;
-            $this->customerNameEng = $crmHeader->name_english;
-            $this->customerNameThi = $crmHeader->name_thai;
-            $this->startVisit = $crmHeader->started_visit_date;
-            $this->monthEstimate = $crmHeader->month_estimate_date;
-            $this->originalMonthEstimate = $crmHeader->original_month_estimate_date;
-            $this->customerType = $crmHeader->customer_type_id;
-            $this->customerGroup = $crmHeader->customer_group_id;
-            $this->contact = $crmHeader->contact;
-            $this->purpose = $crmHeader->purpose;
-            $this->detail = $crmHeader->detail;
-            $this->crmHeader_created_at = $crmHeader->created_at;
-            $this->crmHeader_updated_at = $crmHeader->updated_at;
+                $crmDetails = CrmDetail::where('crm_id', $id)->get();
 
-            // $crmDetails = CrmHeader::findOrFail($id);
+                foreach ($crmDetails as $value) {
+                    $this->inputs[] = [
+                        'crmDetail_id' => $value->id,
+                        'productName' => $value->product->product_name,
+                        'productBrand' => $value->product->brand,
+                        'supplierRep' => $value->product->supplier_rep,
+                        'principal' => $value->product->principal,
+                        'updateVisit' => $value->updated_visit,
+                        'application' => $value->application_id,
+                        'salesStage' => $value->sales_stage_id,
+                        'probability' => $value->probability_id,
+                        'quantity' => $value->quantity,
+                        'unitPrice' => $value->unit_price,
+                        'totalPrice' => number_format($value->total_price, 2),
+                        'packingUnit' => $value->packing_unit_id,
+                        'volumnQty' => $value->volumn_qty,
+                        'volumeUnit' => $value->volume_unit_id,
+                        'additional' => $value->additional,
+                        'competitor' => $value->competitor,
+                        'created_at' => $value->created_at,
+                        'updated_at' => $value->updated_at,
+                    ];
 
-            $crmDetails = CrmDetail::join('products', 'crm_details.product_id', '=', 'products.id')
-                ->join('crm_headers', 'crm_details.crm_id', '=', 'crm_headers.id')
-                ->select('crm_headers.*', 'crm_details.*', 'products.product_name', 'products.brand', 'products.supplier_rep', 'products.principal')
-                ->where('crm_headers.id', $id)
-                ->get();
-
-            // dd($crmDetails);
-
-            // foreach ($crmDetails->items as $value) {
-            foreach ($crmDetails as $value) {
-                $this->inputs[] = [
-                    'crmDetail_id' => $value->id,
-                    'productName' => $value->product_name,
-                    'productBrand' => $value->brand,
-                    'supplierRep' => $value->supplier_rep,
-                    'principal' => $value->principal,
-                    'updateVisit' => $value->updated_visit,
-                    'application' => $value->application_id,
-                    'salesStage' => $value->sales_stage_id,
-                    'probability' => $value->probability_id,
-                    'quantity' => $value->quantity,
-                    'unitPrice' => $value->unit_price,
-                    'totalPrice' => number_format($value->total_price, 2),
-                    'packingUnit' => $value->packing_unit_id,
-                    'volumnQty' => $value->volumn_qty,
-                    'volumeUnit' => $value->volume_unit_id,
-                    'additional' => $value->additional,
-                    'competitor' => $value->competitor,
-                    'created_at' => $value->created_at,
-                    'updated_at' => $value->updated_at,
-                    // 'created_at' => (is_null($value->created_at)) ? $this->crmDetail_created_at : $value->created_at,
-                    // 'updated_at' => (is_null($value->updated_at)) ? $this->crmDetail_updated_at : $value->updated_at,
-                ];
-
-                // นำค่าตัวแปร product_nam ใส่ไว้ที่ Array chekProduct เพื่อไม่ให้เพิ่มสินค้าตัวเดิมซ้ำ
-                array_push($this->checkProduct, $value->product_name);
-                // array_push($this->checkProduct, $value->product_name);
+                    // นำค่าตัวแปร product_nam ใส่ไว้ที่ Array chekProduct เพื่อไม่ให้เพิ่มสินค้าตัวเดิมซ้ำ
+                    array_push($this->checkProduct, $value->product->product_name);
+                }
+            } catch (\Throwable $th) {
+                $this->dispatch(
+                    "sweet.error",
+                    position: "center",
+                    title: "Cannot find CRM number !!",
+                    text: "Customer : " . $this->customerNameEng,
+                    icon: "error",
+                    timer: 3000,
+                    url: route('crm.list'),
+                );
             }
-
-            // dd($this->inputs);
         } else {
             $this->startVisit = Carbon::now()->toDateString();
             $this->monthEstimate = Carbon::now()->toDateString();
@@ -173,6 +166,8 @@ class CrmCreate extends Component
     {
         $customer = Customer::findOrFail($id);
 
+        // dd($customer);
+
         // $customer_ax = DB::connection('sqlsrv2')
         //     ->table('SCC_CRM_CUSTOMERS')
         //     ->Where('CustomerCode', $customer->code)
@@ -190,7 +185,7 @@ class CrmCreate extends Component
                 'updated_user_id' => auth()->user()->id,
             ]);
         }
-
+        $this->customer_id = $customer->id; // Add code 09/12/2025
         $this->customerCode = $customer->code;
         $this->customerNameEng = $customer->name_english;
         $this->customerNameThi = $customer->name_thai;
@@ -204,70 +199,6 @@ class CrmCreate extends Component
             message: (!empty($customer->name_english)) ? $customer->name_english : $customer->name_thai,
         );
     }
-
-    // ย้ายโค้ดไปที่ Component crm.customer.CustomerAxLists
-    // #[On('save-customer-ax')]
-    // public function saveCustomerAx($id)
-    // {
-    //     // $customer_ax = DB::connection('sqlsrv2')
-    //     //     ->table('SCC_CRM_CUSTOMERS')
-    //     //     ->Where('CustomerCode', $id)
-    //     //     ->first();
-
-    //     $customer_ax = SrvCustomer::where('CustomerCode', $id)
-    //         ->first();
-
-    //     // ตรวจสอบรหัสลูกค้าว่ามีใน Database ไหม
-    //     $customer = Customer::where('code', $id)
-    //         ->first();
-
-    //     // ถ้าไม่มีรหัสลูกค้าใน Database ให้เพิ่มข้อมูล
-    //     if (is_null($customer)) {
-    //         // Insert to database
-    //         $customer = Customer::create([
-    //             'code' => $customer_ax->CustomerCode,
-    //             'name_english' => Str::upper($customer_ax->CustomerNameEng),
-    //             'name_thai' => $customer_ax->CustomerNameThi,
-    //             'parent_code' => $customer_ax->ParentCode,
-    //             'parent_name' => Str::upper($customer_ax->ParentName),
-    //             'source' => $this->source,
-    //             'created_user_id' => Auth::user()->id,
-    //             'updated_user_id' => Auth::user()->id,
-    //         ]);
-
-    //         $this->dispatch(
-    //             "sweet.success",
-    //             position: "center",
-    //             title: "Created Successfully !!",
-    //             text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
-    //             // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
-    //             icon: "success",
-    //             timer: 3000,
-    //         );
-    //     } else {
-    //         // Update to database
-    //         $customer->update([
-    //             'code' => $customer_ax->CustomerCode,
-    //             'name_english' => Str::upper($customer_ax->CustomerNameEng),
-    //             'name_thai' => $customer_ax->CustomerNameThi,
-    //             'parent_code' => $customer_ax->ParentCode,
-    //             'parent_name' => Str::upper($customer_ax->ParentName),
-    //             'source' => $this->source,
-    //             'updated_user_id' => Auth::user()->id,
-    //         ]);
-    //         $this->dispatch(
-    //             "sweet.success",
-    //             position: "center",
-    //             title: "Updated Successfully !!",
-    //             text: (!empty($customer->name_english)) ? "Customer : " . $customer->name_english : "Customer : " . $customer->name_thai,
-    //             // text: (!empty($customer->name_english)) ? "Customer Id : " . $customer->code . ", Name : " . $customer->name_english : "Customer Id : " . $customer->code . ", Name : " . $customer->name_thai,
-    //             icon: "success",
-    //             timer: 3000,
-    //         );
-    //     }
-
-    //     $this->dispatch('close-modal-customer-ax');
-    // }
 
     #[On('select-product')]
     public function selectProduct($id)
@@ -383,131 +314,6 @@ class CrmCreate extends Component
         );
     }
 
-    // ย้ายโค้ดไปที่ Component crm.product.ProductAxLists
-    // #[On('save-product-ax')]
-    // public function saveProductAx($name)
-    // {
-    //     // ทำมั้ยไม่ใช่ Proudct Code ?
-
-    //     // $product_ax = DB::connection('sqlsrv2')
-    //     //     ->table('SCC_CRM_PRODUCTS_NEW')
-    //     //     ->where('ProductName', $name)
-    //     //     ->first();
-
-    //     $product_ax = SrvProduct::where('ProductName', $name)
-    //         ->first();
-
-    //     if (empty($product_ax->ProductName)) {
-    //         $this->dispatch(
-    //             "sweet.error",
-    //             position: "center",
-    //             title: "No have product list",
-    //             text: "Please refresh product",
-    //             // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //             icon: "error",
-    //             timer: 3000,
-    //         );
-    //     } else {
-    //         if (empty($product_ax->ProductCode)) {
-
-    //             // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-    //             $product = Product::where('product_name', $product_ax->ProductName)
-    //                 ->first();
-
-    //             if (empty($product)) {
-    //                 Product::create([
-    //                     'code' => $product_ax->ProductCode,
-    //                     'product_name' => $product_ax->ProductName,
-    //                     'brand' => $product_ax->ProductBrand,
-    //                     'supplier_rep' => $product_ax->SupplierRep,
-    //                     'principal' => $product_ax->Principal,
-    //                     'status' => $product_ax->Status,
-    //                     'source' => $this->source,
-    //                     'created_user_id' => Auth::user()->id,
-    //                     'updated_user_id' => Auth::user()->id,
-    //                 ]);
-    //                 $this->dispatch(
-    //                     "sweet.success",
-    //                     position: "center",
-    //                     title: "Created Successfully !!",
-    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     icon: "success",
-    //                     timer: 3000,
-    //                     // url: route('crm.create'),
-    //                 );
-    //             } else {
-    //                 $product->update([
-    //                     'code' => $product_ax->ProductCode,
-    //                     'product_name' => $product_ax->ProductName,
-    //                     'brand' => $product_ax->ProductBrand,
-    //                     'supplier_rep' => $product_ax->SupplierRep,
-    //                     'principal' => $product_ax->Principal,
-    //                     'status' => $product_ax->Status,
-    //                     'source' => $this->source,
-    //                     'updated_user_id' => Auth::user()->id,
-    //                 ]);
-    //                 $this->dispatch(
-    //                     "sweet.success",
-    //                     position: "center",
-    //                     title: "Updated Successfully !!",
-    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     icon: "success",
-    //                     timer: 3000,
-    //                 );
-    //             }
-    //         } else {
-    //             // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-    //             $product = Product::where('code', $product_ax->ProductCode)
-    //                 ->first();
-
-    //             if (empty($product)) {
-    //                 Product::create([
-    //                     'code' => $product_ax->ProductCode,
-    //                     'product_name' => $product_ax->ProductName,
-    //                     'brand' => $product_ax->ProductBrand,
-    //                     'supplier_rep' => $product_ax->SupplierRep,
-    //                     'principal' => $product_ax->Principal,
-    //                     'status' => $product_ax->Status,
-    //                     'source' => $this->source,
-    //                     'created_user_id' => Auth::user()->id,
-    //                     'updated_user_id' => Auth::user()->id,
-    //                 ]);
-    //                 $this->dispatch(
-    //                     "sweet.success",
-    //                     position: "center",
-    //                     title: "Created Successfully !!",
-    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     icon: "success",
-    //                     timer: 3000,
-    //                     // url: route('crm.create'),
-    //                 );
-    //             } else {
-    //                 $product->update([
-    //                     'code' => $product_ax->ProductCode,
-    //                     'product_name' => $product_ax->ProductName,
-    //                     'brand' => $product_ax->ProductBrand,
-    //                     'supplier_rep' => $product_ax->SupplierRep,
-    //                     'principal' => $product_ax->Principal,
-    //                     'status' => $product_ax->Status,
-    //                     'source' => $this->source,
-    //                     'updated_user_id' => Auth::user()->id,
-    //                 ]);
-    //                 $this->dispatch(
-    //                     "sweet.success",
-    //                     position: "center",
-    //                     title: "Updated Successfully !!",
-    //                     text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-    //                     icon: "success",
-    //                     timer: 3000,
-    //                 );
-    //             }
-    //         }
-    //     }
-    // }
-
     public function selectedCustomerType()
     {
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
@@ -614,11 +420,6 @@ class CrmCreate extends Component
             ]
         );
 
-        // ตรวจสอบรหัสลูกค้าที่เลือกว่ามีข้อมูลใน Database ไหม ถ้ามีให้เก็บค่ารหัสลูกค้า เข้าตัวแปรเพื่อบันทึกข้อมูล
-        $customer = Customer::where('code', $this->customerCode)->first();
-
-        $this->customer_id = $customer->id;
-
         // crm_headers remove input space
         $this->contact = trim($this->contact);
         $this->purpose = trim($this->purpose);
@@ -697,7 +498,7 @@ class CrmCreate extends Component
                         $crm_detail->update([
                             // 'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
-                            'update_visit' => $value['updateVisit'],
+                            'updated_visit' => $value['updateVisit'],
                             'application_id' => $value['application'],
                             'sales_stage_id' => $value['salesStage'],
                             'probability_id' => $value['probability'],
@@ -715,7 +516,7 @@ class CrmCreate extends Component
                             "sweet.success",
                             position: "center",
                             title: "Updated Successfully !!",
-                            text: (!empty($this->customerCode)) ? "CRM ID : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng : "CRM ID : " . $this->crmHeader_id . ", Customer : " . $this->customerNameEng,
+                            text: (!empty($this->customerCode)) ? $this->crmHeader_number . ", Customer : " . $this->customerNameEng : $this->crmHeader_number . ", Customer : " . $this->customerNameEng,
                             icon: "success",
                             timer: 3000,
                             url: route('crm.update', $this->crmHeader_id),
@@ -731,7 +532,7 @@ class CrmCreate extends Component
                 $this->dispatch(
                     "sweet.error",
                     position: "center",
-                    title: "Can not add CRM data !!",
+                    title: "Cannot add CRM data !!",
                     text: $e->getMessage(),
                     icon: "error",
                     // timer: 3000,
@@ -769,38 +570,21 @@ class CrmCreate extends Component
         );
     }
 
-    public function deleteItem($id, $product_name)
+    public function deleteItem($id, $document_no, $product_name)
     {
-        $this->dispatch("confirm", id: $id, name: $product_name);
-
-        // dd($id, $product_name);
-
-        // CrmDetail::find($id)->delete();
-
-        // $this->dispatch(
-        //     "sweet.success",
-        //     position: "center",
-        //     title: "Delete Item successfully",
-        //     text: $product_name,
-        //     icon: "success",
-        //     timer: 3000,
-        // );
-
-        // dd($crm_detail);
+        $this->dispatch("confirm", id: $id, document_no: $document_no, product_name: $product_name);
     }
 
     #[On('destroy')]
-    public function destroy($id, $name)
+    public function destroy($id, $document_no, $product_name)
     {
-        // dd($id, $name);
-
         CrmDetail::find($id)->delete();
 
         $this->dispatch(
             "sweet.success",
             position: "center",
             title: "Item deleted successfully !!",
-            text: "Product : " . $id . " - " . $name,
+            text: $document_no . ", Product : " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.update', $this->crmHeader_id),
