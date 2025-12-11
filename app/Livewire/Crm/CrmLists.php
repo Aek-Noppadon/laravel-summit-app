@@ -7,8 +7,6 @@ use App\Models\CrmHeader;
 use App\Models\CustomerGroup;
 use App\Models\CustomerType;
 use App\Models\SalesStage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
