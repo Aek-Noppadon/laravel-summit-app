@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class CrmLists extends Component
 {
-    // use WithPagination;
-    // public $search;
+    use WithPagination;
     public $departmentId;
     public $search_start_visit, $search_end_visit, $search_start_month_estimate, $search_end_month_estimate, $search_start_update_visit, $search_end_update_visit;
     public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_sales_stage, $search_product;
@@ -108,7 +108,7 @@ class CrmLists extends Component
             // ->with('crm_items.product:id,product_name,brand,supplier_rep,principal')
             ->withCount('crm_items')
             ->orderByDesc('id')
-            ->get();
+            ->paginate($this->pagination);
 
         return view('livewire.crm.crm-lists', compact('crms'));
     }
