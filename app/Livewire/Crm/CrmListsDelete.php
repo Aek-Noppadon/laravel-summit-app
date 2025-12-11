@@ -9,15 +9,19 @@ use App\Models\CustomerType;
 use App\Models\SalesStage;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class CrmListsDelete extends Component
 {
+    use WithPagination;
     public $departmentId;
     public $search_start_visit, $search_end_visit, $search_start_month_estimate, $search_end_month_estimate, $search_start_update_visit, $search_end_update_visit;
     public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_sales_stage, $search_product;
     public $pagination = 20;
+    public $paginationItem = 20;
     public $isOpenId = null;
     public $isOpenSearch = true;
+    public $isOpenSearchItem = true;
     public $customerTypes, $customerGroups, $salesStages;
 
     public function mount()
@@ -100,7 +104,7 @@ class CrmListsDelete extends Component
 
             ->withCount('crm_items_deleted')
             ->orderByDesc('deleted_at')
-            ->get();
+            ->paginate($this->pagination);
 
         $crmDetails =   CrmDetail::onlyTrashed()
             ->whereHas('crmHeader', function ($q) {
@@ -108,7 +112,7 @@ class CrmListsDelete extends Component
             })
             ->where('created_user_id', auth()->id())
             ->orderByDesc('deleted_at')
-            ->get();
+            ->paginate($this->paginationItem);
 
         return view('livewire.crm.crm-lists-delete', compact('crms', 'crmDetails'));
     }
@@ -118,6 +122,11 @@ class CrmListsDelete extends Component
         $this->isOpenSearch = ($this->isOpenSearch === $value) ? null : $value;
 
         $this->isOpenId = null;
+    }
+
+    public function toggleSearchItem($value)
+    {
+        $this->isOpenSearchItem = ($this->isOpenSearchItem === $value) ? null : $value;
     }
 
     public function toggle($id)
