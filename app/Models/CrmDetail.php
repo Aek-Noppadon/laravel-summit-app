@@ -48,4 +48,9 @@ class CrmDetail extends Model
     {
         return $this->belongsTo(SalesStage::class, 'sales_stage_id');
     }
+
+    public function probability()
+    {
+        return $this->belongsTo(Probability::class, 'probability_id');
+    }
 }
