@@ -35,7 +35,7 @@ class ApplicationLists extends Component
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy('name')
-            ->paginate();
+            ->paginate($this->pagination);
 
         // ====================================================
 
