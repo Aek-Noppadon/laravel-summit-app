@@ -167,7 +167,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-sm table-hover">
                     <thead>
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
@@ -245,7 +245,7 @@
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col">Brand</th>
                                                     <th scope="col">Supplier Rep.</th>
-                                                    <th scope="col">Principal</th>
+                                                    {{-- <th scope="col">Principal</th> --}}
                                                     <th scope="col">Qty.</th>
                                                     <th scope="col">Unit Price</th>
                                                     <th scope="col">Total Amt.</th>
@@ -265,7 +265,7 @@
                                                             <td>{{ $item->product->product_name }}</td>
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
-                                                            <td>{{ $item->product->principal }}</td>
+                                                            {{-- <td>{{ $item->product->principal }}</td> --}}
                                                             <td>{{ number_format($item->quantity, 0) }}</td>
                                                             <td>{{ number_format($item->unit_price, 2) }}</td>
                                                             <td>{{ number_format($item->total_price, 2) }}</td>
