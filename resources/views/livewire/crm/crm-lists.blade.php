@@ -250,6 +250,7 @@
                                                     <th scope="col">Unit Price</th>
                                                     <th scope="col">Total Amt.</th>
                                                     <th scope="col">Sales Stage</th>
+                                                    <th scope="col">Probability</th>
                                                     <th scope="col">Update Visit</th>
                                                 </thead>
                                                 <tbody>
@@ -269,6 +270,7 @@
                                                             <td>{{ number_format($item->unit_price, 2) }}</td>
                                                             <td>{{ number_format($item->total_price, 2) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
+                                                            <td>{{ $item->probability->name }}</td>
                                                             <td>
                                                                 {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
                                                             </td>
@@ -292,6 +294,12 @@
             </div>
         </div>
         <!-- /.card-body -->
+
+        <div class="modal-footer">
+            <div class="col-12">
+                {{ $crms->links() }}
+            </div>
+        </div>
     </div>
     <!-- /.card -->
 </section>
