@@ -220,6 +220,17 @@
                         </div>
                     </div>
                     <!-- ./Purpose, Detail -->
+
+                    <!-- Addtional Information Header -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="additional" class="form-label">Additional Information</label>
+                                <textarea id="additional" wire:model="additional" class="form-control" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Addtional Information Header -->
                 </div>
 
                 <!-- Customer Modal, Produc Modal, Save -->
@@ -492,7 +503,7 @@
 
                         <!-- Quantity, Unit Price, Total Price -->
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.quantity" class="form-label">
                                         Quantity
@@ -504,7 +515,35 @@
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="inputs.{{ $key }}.volumeUnit" class="form-label">
+                                        Volume Unit
+                                    </label>
+
+                                    <!-- Modal Volume Unit List -->
+                                    <button wire:click="$dispatch('refresh-volume-unit')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-volume-unit">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <!-- ./Modal Volume Unit List -->
+
+                                    <div wire:loading wire:target="selectedVolumeUnit"
+                                        class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
+                                        role="status">
+                                    </div>
+                                    <select id="inputs.{{ $key }}.volumeUnit"
+                                        wire:model="inputs.{{ $key }}.volumeUnit" step="any"
+                                        wire:focus.debounce.1000ms="selectedVolumeUnit" class="form-control">
+                                        <option value="">-- Select --</option>
+                                        @foreach ($volumeUnits as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.unitPrice" class="form-label">
                                         Unit Price
@@ -516,7 +555,7 @@
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.totalPrice" class="form-label">
                                         Total Price
@@ -530,7 +569,7 @@
                         <!-- ./Quantity, Unit Price, Total Price -->
 
                         <!--Packing Unit, Volumn Qty, Volume Unit -->
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.packingUnit" class="form-label">
@@ -588,7 +627,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- ./Packing Unit, Volumn Qty, Volume Unit -->
 
                         <!-- Additional Information, Competitor Situation -->
@@ -614,7 +653,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--./ Aditional Information, Competitor Situation -->
+                        <!--./ Additional Information, Competitor Situation -->
                     </div>
 
                     <!-- Product Modal, Product Remove -->
