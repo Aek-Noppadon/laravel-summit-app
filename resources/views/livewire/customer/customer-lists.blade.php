@@ -68,16 +68,19 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
-                        <th scope="col" style="width: 90px">#</th>
+                        <th scope="col">#</th>
+                        {{-- <th scope="col" style="width: 90px">#</th> --}}
                         <th scope="col">Created</th>
-                        <th scope="col">updated</th>
-                        <th scope="col" style="width: 53px"></th>
-                        <th scope="col" style="width: 90px">ID</th>
-                        <th scope="col" style="width: 135px">Customer Code</th>
-                        <th scope="col">Customer Name Eng.</th>
-                        <th scope="col">Customer Name Thi.</th>
-                        <th scope="col">Parent Code</th>
-                        <th scope="col" style="width: 91px">Action</th>
+                        <th scope="col">Updated</th>
+                        <th scope="col"></th>
+                        {{-- <th scope="col" style="width: 53px"></th> --}}
+                        <th scope="col">Code</th>
+                        {{-- <th scope="col" style="width: 135px">Customer Code</th> --}}
+                        <th scope="col">Name English</th>
+                        <th scope="col">Name Thai</th>
+                        <th scope="col">Parent</th>
+                        <th scope="col" style="width: 100px">Action</th>
+                        {{-- <th scope="col" style="width: 91px">Action</th> --}}
                     </thead>
 
                     <tbody>
@@ -102,19 +105,19 @@
                                     </small>
                                 </td>
                                 <td>
-                                    @if ($item->source === '0')
+                                    @if ($item->source === 0)
                                         <span class="badge badge-pill badge-info">
                                             AX
                                         </span>
                                     @endif
                                 </td>
-                                <td>{{ $item->id }}</td>
+                                {{-- <td>{{ $item->id }}</td> --}}
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->name_english }}</td>
                                 <td>{{ $item->name_thai }}</td>
                                 <td>{{ $item->parent_code }}</td>
                                 <td>
-                                    @if ($item->source === '1')
+                                    @if ($item->source === 1)
                                         <button
                                             wire:click.prevent="$dispatch('edit-customer',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
