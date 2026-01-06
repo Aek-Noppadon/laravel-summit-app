@@ -70,7 +70,7 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
-                                        @if ($customer->source === 0)
+                                        @if ($customer->source === '0')
                                             <span class="badge badge-pill badge-info">
                                                 AX
                                             </span>
@@ -88,7 +88,7 @@
                                             <i class="fas fa-check"></i>
                                         </button>
 
-                                        @if ($customer->source === 1)
+                                        @if ($customer->source === '1')
                                             <button
                                                 wire:click.prevent="$dispatch('edit-customer',{id:{{ $customer->id }}})"
                                                 type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
