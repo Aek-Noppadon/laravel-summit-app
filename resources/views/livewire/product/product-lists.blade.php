@@ -105,7 +105,7 @@
                                     </small>
                                 </td>
                                 <td>
-                                    @if ($item->source === 0)
+                                    @if ($item->source === '0')
                                         <span class="badge badge-pill badge-info">
                                             AX
                                         </span>
@@ -117,7 +117,7 @@
                                 <td>{{ $item->supplier_rep }}</td>
                                 <td>{{ $item->principal }}</td>
                                 <td>
-                                    @if ($item->source === 1)
+                                    @if ($item->source === '1')
                                         <button wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                             data-target="#modal-edit-product">
