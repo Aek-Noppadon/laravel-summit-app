@@ -22,7 +22,10 @@
                     class="img-circle elevation-2" alt="{{ Auth::user()->first_name }}">
             </div> --}}
             <div class="info">
-                <p class="d-block text-light">{{ auth()->user()->name }} {{ auth()->user()->last_name }}</p>
+                <p class="d-block text-light">{{ auth()->user()->name }} {{ auth()->user()->last_name }}
+                    <span class="badge badge-light">{{ auth()->user()->id }}</span>
+                </p>
+
                 @isset(auth()->user()->department->name)
                     <p class="d-block text-light">{{ auth()->user()->department->name }}</p>
                 @endisset
@@ -34,7 +37,8 @@
         <!-- SidebarSearch Form -->
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                    aria-label="Search">
                 <div class="input-group-append">
                     <button class="btn btn-sidebar">
                         <i class="fas fa-search fa-fw"></i>
