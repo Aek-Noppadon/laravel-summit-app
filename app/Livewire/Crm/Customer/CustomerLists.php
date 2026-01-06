@@ -22,9 +22,9 @@ class CustomerLists extends Component
         $departmentId = auth()->user()->department_id;
 
         $customers = Customer::where(function ($customerQuery) use ($departmentId) {
-            $customerQuery->where('source', '0')
+            $customerQuery->where('source', 0)
                 ->orWhere(function ($q) use ($departmentId) {
-                    $q->where('source', '1')
+                    $q->where('source', 1)
                         ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                             $query
                                 ->where('id', $departmentId);
@@ -34,7 +34,7 @@ class CustomerLists extends Component
             ->when($this->search, function ($query) use ($departmentId) {
                 $query->where(function ($searchQuery) use ($departmentId) {
                     $searchQuery->where(function ($q) {
-                        $q->where('source', '0')
+                        $q->where('source', 0)
                             ->where(function ($qq) {
                                 $qq->where('code', 'like', '%' . $this->search . '%')
                                     ->orWhere('name_english', 'like', '%' . $this->search . '%')
@@ -42,7 +42,7 @@ class CustomerLists extends Component
                                     ->orWhere('parent_code', 'like', '%' . $this->search . '%');
                             });
                     })->orWhere(function ($q) use ($departmentId) {
-                        $q->where('source', '1')
+                        $q->where('source', 1)
                             ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                                 $query->where('id', $departmentId);
                             })

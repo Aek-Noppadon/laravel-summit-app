@@ -9,7 +9,7 @@ use Livewire\Component;
 class CustomerCreate extends Component
 {
     public $customer_id, $name_english, $name_thai;
-    public $source = '1';
+    public $source = 1;
 
     public function render()
     {
@@ -41,7 +41,7 @@ class CustomerCreate extends Component
             );
         } else {
             $exists = Customer::where('name_english', $this->name_english)
-                ->where('source', '0')
+                ->where('source', 0)
                 ->orWhere('name_english', $this->name_english)
                 ->whereHas('userCreated', function ($query) use ($departmentId) {
                     $query->where('department_id', $departmentId);

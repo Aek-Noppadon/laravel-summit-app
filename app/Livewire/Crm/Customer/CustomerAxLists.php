@@ -13,7 +13,7 @@ class CustomerAxLists extends Component
     use WithPagination;
     public $search;
     public $pagination = 20;
-    public $source = '0';
+    public $source = 0;
     // public $customerCode, $CustomerNameEng;
 
     #[On('refresh-customer-ax')]
