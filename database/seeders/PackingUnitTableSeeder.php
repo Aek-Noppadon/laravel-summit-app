@@ -17,23 +17,31 @@ class PackingUnitTableSeeder extends Seeder
             array(
                 [
                     'name' => 'Bag',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
                     'name' => 'Bottle',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
                     'name' => 'Can',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
                     'name' => 'EA',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
             )
         );

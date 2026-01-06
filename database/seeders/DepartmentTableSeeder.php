@@ -16,24 +16,32 @@ class DepartmentTableSeeder extends Seeder
         DB::table('departments')->insert(
             array(
                 [
-                    'name' => 'PERSONAL & HOME CARE',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'name' => 'Personal & Home Care',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
-                    'name' => 'INDUSTRIAL CHEMICALS',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'name' => 'Industrial Chemicals',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
-                    'name' => 'NUTRITIONAL INGREDIENTS',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'name' => 'Pharma & Actives',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
                 [
-                    'name' => 'PHARMA & ACTIVES',
-                    'created_at' => '2025-11-10',
-                    'updated_at' => '2025-11-10',
+                    'name' => 'Nutritional & Health Ingredients',
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
+                    'created_at' => '2026-01-06',
+                    'updated_at' => '2026-01-06',
                 ],
             )
         );
