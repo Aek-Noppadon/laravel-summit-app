@@ -34,7 +34,7 @@ class CustomerEdit extends Component
         $departmentId = auth()->user()->department_id;
 
         $exists = Customer::where('name_english', $this->name_english)
-            ->where('source', '0')
+            ->where('source', 0)
             ->orWhere('name_english', $this->name_english)
             ->where('id', '<>', $this->id)
             ->whereHas('userCreated', function ($query) use ($departmentId) {
