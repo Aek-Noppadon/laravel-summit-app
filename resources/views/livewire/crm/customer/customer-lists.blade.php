@@ -59,8 +59,8 @@
                             <th scope="col">#</th>
                             <th scope="col" style="width: 35px"></th>
                             <th scope="col">Code</th>
-                            <th scope="col">Customer Name Eng.</th>
-                            <th scope="col">Customer Name Thi.</th>
+                            <th scope="col">Name English</th>
+                            <th scope="col">Name Thai</th>
                             <th scope="col">Parent</th>
                             <th scope="col" style="width: 115px">Action</th>
                         </thead>
@@ -70,7 +70,7 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
-                                        @if ($customer->source === '0')
+                                        @if ($customer->source === 0)
                                             <span class="badge badge-pill badge-info">
                                                 AX
                                             </span>
@@ -88,7 +88,7 @@
                                             <i class="fas fa-check"></i>
                                         </button>
 
-                                        @if ($customer->source === '1')
+                                        @if ($customer->source === 1)
                                             <button
                                                 wire:click.prevent="$dispatch('edit-customer',{id:{{ $customer->id }}})"
                                                 type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
