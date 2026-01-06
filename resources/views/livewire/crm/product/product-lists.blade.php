@@ -57,9 +57,9 @@
                     <table class="table table-hover table-sm">
                         <thead>
                             <th scope="col">#</th>
-                            <th scope="col" style="width: 40px"></th>
+                            <th scope="col" style="width: 35px"></th>
                             <th scope="col">Code</th>
-                            <th scope="col">Product Name</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Brand</th>
                             <th scope="col">Supplier Rep.</th>
                             <th scope="col">Principal</th>
@@ -71,7 +71,7 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
-                                        @if ($product->source === '0')
+                                        @if ($product->source === 0)
                                             <span class="badge badge-pill badge-info">
                                                 AX
                                             </span>
@@ -88,7 +88,7 @@
                                             wire:click="$dispatch('refresh-product')" class="btn btn-success btn-sm">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        @if ($product->source === '1')
+                                        @if ($product->source === 1)
                                             <button
                                                 wire:click.prevent="$dispatch('edit-product',{id:{{ $product->id }}})"
                                                 type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
