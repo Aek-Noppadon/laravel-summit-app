@@ -13,7 +13,7 @@ class ProductAxLists extends Component
     use WithPagination;
     public $search;
     public $pagination = 20;
-    public $source = '0';
+    public $source = 0;
 
     #[On('refresh-product-ax')]
     public function render()

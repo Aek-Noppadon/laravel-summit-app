@@ -19,8 +19,8 @@ class ProductLists extends Component
         $departmentId = auth()->user()->department_id;
 
         $products = Product::where(function ($productQuery) use ($departmentId) {
-            $productQuery->where('source', '0')
-                ->orWhere('source', '1')
+            $productQuery->where('source', 0)
+                ->orWhere('source', 1)
                 ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                     $query->where('id', $departmentId);
                 });
@@ -28,7 +28,7 @@ class ProductLists extends Component
             ->when($this->search, function ($query) use ($departmentId) {
                 $query->where(function ($searchQuery) use ($departmentId) {
                     $searchQuery->where(function ($q) {
-                        $q->where('source', '0')
+                        $q->where('source', 0)
                             ->where(function ($qq) {
                                 $qq->where('product_name', 'like', '%' . $this->search . '%')
                                     ->orWhere('brand', 'like', '%' . $this->search . '%')
@@ -36,7 +36,7 @@ class ProductLists extends Component
                                     ->orWhere('principal', 'like', '%' . $this->search . '%');
                             });
                     })->orWhere(function ($q) use ($departmentId) {
-                        $q->where('source', '1')
+                        $q->where('source', 1)
                             ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                                 $query->where('id', $departmentId);
                             })

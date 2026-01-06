@@ -9,7 +9,7 @@ use Livewire\Component;
 class ProductCreate extends Component
 {
     public $product_name, $brand, $supplier_rep, $principal, $id;
-    public $status = '0', $source = '1';
+    public $status = 0, $source = 1;
 
     public function render()
     {
@@ -43,7 +43,7 @@ class ProductCreate extends Component
             );
         } else {
             $exists = Product::where('product_name', $this->product_name)
-                ->where('source', '0')
+                ->where('source', 0)
                 ->orWhere('product_name', $this->product_name)
                 ->whereHas('userCreated', function ($query) use ($departmentId) {
                     $query->where('department_id', $departmentId);

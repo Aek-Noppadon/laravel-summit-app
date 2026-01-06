@@ -3,7 +3,6 @@
 namespace App\Livewire\Crm\Product;
 
 use App\Models\Product;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -45,7 +44,7 @@ class ProductEdit extends Component
         $departmentId = auth()->user()->department_id;
 
         $exists = Product::where('product_name', $this->product_name)
-            ->where('source', '0')
+            ->where('source', 0)
             ->orWhere('product_name', $this->product_name)
             ->where('id', '<>', $this->id)
             ->whereHas('userCreated', function ($query) use ($departmentId) {
