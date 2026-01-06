@@ -9,7 +9,7 @@
 
 1000 ms = 1s
 
-php artisan make:seeder UsersTableSeeder
+php artisan make:seeder UserTableSeeder
 php artisan db:seed
 
 3. Config livewire (Optional)
