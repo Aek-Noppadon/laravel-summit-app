@@ -74,8 +74,8 @@
                         <th scope="col">Updated</th>
                         <th scope="col"></th>
                         {{-- <th scope="col" style="width: 53px"></th> --}}
+                        <th scope="col">ID</th>
                         <th scope="col">Code</th>
-                        {{-- <th scope="col" style="width: 135px">Product Code</th> --}}
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
                         <th scope="col">Supplier Rep.</th>
@@ -111,6 +111,7 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->product_name }}</td>
                                 <td>{{ $item->brand }}</td>
