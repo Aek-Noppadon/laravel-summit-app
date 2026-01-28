@@ -15,33 +15,37 @@ class VolumeUnitTableSeeder extends Seeder
     {
         DB::table('volume_units')->insert(
             array(
+                // PERSONAL & HOME CARE
                 [
                     'name' => 'Kilogram',
                     'created_user_id' => 2,
                     'updated_user_id' => 2,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
+                // INDUSTRIAL CHEMICALS
                 [
                     'name' => 'Kilogram',
-                    'created_user_id' => 10,
-                    'updated_user_id' => 10,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_user_id' => 12,
+                    'updated_user_id' => 12,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
-                [
-                    'name' => 'Kilogram',
-                    'created_user_id' => 13,
-                    'updated_user_id' => 13,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
-                ],
+                // PHARMA & ACTIVES
                 [
                     'name' => 'Kilogram',
                     'created_user_id' => 18,
                     'updated_user_id' => 18,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                // NUTRITIONAL INGREDIENTS
+                [
+                    'name' => 'Kilogram',
+                    'created_user_id' => 24,
+                    'updated_user_id' => 24,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
             )
         );

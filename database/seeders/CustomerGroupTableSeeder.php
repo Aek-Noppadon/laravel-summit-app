@@ -15,47 +15,50 @@ class CustomerGroupTableSeeder extends Seeder
     {
         DB::table('customer_groups')->insert(
             array(
+                // PERSONAL & HOME CARE
                 [
                     'name' => 'Personal Care',
                     'created_user_id' => 2,
                     'updated_user_id' => 2,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Home Care',
                     'created_user_id' => 2,
                     'updated_user_id' => 2,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
+                // PHARMA & ACTIVES
                 [
                     'name' => 'Phama Additive',
-                    'created_user_id' => 13,
-                    'updated_user_id' => 13,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_user_id' => 18,
+                    'updated_user_id' => 18,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Personal Care',
-                    'created_user_id' => 13,
-                    'updated_user_id' => 13,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_user_id' => 18,
+                    'updated_user_id' => 18,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Home Care',
-                    'created_user_id' => 13,
-                    'updated_user_id' => 13,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
-                ],
-                [
-                    'name' => 'Nutritional Ingredients',
                     'created_user_id' => 18,
                     'updated_user_id' => 18,
-                    'created_at' => '2026-01-06',
-                    'updated_at' => '2026-01-06',
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                // NUTRITIONAL INGREDIENTS
+                [
+                    'name' => 'Nutritional Ingredients',
+                    'created_user_id' => 24,
+                    'updated_user_id' => 24,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
             )
         );

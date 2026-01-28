@@ -15,6 +15,7 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert(
             array(
+                // IT
                 [
                     'name' => 'Noppadon',
                     'last_name' => 'Bumrerchao',
@@ -23,6 +24,35 @@ class UserTableSeeder extends Seeder
                     'department_id' => null,
                     'email ' => 'noppadon.b@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 1,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+
+                ],
+                // PERSONAL & HOME CARE
+                [
+                    'name' => 'Worapun',
+                    'last_name' => 'Inpun',
+                    'sales_id' => '306',
+                    'employee_id' => null,
+                    'department_id' => 1,
+                    'email ' => 'worapun@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                [
+                    'name' => 'Sirirat',
+                    'last_name' => 'Khongkham',
+                    'sales_id' => '316',
+                    'employee_id' => null,
+                    'department_id' => 1,
+                    'email ' => 'sirirat@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Mintra',
@@ -32,6 +62,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'mintra@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Tawatchai',
@@ -41,6 +74,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'tawatchai@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Piratchaporn',
@@ -50,6 +86,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'piratchaporn@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Mattanavadee',
@@ -59,6 +98,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'mattanavadee@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Samitanan',
@@ -68,6 +110,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'samitanan@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Natthawadee',
@@ -77,6 +122,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'natthawadee.k@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Panuwat',
@@ -86,6 +134,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'panuwat.c@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Chanapa',
@@ -95,6 +146,22 @@ class UserTableSeeder extends Seeder
                     'department_id' => 1,
                     'email ' => 'chanapa.k@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                // INDUSTRIAL CHEMICALS
+                [
+                    'name' => 'Chanunrud',
+                    'last_name' => 'Banjerdpradit',
+                    'sales_id' => '302',
+                    'employee_id' => null,
+                    'department_id' => 2,
+                    'email ' => 'chanunrud@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Phuwanai',
@@ -104,6 +171,21 @@ class UserTableSeeder extends Seeder
                     'department_id' => 2,
                     'email ' => 'phuwanai@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                [
+                    'name' => 'Thida',
+                    'last_name' => 'Thanomngam',
+                    'sales_id' => '314',
+                    'employee_id' => null,
+                    'department_id' => 2,
+                    'email ' => 'thida@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Pattarawan',
@@ -113,6 +195,21 @@ class UserTableSeeder extends Seeder
                     'department_id' => 2,
                     'email ' => 'pattarawan@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                [
+                    'name' => 'Chakrapun',
+                    'last_name' => 'Intanai',
+                    'sales_id' => '337',
+                    'employee_id' => null,
+                    'department_id' => 2,
+                    'email ' => 'chakrapun.i@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Supanat',
@@ -122,7 +219,11 @@ class UserTableSeeder extends Seeder
                     'department_id' => 2,
                     'email ' => 'supanat.p@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
+                // PHARMA & ACTIVES
                 [
                     'name' => 'Kanchana',
                     'last_name' => 'Songsilawat',
@@ -131,6 +232,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 3,
                     'email ' => 'kanchana@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Worapat',
@@ -140,6 +244,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 3,
                     'email ' => 'worapat@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Krittaya',
@@ -149,6 +256,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 3,
                     'email ' => 'krittaya@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Srikanya',
@@ -158,6 +268,21 @@ class UserTableSeeder extends Seeder
                     'department_id' => 3,
                     'email ' => 'srikanya.t@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
+                ],
+                [
+                    'name' => 'Metawee',
+                    'last_name' => 'Kaewluamsai',
+                    'sales_id' => '334',
+                    'employee_id' => null,
+                    'department_id' => 3,
+                    'email ' => 'metawee.k@smchemical.com',
+                    'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Harisa',
@@ -167,7 +292,11 @@ class UserTableSeeder extends Seeder
                     'department_id' => 3,
                     'email ' => 'harisa.h@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
+                // 
                 [
                     'name' => 'Samitanan',
                     'last_name' => 'Booncharoen',
@@ -176,6 +305,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 4,
                     'email ' => 'samitanan.ni@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Sorawis',
@@ -185,6 +317,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 4,
                     'email ' => 'sorawis.c@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
                 [
                     'name' => 'Pimwadee',
@@ -194,6 +329,9 @@ class UserTableSeeder extends Seeder
                     'department_id' => 4,
                     'email ' => 'pimwadee.k@smchemical.com',
                     'password ' => Hash::make('12345678'),
+                    'role' => 2,
+                    'created_at' => '2026-01-28',
+                    'updated_at' => '2026-01-28',
                 ],
             )
         );
