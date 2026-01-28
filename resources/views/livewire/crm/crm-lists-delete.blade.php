@@ -60,13 +60,13 @@
                                     class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
-                                <input id="startMonthEstimate" wire:model.live="search_start_month_estimate"
+                                <label for="startEstimateDate" class="form-label">Start Estimate Date</label>
+                                <input id="startEstimateDate" wire:model.live="search_start_estimate_date"
                                     type="date" class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
-                                <input id="endMonthEstimate" wire:model.live="search_end_month_estimate" type="date"
+                                <label for="endEstimateDate" class="form-label">End Estimate Date</label>
+                                <input id="endEstimateDate" wire:model.live="search_end_estimate_date" type="date"
                                     class="form-control">
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Start Visit</th>
-                        <th scope="col">Month Estimate</th>
+                        <th scope="col">Estimate Date</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 90px">Action</th>
@@ -203,7 +203,7 @@
                                     {{ Carbon\Carbon::parse($item->started_visit_date)->format('d/m/Y') }}
                                 </td>
                                 <td>
-                                    {{ Carbon\Carbon::parse($item->month_estimate_date)->format('d/m/Y') }}
+                                    {{ Carbon\Carbon::parse($item->estimate_date)->format('d/m/Y') }}
                                 </td>
                                 <td>{{ $item->contact }}</td>
                                 <td>
@@ -344,14 +344,14 @@
                                     class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
-                                <input id="startMonthEstimate" wire:model.live="search_start_month_estimate"
+                                <label for="startEstimateDate" class="form-label">Start Estimate Date</label>
+                                <input id="startEstimateDate" wire:model.live="search_start_estimate_date"
                                     type="date" class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
-                                <input id="endMonthEstimate" wire:model.live="search_end_month_estimate"
-                                    type="date" class="form-control">
+                                <label for="endEstimateDate" class="form-label">End Estimate Date</label>
+                                <input id="endEstimateDate" wire:model.live="search_end_estimate_date" type="date"
+                                    class="form-control">
                             </div>
                         </div>
 

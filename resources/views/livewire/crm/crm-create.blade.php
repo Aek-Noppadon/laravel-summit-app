@@ -100,7 +100,7 @@
                     </div>
                     <!-- ./Customer Code, Customer Name Eng, Customer Name Thi -->
 
-                    <!-- Start Visit, Month Estimate, Customer Type, Customer Group -->
+                    <!-- Start Visit, Estimate Date, Customer Type, Customer Group -->
                     <div class="row">
                         <div class="col-3">
                             <div class="form-group">
@@ -115,11 +115,11 @@
                         </div>
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="monthEstimate" class="form-label">Month Estimate</label>
+                                <label for="estimateDate" class="form-label">Estimate Date</label>
                                 <span class="text-danger font-weight-bold">*</span>
-                                <input id="monthEstimate" wire:model="monthEstimate" type="date"
-                                    class="form-control @error('monthEstimate') is-invalid @enderror">
-                                @error('monthEstimate')
+                                <input id="estimateDate" wire:model="estimateDate" type="date"
+                                    class="form-control @error('estimateDate') is-invalid @enderror">
+                                @error('estimateDate')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -180,7 +180,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- ./Start Visit, Month Estimate, Customer Type, Customer Group -->
+                    <!-- ./Start Visit, Estimate Date, Customer Type, Customer Group -->
 
                     <!-- Contact Person -->
                     <div class="row mb-4">
@@ -221,7 +221,18 @@
                     </div>
                     <!-- ./Purpose, Detail -->
 
-                    <!-- Addtional Information Header -->
+                    <!-- Opportunity -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="opportunity" class="form-label">Opportunity</label>
+                                <textarea id="opportunity" wire:model="opportunity" class="form-control" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Addtional Information Header -->
+
+                    <!-- Additional Information Header -->
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -231,6 +242,7 @@
                         </div>
                     </div>
                     <!-- /Addtional Information Header -->
+
                 </div>
 
                 <!-- Customer Modal, Produc Modal, Save -->

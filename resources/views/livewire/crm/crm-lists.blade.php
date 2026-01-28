@@ -60,13 +60,13 @@
                                     class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="startMonthEstimate" class="form-label">Start Month Estimate</label>
-                                <input id="startMonthEstimate" wire:model.live="search_start_month_estimate"
+                                <label for="startEstimateDate" class="form-label">Start Estimate Date</label>
+                                <input id="startEstimateDate" wire:model.live="search_start_estimate_date"
                                     type="date" class="form-control">
                             </div>
                             <div class="col-3">
-                                <label for="endMonthEstimate" class="form-label">End Month Estimate</label>
-                                <input id="endMonthEstimate" wire:model.live="search_end_month_estimate" type="date"
+                                <label for="endEstimateDate" class="form-label">End Estimate Date</label>
+                                <input id="endEstimateDate" wire:model.live="search_end_estimate_date" type="date"
                                     class="form-control">
                             </div>
                         </div>
@@ -170,13 +170,15 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        <th scope="col">Created</th>
-                        <th scope="col">updated</th>
-                        <th scope="col">Number</th>
+                        <th scope="col" style="width: 120px">Created</th>
+                        {{-- <th scope="col">updated</th> --}}
+                        <th scope="col">ID</th>
+                        <th scope="col" style="width: 120px">Number</th>
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
+                        <th scope="col">Type</th>
                         <th scope="col">Start Visit</th>
-                        <th scope="col">Month Estimate</th>
+                        <th scope="col">Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 115px">Action</th>
@@ -186,24 +188,26 @@
                         @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
+                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                                    {{-- {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br> --}}
                                     <small class="badge badge-light"><i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
+                                {{-- <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
                                     {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
                                     <small class="badge badge-light"><i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
-                                </td>
+                                </td> --}}
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
                                 <td>{{ $item->customer->name_english }}</td>
+                                <td>{{ $item->customer_type->name }}</td>
                                 <td>
                                     {{ Carbon\Carbon::parse($item->started_visit_date)->format('d/m/Y') }}
                                 </td>
                                 <td>
-                                    {{ Carbon\Carbon::parse($item->month_estimate_date)->format('d/m/Y') }}
+                                    {{ Carbon\Carbon::parse($item->estimate_date)->format('d/m/Y') }}
                                 </td>
                                 <td>{{ $item->contact }}</td>
                                 <td>
@@ -222,7 +226,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary"
+                                        target="_blank">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button
@@ -272,7 +277,7 @@
                                                             <td>{{ $item->salesStage->name }}</td>
                                                             <td>{{ $item->probability->name }}</td>
                                                             <td>
-                                                                {{ Carbon\Carbon::parse($item->updated_visit)->format('d/m/Y') }}
+                                                                {{ Carbon\Carbon::parse($item->updated_visit_date)->format('d/m/Y') }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
