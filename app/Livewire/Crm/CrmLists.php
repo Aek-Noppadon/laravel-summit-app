@@ -15,7 +15,7 @@ class CrmLists extends Component
 {
     use WithPagination;
     public $departmentId;
-    public $search_start_visit, $search_end_visit, $search_start_month_estimate, $search_end_month_estimate, $search_start_update_visit, $search_end_update_visit;
+    public $search_start_visit, $search_end_visit, $search_start_estimate_date, $search_end_estimate_date, $search_start_update_visit, $search_end_update_visit;
     public $search_customer, $search_customer_type, $search_customer_group, $search_contact, $search_sales_stage, $search_product;
     public $pagination = 20;
     public $isOpenId = null;
@@ -54,9 +54,9 @@ class CrmLists extends Component
                     $startVisitQuery->whereBetween('started_visit_date', [$this->search_start_visit, $this->search_end_visit]);
                 }
             })
-            ->when($this->search_start_month_estimate, function ($monthEstimateQuery) {
-                if ($this->search_start_month_estimate && $this->search_end_month_estimate) {
-                    $monthEstimateQuery->whereBetween('month_estimate_date', [$this->search_start_month_estimate, $this->search_end_month_estimate]);
+            ->when($this->search_start_estimate_date, function ($estimateDateQuery) {
+                if ($this->search_start_estimate_date && $this->search_end_estimate_date) {
+                    $estimateDateQuery->whereBetween('month_estimate_date', [$this->search_start_estimate_date, $this->search_end_estimate_date]);
                 }
             })
             ->when($this->search_contact, function ($contactQuery) {

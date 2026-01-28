@@ -29,10 +29,10 @@ class CrmCreate extends Component
     // Variables for fetching values ​​from the database
     public $customerTypes, $customerGroups, $salesStages, $probabilities, $applications, $packingUnits, $volumeUnits;
     // Variables for form inputs
-    public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $monthEstimate,  $customerType, $customerGroup, $contact, $purpose, $detail;
-    public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumeUnit, $additional, $competitor;
+    public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $estimateDate,  $customerType, $customerGroup, $contact, $purpose, $detail;
+    public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumeUnit, $additional, $competitor, $opportunity;
     public $quantity, $unitPrice, $totalPrice;
-    public $crmHeader_number, $crmHeader_id, $originalMonthEstimate, $crmHeader_created_at, $crmHeader_updated_at;
+    public $crmHeader_number, $crmHeader_id, $originalEstimateDate, $crmHeader_created_at, $crmHeader_updated_at;
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
     public $product_id, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
@@ -57,13 +57,14 @@ class CrmCreate extends Component
                 $this->customerNameEng = $crmHeader->customer->name_english;
                 $this->customerNameThi = $crmHeader->customer->name_thai;
                 $this->startVisit = $crmHeader->started_visit_date;
-                $this->monthEstimate = $crmHeader->month_estimate_date;
-                $this->originalMonthEstimate = $crmHeader->original_month_estimate_date;
+                $this->estimateDate = $crmHeader->estimate_date;
+                $this->originalEstimateDate = $crmHeader->original_estimate_date;
                 $this->customerType = $crmHeader->customer_type_id;
                 $this->customerGroup = $crmHeader->customer_group_id;
                 $this->contact = $crmHeader->contact;
                 $this->purpose = $crmHeader->purpose;
                 $this->detail = $crmHeader->detail;
+                $this->opportunity = $crmHeader->opportunity;
                 $this->crmHeader_created_at = $crmHeader->created_at;
                 $this->crmHeader_updated_at = $crmHeader->updated_at;
 
@@ -76,7 +77,7 @@ class CrmCreate extends Component
                         'productBrand' => $value->product->brand,
                         'supplierRep' => $value->product->supplier_rep,
                         'principal' => $value->product->principal,
-                        'updateVisit' => $value->updated_visit,
+                        'updateVisit' => $value->updated_visit_date,
                         'application' => $value->application_id,
                         'salesStage' => $value->sales_stage_id,
                         'probability' => $value->probability_id,
@@ -108,7 +109,7 @@ class CrmCreate extends Component
             }
         } else {
             $this->startVisit = Carbon::now()->toDateString();
-            $this->monthEstimate = Carbon::now()->toDateString();
+            $this->estimateDate = Carbon::now()->toDateString();
         }
 
         $this->salesStages = SalesStage::all();
@@ -390,7 +391,7 @@ class CrmCreate extends Component
                 // Validate CRM Headers.                
                 'customerNameEng' => 'required',
                 'startVisit' => 'required',
-                'monthEstimate' => 'required',
+                'estimateDate' => 'required',
                 'customerType' => 'required',
                 'contact' => 'required',
                 'purpose' => 'required',
@@ -406,7 +407,7 @@ class CrmCreate extends Component
                 // Validate message CRM Headers.               
                 'customerNameEng' => 'Customer name Eng. field is required.',
                 'startVisit' => 'Start visit date field is required.',
-                'monthEstimate' => 'Month estimate field is required.',
+                'estimateDate' => 'Estimate date field is required.',
                 'customerType' => 'Customer type field is required.',
                 'contact' => 'Contact person field is required.',
                 'purpose' => 'Purpose field is required.',
@@ -437,8 +438,8 @@ class CrmCreate extends Component
                     [
                         'customer_id' => $this->customer_id,
                         'started_visit_date' => $this->startVisit,
-                        'month_estimate_date' => $this->monthEstimate,
-                        'original_month_estimate_date' => (is_null($this->originalMonthEstimate)) ? $this->monthEstimate : $this->originalMonthEstimate,
+                        'estimate_date' => $this->estimateDate,
+                        'original_estimate_date' => (is_null($this->originalEstimateDate)) ? $this->estimateDate : $this->originalEstimateDate,
                         'customer_type_id' => $this->customerType,
                         'customer_group_id' => $this->customerGroup,
                         'contact' => $this->contact,
@@ -468,7 +469,7 @@ class CrmCreate extends Component
                         $crm_detail = CrmDetail::create([
                             'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
-                            'updated_visit' => $value['updateVisit'],
+                            'updated_visit_date' => $value['updateVisit'],
                             'application_id' => $value['application'],
                             'sales_stage_id' => $value['salesStage'],
                             'probability_id' => $value['probability'],
@@ -498,7 +499,7 @@ class CrmCreate extends Component
                         $crm_detail->update([
                             // 'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
-                            'updated_visit' => $value['updateVisit'],
+                            'updated_visit_date' => $value['updateVisit'],
                             'application_id' => $value['application'],
                             'sales_stage_id' => $value['salesStage'],
                             'probability_id' => $value['probability'],
