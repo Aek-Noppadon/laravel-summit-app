@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('email')->unique()->comment('Email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->comment('Password');
+            $table->unsignedTinyInteger('role')->nullable()->comment('1 = IT Admin, 2 = Sales, 3 = Sales Admin');
+            $table->unsignedTinyInteger('status')->default(1)->comment('0 = Inactive, 1 = Active');
             $table->rememberToken();
             $table->timestamps();
         });

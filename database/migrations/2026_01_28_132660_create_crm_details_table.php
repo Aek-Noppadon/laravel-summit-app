@@ -18,14 +18,14 @@ return new class extends Migration
             $table->foreign('crm_id')->references('id')->on('crm_headers')->cascadeOnDelete()->comment('CRM Header ID');
             $table->unsignedSmallInteger('product_id')->comment('Product ID');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->date('updated_visit')->comment('Updated Visit');
+            $table->date('updated_visit_date')->comment('Updated Visit');
             $table->unsignedTinyInteger('application_id')->nullable()->comment('Application');
             $table->foreign('application_id')->references('id')->on('applications');
             $table->unsignedTinyInteger('sales_stage_id')->comment('Sales Stages');
             $table->foreign('sales_stage_id')->references('id')->on('sales_stages');
             $table->unsignedTinyInteger('probability_id')->comment('Probability');
             $table->foreign('probability_id')->references('id')->on('probabilities');
-            $table->integer('quantity')->comment('Quantity');
+            $table->decimal('quantity')->comment('Quantity');
             $table->decimal('unit_price')->comment('Unit Price');
             $table->decimal('total_price', 12, 2)->comment('Total Price');
             $table->unsignedTinyInteger('packing_unit_id')->nullable()->comment('Packing Unit');
@@ -33,8 +33,9 @@ return new class extends Migration
             $table->integer('volume_qty')->nullable()->comment('Volume Quantity');
             $table->unsignedTinyInteger('volume_unit_id')->nullable()->comment('Volume Unit');
             $table->foreign('volume_unit_id')->references('id')->on('volume_units');
-            $table->string('additional')->nullable()->comment('Additional');
-            $table->string('competitor')->nullable()->comment('Competitor');
+            $table->text('additional')->nullable()->comment('Additional');
+            $table->text('competitor')->nullable()->comment('Competitor');
+            $table->unsignedTinyInteger('source')->nullable()->comment('0 = Excel, 1 = Web');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
             $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');

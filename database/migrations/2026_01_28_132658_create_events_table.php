@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applications', function (Blueprint $table) {
-            $table->tinyIncrements('id')->comment('Application ID');
-            $table->string('name')->comment('Application Name');
+        Schema::create('events', function (Blueprint $table) {
+            $table->tinyIncrements('id')->comment('Event ID');
+            $table->string('name')->comment('Event Name');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
             $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('events');
     }
 };

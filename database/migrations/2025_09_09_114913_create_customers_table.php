@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('name_thai')->nullable()->comment('Name Thai');
             $table->string('parent_code', 8)->nullable()->comment('Parent Code');
             $table->string('parent_name')->nullable()->comment('Parent Name');
-            $table->unsignedTinyInteger('source')->nullable()->comment('Data Source 0 = AX, 1 = Master');
-            // $table->enum('source', ['0', '1'])->nullable()->comment('Data Source 0 = AX, 1 = Master');
+            $table->unsignedTinyInteger('source')->nullable()->comment('0 = AX, 1 = Web');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
             $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
