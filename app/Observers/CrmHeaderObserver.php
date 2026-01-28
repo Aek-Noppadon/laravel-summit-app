@@ -20,7 +20,7 @@ class CrmHeaderObserver
         // 1. use SoftDeleted on model 
         //2. edit migration file
 
-        // Code = CRM-2500001
+        // Code = CRM-26010001
         // ID = 1
         $prefix = "CRM-" . now()->format('y') . now()->format('m');
 
