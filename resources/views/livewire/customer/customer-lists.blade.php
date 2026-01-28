@@ -72,8 +72,8 @@
                         {{-- <th scope="col" style="width: 90px">#</th> --}}
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
-                        <th scope="col"></th>
-                        {{-- <th scope="col" style="width: 53px"></th> --}}
+                        <th scope="col" style="width: 53px"></th>
+                        <th scope="col">ID</th>
                         <th scope="col">Code</th>
                         {{-- <th scope="col" style="width: 135px">Customer Code</th> --}}
                         <th scope="col">Name English</th>
@@ -111,7 +111,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                {{-- <td>{{ $item->id }}</td> --}}
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->name_english }}</td>
                                 <td>{{ $item->name_thai }}</td>
