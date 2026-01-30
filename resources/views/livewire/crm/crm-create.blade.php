@@ -81,6 +81,20 @@
                             <div class="form-group">
                                 <label for="customerNameEng" class="form-label">Customer Name ENG.</label>
                                 <span class="text-danger font-weight-bold">*</span>
+
+                                <!-- Customer Modal Search -->
+                                <button wire:click="$dispatch('refresh-customer')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-customer">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                                @livewire('crm.customer.customer-lists')
+
+                                @livewire('crm.customer.customer-ax-lists')
+
+                                @livewire('crm.customer.customer-create')
+                                <!-- ./Customer Modal Search -->
+
                                 <input id="customerNameEng" wire:model="customerNameEng" type="text"
                                     class="form-control @error('customerNameEng') is-invalid @enderror" disabled
                                     readonly>
@@ -182,9 +196,27 @@
                     </div>
                     <!-- ./Start Visit, Estimate Date, Customer Type, Customer Group -->
 
-                    <!-- Contact Person -->
+                    <!-- Event, Contact Person -->
                     <div class="row mb-4">
-                        <div class="col-12">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label">Event</label>
+
+                                <!-- Event Modal Search -->
+                                <button wire:click="$dispatch('refresh-event')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-event">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                                @livewire('crm.event.event-lists')
+
+                                @livewire('crm.event.event-create')
+                                <!-- ./Event Modal Search -->
+
+                                <input wire:model='event_name' type="text" class="form-control" disabled readonly>
+                            </div>
+                        </div>
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="contact" class="form-label">Contact Person</label>
                                 <span class="text-danger font-weight-bold">*</span>
@@ -230,18 +262,114 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Addtional Information Header -->
+                    <!-- /Opportunity -->
 
-                    <!-- Additional Information Header -->
+                    <!-- Header Application, Sales Stage, Probablility -->
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="application" class="form-label">
+                                    Application
+                                </label>
+
+                                <!-- Modal Application List -->
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                    data-target="#modal-application">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <!-- ./Modal Application List -->
+
+                                <div wire:loading wire:target="selectedApplication"
+                                    class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
+                                    role="status">
+                                </div>
+                                <select id="application" wire:model="application"
+                                    wire:focus.debounce.1000ms="selectedApplication" class="form-control">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($applications as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="salesStage" class="form-label">
+                                    Sales Stage
+                                </label>
+                                <span class="text-danger font-weight-bold">*</span>
+                                <div wire:loading wire:target="selectedSalesStage" class="spinner-border text-primary"
+                                    style="width: 1.2rem;height:1.2rem" role="status">
+                                </div>
+                                <select id="salesStage" wire:model="salesStage"
+                                    wire:focus.debounce.1000ms="selectedSalesStage"
+                                    class="form-control @error('salesStage') is-invalid @enderror">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($salesStages as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('salesStage')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="probability" class="form-label">
+                                    Probability
+                                </label>
+                                <span class="text-danger font-weight-bold">*</span>
+
+                                <!-- Modal Probability List -->
+                                <button wire:click="$dispatch('refresh-probability')" type="button"
+                                    class="btn btn-primary btn-sm" data-toggle="modal"
+                                    data-target="#modal-probability">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <!-- ./Modal Probability List -->
+
+                                <div wire:loading wire:target="selectedProbability"
+                                    class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
+                                    role="status">
+                                </div>
+
+                                <select id="probability" wire:model="probability"
+                                    wire:focus.debounce.1000ms="selectedProbability"
+                                    class="form-control @error('probability') is-invalid @enderror">
+                                    <option value="">-- Select --</option>
+                                    @foreach ($probabilities as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('probability')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./Header Application, Sales Stage, Probablility -->
+
+                    <!-- Header Additional Information, Competitor Situation -->
+                    <div class="row">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="additional" class="form-label">Additional Information</label>
                                 <textarea id="additional" wire:model="additional" class="form-control" cols="30" rows="5"></textarea>
                             </div>
                         </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="competitor" class="form-label">
+                                    Competitor Situation
+                                </label>
+                                <textarea id="competitor" wire:model="competitor" class="form-control" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <!-- /Addtional Information Header -->
+                    <!-- ./Header / Additional Information, Competitor Situation -->
 
                 </div>
 
@@ -249,27 +377,8 @@
                 <div class="card-footer">
                     <div class="row">
 
-                        <!-- Customer Modal -->
-                        <div class="col-4">
-                            <!-- Search Customer Modal -->
-                            <div class="btn-group w-100" role="group">
-                                <button wire:click="$dispatch('refresh-customer')" type="button"
-                                    class="btn btn-primary" data-toggle="modal" data-target="#modal-customer">
-                                    <i class="fas fa-search"></i> Customers
-                                </button>
-
-                                @livewire('crm.customer.customer-lists')
-
-                                @livewire('crm.customer.customer-ax-lists')
-
-                                @livewire('crm.customer.customer-create')
-
-                            </div>
-                        </div>
-                        <!-- ./Customer Modal -->
-
-                        <!-- Product Modal -->
-                        <div class="col-4">
+                        <!-- Product Modal Search -->
+                        <div class="col-6">
                             <div class="btn-group w-100" role="group">
                                 <button wire:click="$dispatch('refresh-product')" type="button"
                                     class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
@@ -284,10 +393,10 @@
 
                             </div>
                         </div>
-                        <!-- ./Product Modal -->
+                        <!-- ./Product Modal Search -->
 
                         <!-- Save CRM -->
-                        <div class="col-4">
+                        <div class="col-6">
                             {{-- <button type="submit" class="btn btn-success w-100">
                                 <i class="fas fa-save"></i> Save
                             </button> --}}
@@ -339,17 +448,6 @@
 
                         <!-- Product Name -->
                         <div class="row">
-                            {{-- <div class="col-1">
-                                <div class="form-group">
-                                    <label for="inputs.{{ $key }}.crmDetail_id" class="form-label">
-                                        Item ID
-                                    </label>
-                                    <input id="inputs.{{ $key }}.crmDetail_id"
-                                        wire:model="inputs.{{ $key }}.crmDetail_id" type="text"
-                                        class="form-control" disabled readonly>
-                                </div>
-                            </div> --}}
-                            {{-- wire:model="form.inputs.{{ $index }}.productName" --}}
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="inputs.{{ $key }}.productName" class="form-label">
