@@ -24,9 +24,9 @@
 
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label for="name" class="form-label">Customer Type Name</label>
+                                        <label class="form-label">Customer Type Name</label>
                                         <span class="text-danger font-weight-bold">*</span>
-                                        <input id="name" wire:model="name" type="text"
+                                        <input wire:model="name" type="text"
                                             class="form-control @error('name') is-invalid @enderror">
                                         @error('name')
                                             <span class="text-danger">{{ $message }}</span>
