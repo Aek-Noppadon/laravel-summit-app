@@ -35,7 +35,7 @@ class CustomerTypeLists extends Component
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy('name')
-            ->paginate();
+            ->paginate($this->pagination);
         // =======================================================
 
         return view('livewire.customer-type.customer-type-lists', compact('customer_types'));
