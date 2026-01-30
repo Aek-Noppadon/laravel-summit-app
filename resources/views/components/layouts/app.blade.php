@@ -20,7 +20,8 @@
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('backend/admin-lte/plugins/toastr/toastr.min.css') }}">
     @livewireStyles
-    <title>@yield('title') | Backend</title>
+    {{-- <title>@yield('title') | Backend</title> --}}
+    <title>Summit Web Application</title>
     <!-- Header Script -->
     @yield('header-script')
     <!-- ./Header Script -->
