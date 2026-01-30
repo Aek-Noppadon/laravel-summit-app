@@ -35,7 +35,7 @@ class CustomerTypeLists extends Component
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->orderBy('name')
-            ->paginate();
+            ->paginate($this->pagination);
         // =======================================================
 
         return view('livewire.crm.customer-type.customer-type-lists', compact('customer_types'));
@@ -77,7 +77,7 @@ class CustomerTypeLists extends Component
             $this->dispatch(
                 "sweet.error",
                 position: "center",
-                title: "Can not Deleted !!",
+                title: "Cannot Deleted !!",
                 text: "Customer Type : " . $name . " there is a transaction in CRM.",
                 icon: "error",
             );
