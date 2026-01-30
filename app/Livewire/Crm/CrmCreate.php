@@ -9,6 +9,7 @@ use App\Models\CrmHeader;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\CustomerType;
+use App\Models\Event;
 use App\Models\PackingUnit;
 use App\Models\Probability;
 use App\Models\Product;
@@ -18,10 +19,8 @@ use App\Models\SrvProduct;
 use App\Models\VolumeUnit;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use PhpParser\Node\Stmt\TryCatch;
 
 class CrmCreate extends Component
 {
@@ -29,7 +28,8 @@ class CrmCreate extends Component
     // Variables for fetching values ​​from the database
     public $customerTypes, $customerGroups, $salesStages, $probabilities, $applications, $packingUnits, $volumeUnits;
     // Variables for form inputs
-    public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $estimateDate,  $customerType, $customerGroup, $contact, $purpose, $detail;
+    public $customer_id, $customerCode, $customerNameEng, $customerNameThi, $parentCode, $parentName, $startVisit, $estimateDate, $customerType, $customerGroup, $contact, $purpose, $detail;
+    public $event_id, $event_name; // Event variable
     public $application, $salesStage, $probability, $packingUnit, $volumnQty, $volumeUnit, $additional, $competitor, $opportunity;
     public $quantity, $unitPrice, $totalPrice;
     public $crmHeader_number, $crmHeader_id, $originalEstimateDate, $crmHeader_created_at, $crmHeader_updated_at;
@@ -162,17 +162,28 @@ class CrmCreate extends Component
         return view('livewire.crm.crm-create');
     }
 
+    #[On('select-event')]
+    public function selectEvent($id)
+    {
+        $event = Event::findOrFail($id);
+
+        $this->event_id = $event->id;
+        $this->event_name = $event->name;
+
+        $this->dispatch(
+            "toastr.success",
+            position: "toast-top-left", //toast-botton-left
+            progressbar: true,
+            timeout: 3000,
+            title: "Add Event Successfully",
+            message: $event->name,
+        );
+    }
+
     #[On('select-customer')]
     public function selectCustomer($id)
     {
         $customer = Customer::findOrFail($id);
-
-        // dd($customer);
-
-        // $customer_ax = DB::connection('sqlsrv2')
-        //     ->table('SCC_CRM_CUSTOMERS')
-        //     ->Where('CustomerCode', $customer->code)
-        //     ->first();
 
         $customer_ax = SrvCustomer::where('CustomerCode', $customer->code)
             ->first();
@@ -375,16 +386,26 @@ class CrmCreate extends Component
     public function sumRow($index)
     {
         if (($this->inputs[$index]['quantity'] != null) && ($this->inputs[$index]['unitPrice'] != null)) {
-            $this->inputs[$index]['totalPrice'] = number_format((int)$this->inputs[$index]['quantity'] * (float)$this->inputs[$index]['unitPrice'], 2);
+            $this->inputs[$index]['totalPrice'] = number_format((float)$this->inputs[$index]['quantity'] * (float)$this->inputs[$index]['unitPrice'], 2);
         } else {
             $this->inputs[$index]['totalPrice'] = null;
         }
+
+        // if (($this->inputs[$index]['quantity'] != null) && ($this->inputs[$index]['unitPrice'] != null)) {
+        //     $this->inputs[$index]['totalPrice'] = number_format((int)$this->inputs[$index]['quantity'] * (float)$this->inputs[$index]['unitPrice'], 2);
+        // } else {
+        //     $this->inputs[$index]['totalPrice'] = null;
+        // }
     }
 
     public function save()
     {
 
         // $this->crmCreateForm->validate();
+
+        // dd($this->inputs);
+
+        // dd($this->estimateDate);
 
         $this->validate(
             [
