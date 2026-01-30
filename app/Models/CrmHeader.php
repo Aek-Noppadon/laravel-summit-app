@@ -24,6 +24,11 @@ class CrmHeader extends Model
         'updated_user_id',
     ];
 
+    public function userCreated()
+    {
+        return $this->belongsTo(User::class, 'created_user_id');
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
