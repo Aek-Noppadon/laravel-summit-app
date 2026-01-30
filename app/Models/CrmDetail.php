@@ -12,7 +12,7 @@ class CrmDetail extends Model
     protected $fillable = [
         'crm_id',
         'product_id',
-        'updated_visit',
+        'updated_visit_date',
         'quantity',
         'unit_price',
         'volume_qty',
