@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Events Master List</h4>
+                <h4 class="modal-title">Event Lists</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -135,7 +135,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `Event : ${event.name}`,
+                text: `${event.name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
