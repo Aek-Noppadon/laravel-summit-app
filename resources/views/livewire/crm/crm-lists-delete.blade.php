@@ -176,7 +176,7 @@
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Start Visit</th>
-                        <th scope="col">Estimate Date</th>
+                        <th scope="col">Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         <th scope="col" style="width: 90px">Action</th>
@@ -186,15 +186,19 @@
                         @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->deleted_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }}
+                                    <br>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
+                                    </small>
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
+                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                                    <br>
+                                    <small class="badge badge-light">
+                                        <i class="far fa-clock"></i>
+                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                                    </small>
                                 </td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
@@ -476,7 +480,6 @@
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->deleted_at)->format('H:i:s') }}<br>
                                     <small class="badge badge-light"><i class="far fa-clock"></i>
                                         {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
                                     </small>
@@ -541,8 +544,8 @@
 
             Swal.fire({
                 title: "Are you sure restore ?",
-                text: `${event.document_no}, Customer : ${event.name_english}`,
-                icon: "question",
+                html: `${event.document_no}<br>${event.name_english}`,
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
@@ -562,8 +565,8 @@
         $wire.on("confirmRestoreCrmItem", (event) => {
             Swal.fire({
                 title: "Are you sure restore ?",
-                text: `${event.document_no}, Product : ${event.product_name}`,
-                icon: "question",
+                html: `${event.document_no}<br>${event.product_name}`,
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
@@ -586,7 +589,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `${event.document_no}, Customer : ${event.name_english}`,
+                html: `${event.document_no}<br>${event.name_english}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -610,7 +613,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `${event.document_no}, Product : ${event.product_name}`,
+                html: `${event.document_no}<br>${event.product_name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
