@@ -41,6 +41,8 @@ class CrmCreate extends Component
 
     public function mount($id = null)
     {
+        $this->departmentId = auth()->user()->department_id;
+
         // Variable crmHeader_id ใช้สำหรับตอนลบ แล้วอ้างค่าตอนรีเฟรชเพจ
         $this->crmHeader_id = $id;
 
@@ -49,6 +51,8 @@ class CrmCreate extends Component
             $crmHeader = CrmHeader::where('id', $id)
                 ->where('created_user_id', auth()->user()->id)
                 ->first();
+
+            // dd($crmHeader);
 
             try {
                 $this->customer_id = $crmHeader->customer_id; // Add code 09/12/2025
@@ -61,6 +65,7 @@ class CrmCreate extends Component
                 $this->originalEstimateDate = $crmHeader->original_estimate_date;
                 $this->customerType = $crmHeader->customer_type_id;
                 $this->customerGroup = $crmHeader->customer_group_id;
+                $this->event_name = $crmHeader->event->name;
                 $this->contact = $crmHeader->contact;
                 $this->purpose = $crmHeader->purpose;
                 $this->detail = $crmHeader->detail;
@@ -101,15 +106,31 @@ class CrmCreate extends Component
                     "sweet.error",
                     position: "center",
                     title: "Cannot find CRM number !!",
-                    text: "Customer : " . $this->customerNameEng,
+                    // text: "Customer : " . $this->customerNameEng,
+                    text: $th->getMessage(),
                     icon: "error",
-                    timer: 3000,
+                    // timer: 3000,
                     url: route('crm.list'),
                 );
             }
         } else {
             $this->startVisit = Carbon::now()->toDateString();
             $this->estimateDate = Carbon::now()->toDateString();
+
+            $event = Event::where(function ($query) {
+                $query->where('name', 'No Event')
+                    ->whereHas('userCreated.department', function ($query) {
+                        $query
+                            ->where('id', $this->departmentId);
+                    });
+            })->first();
+
+            // dd($event);
+
+            if ($event) {
+                $this->event_id = $event->id;
+                $this->event_name = $event->name;
+            }
         }
 
         $this->salesStages = SalesStage::all();
@@ -124,9 +145,6 @@ class CrmCreate extends Component
         Show data by user & department 
         =======================================================
         */
-
-        $this->departmentId = auth()->user()->department_id;
-
 
         $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
             $query->where('department_id', $this->departmentId);
@@ -405,7 +423,7 @@ class CrmCreate extends Component
 
         // dd($this->inputs);
 
-        // dd($this->estimateDate);
+        // dd('Id : ' . $this->event_id . ", " . $this->event_name);
 
         $this->validate(
             [
@@ -449,6 +467,9 @@ class CrmCreate extends Component
 
         if ($this->inputs) {
 
+
+            // dd($this->event_id . ' - ' . $this->event_name);
+
             try {
                 DB::beginTransaction();
 
@@ -463,6 +484,7 @@ class CrmCreate extends Component
                         'original_estimate_date' => (is_null($this->originalEstimateDate)) ? $this->estimateDate : $this->originalEstimateDate,
                         'customer_type_id' => $this->customerType,
                         'customer_group_id' => $this->customerGroup,
+                        'event_id' => $this->event_id,
                         'contact' => $this->contact,
                         'purpose' => $this->purpose,
                         'detail' => $this->detail,
@@ -510,17 +532,20 @@ class CrmCreate extends Component
                             "sweet.success",
                             position: "center",
                             title: "Created Successfully !!",
-                            text: (!empty($this->customerCode)) ? "CRM Customer : " . $this->customerNameEng : "CRM Customer : " . $this->customerNameEng,
+                            text: (!empty($this->customerCode)) ? "CRM : " . $this->customerNameEng : "CRM " . $this->customerNameEng,
                             icon: "success",
                             timer: 3000,
                             url: route('crm.list'),
                         );
                     } else {
                         // CRM data update to database
+                        dd(Carbon::now()->toDateString());
+
                         $crm_detail->update([
                             // 'crm_id' => $crm_header->id,
                             'product_id' => $this->product_id,
-                            'updated_visit_date' => $value['updateVisit'],
+                            'updated_visit_date' => Carbon::now()->toDateString(),
+                            // 'updated_visit_date' => $value['updateVisit'],
                             'application_id' => $value['application'],
                             'sales_stage_id' => $value['salesStage'],
                             'probability_id' => $value['probability'],
@@ -538,7 +563,7 @@ class CrmCreate extends Component
                             "sweet.success",
                             position: "center",
                             title: "Updated Successfully !!",
-                            text: (!empty($this->customerCode)) ? $this->crmHeader_number . ", Customer : " . $this->customerNameEng : $this->crmHeader_number . ", Customer : " . $this->customerNameEng,
+                            text: (!empty($this->customerCode)) ? $this->crmHeader_number . ", " . $this->customerNameEng : $this->crmHeader_number . ", Customer : " . $this->customerNameEng,
                             icon: "success",
                             timer: 3000,
                             url: route('crm.update', $this->crmHeader_id),
