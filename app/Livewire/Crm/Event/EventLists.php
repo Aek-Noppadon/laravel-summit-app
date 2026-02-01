@@ -28,15 +28,26 @@ class EventLists extends Component
 
         $departmentId = auth()->user()->department_id;
 
-        $events = Event::whereHas('userCreated.department', function ($query) use ($departmentId) {
-            $query->where('department_id', $departmentId);
-        })
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
-            // ->orderBy('name')
-            ->latest()
+        $events = Event::where(function ($query) use ($departmentId) {
+            $query->where('id', 1)
+                ->orWhere(function ($query) use ($departmentId) {
+                    $query->whereHas('userCreated.department', function ($query) use ($departmentId) {
+                        $query
+                            ->where('id', $departmentId);
+                    });
+                });
+        })->latest()
             ->paginate($this->pagination);
+
+        // $events = Event::whereHas('userCreated.department', function ($query) use ($departmentId) {
+        //     $query->where('department_id', $departmentId);
+        // })
+        //     ->when($this->search, function ($query) {
+        //         $query->where('name', 'like', '%' . $this->search . '%');
+        //     })
+        //     // ->orderBy('name')
+        //     ->latest()
+        //     ->paginate($this->pagination);
         // =======================================================
 
         return view('livewire.crm.event.event-lists', compact('events'));
