@@ -77,7 +77,7 @@
                                         <small class="badge badge-light">
                                             <i class="far fa-clock"></i>
                                             {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                            ,{{ $item->userCreated->name }}
+                                            ,{{ $item->userUpdated->name }}
                                         </small>
                                     </td>
                                     <td>{{ $item->id }}</td>
