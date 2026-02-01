@@ -57,7 +57,7 @@ class EventLists extends Component
                 "sweet.success",
                 position: "center",
                 title: "Deleted Successfully !!",
-                text: "Event : " . $name,
+                text: $name,
                 icon: "success",
                 timer: 3000,
             );
