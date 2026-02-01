@@ -14,21 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(UserTableSeeder::class);
-        $this->call(DepartmentTableSeeder::class);
-        $this->call(SalesStageTableSeeder::class);
-        $this->call(CustomerTypeTableSeeder::class);
-        $this->call(CustomerGroupTableSeeder::class);
-        $this->call(ProbabilityTableSeeder::class);
-        $this->call(VolumeUnitTableSeeder::class);
-        // $this->call(ApplicationTableSeeder::class);
-        // $this->call(PackingUnitTableSeeder::class);
-
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // $this->call(UserTableSeeder::class);
+        // $this->call(DepartmentTableSeeder::class);
+        // $this->call(SalesStageTableSeeder::class);
+        // $this->call(CustomerTypeTableSeeder::class);
+        // $this->call(CustomerGroupTableSeeder::class);
+        // $this->call(ProbabilityTableSeeder::class);
+        // $this->call(VolumeUnitTableSeeder::class);
+        $this->call(EventTableSeeder::class);
     }
 }
