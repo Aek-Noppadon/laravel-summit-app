@@ -36,7 +36,7 @@
                         <a href="{{ route('crm.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Add CRM
                         </a>
-                        <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
+                        <button wire:click="$dispatch('refresh-crm')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                         <button wire:click="toggleSearch(true)" class="btn btn-primary">
@@ -196,11 +196,6 @@
                                         ,{{ $item->userCreated->name }}
                                     </small>
                                 </td>
-                                {{-- <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
-                                </td> --}}
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
@@ -274,7 +269,7 @@
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
                                                             {{-- <td>{{ $item->product->principal }}</td> --}}
-                                                            <td>{{ number_format($item->quantity, 0) }}</td>
+                                                            <td>{{ number_format($item->quantity, 2) }}</td>
                                                             <td>{{ number_format($item->unit_price, 2) }}</td>
                                                             <td>{{ number_format($item->total_price, 2) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
@@ -320,7 +315,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `${event.document_no}, Customer : ${event.name_english}`,
+                html: `${event.document_no}<br>${event.name_english}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
