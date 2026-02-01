@@ -42,8 +42,11 @@ class CrmLists extends Component
         $this->salesStages = SalesStage::all();
     }
 
+    #[On('refresh-crm')]
     public function render()
     {
+        // dd("Render");
+
         $userId = auth()->user()->id;
 
         $crms = CrmHeader::where(function ($userQuery) use ($userId) {
@@ -164,7 +167,7 @@ class CrmLists extends Component
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            text: $document_no . ", Customer: " . $name_english,
+            text: $document_no . " " . $name_english,
             icon: "success",
             timer: 3000,
             url: route('crm.list'),
