@@ -59,7 +59,7 @@ class CrmLists extends Component
             })
             ->when($this->search_start_estimate_date, function ($estimateDateQuery) {
                 if ($this->search_start_estimate_date && $this->search_end_estimate_date) {
-                    $estimateDateQuery->whereBetween('month_estimate_date', [$this->search_start_estimate_date, $this->search_end_estimate_date]);
+                    $estimateDateQuery->whereBetween('estimate_date', [$this->search_start_estimate_date, $this->search_end_estimate_date]);
                 }
             })
             ->when($this->search_contact, function ($contactQuery) {
@@ -83,7 +83,7 @@ class CrmLists extends Component
             ->when($this->search_start_update_visit, function ($query) {
                 if ($this->search_start_update_visit && $this->search_end_update_visit) {
                     $query->whereHas('crm_items', function ($startVisitUpdateQuery) {
-                        $startVisitUpdateQuery->whereBetween('update_visit', [$this->search_start_update_visit, $this->search_end_update_visit]);
+                        $startVisitUpdateQuery->whereBetween('updated_visit_date', [$this->search_start_update_visit, $this->search_end_update_visit]);
                     });
                 }
             })
@@ -167,7 +167,7 @@ class CrmLists extends Component
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            text: $document_no . " " . $name_english,
+            text: $document_no . " : " . $name_english,
             icon: "success",
             timer: 3000,
             url: route('crm.list'),
