@@ -1,36 +1,24 @@
-{{-- @php
-    $id = Auth::user()->id;
-    $adminData = App\Models\User::find($id);
-
-    $site_setting = DB::table('site_setting')->select('favicon_image')->first();
-@endphp --}}
-
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    {{-- <a href="/" target="_blank" class="brand-link">
-        <img src="{{ $site_setting ? asset($site_setting->favicon_image) : '' }}" alt="Logo" class="brand-image">
-        <span class="brand-text font-weight-light">Summit Chemical</span>
-    </a> --}}
+    <a href="{{ route('dashboard') }}" class="brand-link">
+        <img src="{{ asset('images/logo/favicon.png') }}"Logo" class="brand-image">
+        <span class="brand-text font-weight-light">SMC Chemical</span>
+    </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            {{-- <div class="image">
-                <img src="{{ !empty($adminData->image) ? url($adminData->image) : url('backend/images/upload/users/no_image.jpg') }}""
-                    class="img-circle elevation-2" alt="{{ Auth::user()->first_name }}">
-            </div> --}}
             <div class="info">
-                <p class="d-block text-light">{{ auth()->user()->name }} {{ auth()->user()->last_name }}
-                    <span class="badge badge-light">{{ auth()->user()->id }}</span>
-                </p>
+                <a href="{{ route('dashboard') }}" class="d-block">{{ Auth::user()->name }}
+                    {{ Auth::user()->last_name }}</a>
 
                 @isset(auth()->user()->department->name)
-                    <p class="d-block text-light">{{ auth()->user()->department->name }}</p>
+                    <div class="d-block text-light">
+                        {{ auth()->user()->department->name }}
+                    </div>
                 @endisset
-
-                {{-- <a href="#" class="d-block">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a> --}}
             </div>
         </div>
 
@@ -114,7 +102,7 @@
                                 class="nav-link {{ request()->is('crms/lists/delete') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
                                 {{-- <i class="far fa-circle nav-icon"></i> --}}
-                                <p>CRM Lists Delete</p>
+                                <p>CRM Delete Lists</p>
                             </a>
                         </li>
                     </ul>
@@ -174,17 +162,6 @@
                         </li>
                     </ul>
 
-                    <!-- Sales Stage Lists -->
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('sales-stage.list') }}"
-                                class="nav-link {{ request()->is('sales-stages*') ? 'active' : '' }}">
-                                <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>Sales Stage Lists</p>
-                            </a>
-                        </li>
-                    </ul>
-
                     <!-- Probability Lists -->
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -203,6 +180,17 @@
                                 class="nav-link {{ request()->is('volume-units*') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
                                 <p>Volume Unit Lists</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Sales Stage Lists -->
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('sales-stage.list') }}"
+                                class="nav-link {{ request()->is('sales-stages*') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                <p>Sales Stage Lists</p>
                             </a>
                         </li>
                     </ul>
