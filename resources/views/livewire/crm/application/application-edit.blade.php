@@ -14,7 +14,7 @@
             <div class="modal-body">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Application Form</h3>
+                        <h3 class="card-title">Edit Form</h3>
                     </div>
 
                     <form>
