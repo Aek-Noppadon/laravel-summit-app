@@ -25,3 +25,7 @@ Homestead.yaml
 Thumbs.db
 app/Livewire/Crm/Application/ApplicationLists.php
 app/Livewire/Crm/CrmCreate-2025-12-09.php
+resources/views/livewire/crm/crm-create-2026-02-04.blade.php
+app/Livewire/Crm/CrmCreate-2025-03-02.php
+app/Livewire/Crm/Product/ProductAxLists-2026-02-03.php
+public/images/logo/favicon.png
