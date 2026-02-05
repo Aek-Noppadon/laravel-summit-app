@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Customer Type</h4>
+                <h4 class="modal-title">Customer Type</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Customer Type Form</h3>
+                        <h3 class="card-title">Edit Form</h3>
                     </div>
                     <form>
                         <div class="card-body">
