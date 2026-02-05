@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Application\ApplicationCreate;
 use App\Livewire\Application\ApplicationLists;
 use App\Livewire\Crm\CrmCreate;
-use App\Livewire\Crm\CrmDeleteLists;
 use App\Livewire\Crm\CrmLists;
 use App\Livewire\Crm\CrmListsDelete;
 use App\Livewire\Customer\CustomerCreate;
@@ -34,7 +33,7 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', CrmLists::class)->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', UserProfile::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
