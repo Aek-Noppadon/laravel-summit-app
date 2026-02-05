@@ -24,6 +24,7 @@ class CrmDetail extends Model
         'volume_unit_id',
         'additional',
         'competitor',
+        'source',
         'created_user_id',
         'updated_user_id',
     ];
