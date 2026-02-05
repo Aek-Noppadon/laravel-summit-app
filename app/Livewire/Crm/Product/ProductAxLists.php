@@ -30,145 +30,82 @@ class ProductAxLists extends Component
                 ->paginate($this->pagination);
         }
 
-        // if (!$this->search) {
-        //     $products = DB::connection('sqlsrv2')
-        //         ->table('SCC_CRM_PRODUCTS_NEW')
-        //         // ->orderBy('ProductCode')
-        //         ->orderBy('ProductName')
-        //         ->paginate($this->pagination);
-        // } else {
-        //     $products = DB::connection('sqlsrv2')
-        //         ->table('SCC_CRM_PRODUCTS_NEW')
-        //         ->where('ProductName', 'LIKE', '%' . $this->search . '%')
-        //         ->orWhere('ProductBrand', 'LIKE', '%' . $this->search . '%')
-        //         ->orWhere('SupplierRep', 'LIKE', '%' . $this->search . '%')
-        //         ->orWhere('Principal', 'LIKE', '%' . $this->search . '%')
-        //         // ->orderBy('ProductCode')
-        //         ->orderBy('ProductName')
-        //         ->paginate($this->pagination);
-        // }
-
         return view('livewire.crm.product.product-ax-lists', compact('products'));
     }
 
     #[On('save-product-ax')]
-    public function saveProductAx($product_code, $product_name)
+    public function saveProductAx($product_code, $product_name, $product_brand, $supplier_rep, $principal)
     {
-        if ($product_code) {
-            $product_ax = SrvProduct::where('ProductCode', $product_code)
-                ->first();
-        } else {
-            $product_ax = SrvProduct::where('ProductName', $product_name)
-                ->first();
-        }
+        // dd($product_code, $product_name, $product_brand, $supplier_rep, $principal);
 
-        if (empty($product_ax->ProductName)) {
+        $productAx = SrvProduct::where('ProductName', $product_name)
+            ->where('ProductBrand', $product_brand)
+            ->where('SupplierRep', $supplier_rep)
+            ->where('Principal', $principal)
+            ->first();
+
+        if (empty($productAx)) {
             $this->dispatch(
                 "sweet.error",
                 position: "center",
                 title: "No have product list",
                 text: "Please refresh product",
-                // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
                 icon: "error",
                 timer: 3000,
             );
-        } else {
-            if (empty($product_ax->ProductCode)) {
+            return;
+        }
 
-                // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-                $product = Product::where('product_name', $product_ax->ProductName)
-                    ->first();
+        if ($productAx) {
+            // Update product name to product master
+            $product = Product::where('product_name', $productAx->ProductName)
+                ->where('brand', $productAx->ProductBrand)
+                ->where('supplier_rep', $supplier_rep)
+                ->where('principal', $principal)
+                ->first();
 
-                if (empty($product)) {
-                    Product::create([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'created_user_id' => auth()->user()->id,
-                        'updated_user_id' => auth()->user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Created Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                        // url: route('crm.create'),
-                    );
-                } else {
-                    $product->update([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'updated_user_id' => auth()->user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Updated Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                    );
-                }
+            if ($product) {
+                $product->update([
+                    'code' => $productAx->ProductCode,
+                    'product_name' => $productAx->ProductName,
+                    'brand' => $productAx->ProductBrand,
+                    'supplier_rep' => $productAx->SupplierRep,
+                    'principal' => $productAx->Principal,
+                    'status' => $productAx->Status,
+                    'source' => $this->source,
+                    'updated_user_id' => auth()->user()->id,
+                ]);
+                $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "Updated Successfully !!",
+                    text: "Product : " . $productAx->ProductName,
+                    icon: "success",
+                    timer: 3000,
+                );
+
+                // Insert product name to product master
             } else {
-                // ตรวจสอบสินค้าว่ามีอยู่ใน Database ไหม, ถ้าไม่มีให้ Insert, ถ้ามีให้ Update
-                $product = Product::where('code', $product_ax->ProductCode)
-                    ->first();
+                Product::create([
+                    'code' => $productAx->ProductCode,
+                    'product_name' => $productAx->ProductName,
+                    'brand' => $productAx->ProductBrand,
+                    'supplier_rep' => $productAx->SupplierRep,
+                    'principal' => $productAx->Principal,
+                    'status' => $productAx->Status,
+                    'source' => $this->source,
+                    'created_user_id' => auth()->user()->id,
+                    'updated_user_id' => auth()->user()->id,
+                ]);
 
-                if (empty($product)) {
-                    Product::create([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'created_user_id' => auth()->user()->id,
-                        'updated_user_id' => auth()->user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Created Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        // text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductCode . " - " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                        // url: route('crm.create'),
-                    );
-                } else {
-                    $product->update([
-                        'code' => $product_ax->ProductCode,
-                        'product_name' => $product_ax->ProductName,
-                        'brand' => $product_ax->ProductBrand,
-                        'supplier_rep' => $product_ax->SupplierRep,
-                        'principal' => $product_ax->Principal,
-                        'status' => $product_ax->Status,
-                        'source' => $this->source,
-                        'updated_user_id' => auth()->user()->id,
-                    ]);
-                    $this->dispatch(
-                        "sweet.success",
-                        position: "center",
-                        title: "Updated Successfully !!",
-                        text: (!empty($product_ax->ProductCode)) ? "Product : " . $product_ax->ProductName : "Product : " . $product_ax->ProductName,
-                        icon: "success",
-                        timer: 3000,
-                    );
-                }
+                $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "Created Successfully !!",
+                    text: "Product : " . $productAx->ProductName,
+                    icon: "success",
+                    timer: 3000,
+                );
             }
         }
 
