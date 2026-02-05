@@ -21,6 +21,8 @@ class CrmHeader extends Model
         'contact',
         'purpose',
         'detail',
+        'opportunity',
+        'source',
         'created_user_id',
         'updated_user_id',
     ];
