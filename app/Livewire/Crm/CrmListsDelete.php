@@ -43,6 +43,7 @@ class CrmListsDelete extends Component
         $this->salesStages = SalesStage::all();
     }
 
+    #[On('refresh-crm')]
     public function render()
     {
         $userId = auth()->user()->id;
@@ -58,7 +59,7 @@ class CrmListsDelete extends Component
             })
             ->when($this->search_start_estimate_date, function ($estimateDateQuery) {
                 if ($this->search_start_estimate_date && $this->search_end_estimate_date) {
-                    $estimateDateQuery->whereBetween('month_estimate_date', [$this->search_start_estimate_date, $this->search_end_estimate_date]);
+                    $estimateDateQuery->whereBetween('estimate_date', [$this->search_start_estimate_date, $this->search_end_estimate_date]);
                 }
             })
             ->when($this->search_contact, function ($contactQuery) {
@@ -82,7 +83,7 @@ class CrmListsDelete extends Component
             ->when($this->search_start_update_visit, function ($query) {
                 if ($this->search_start_update_visit && $this->search_end_update_visit) {
                     $query->whereHas('crm_items_deleted', function ($startVisitUpdateQuery) {
-                        $startVisitUpdateQuery->whereBetween('update_visit', [$this->search_start_update_visit, $this->search_end_update_visit]);
+                        $startVisitUpdateQuery->whereBetween('updated_visit_date', [$this->search_start_update_visit, $this->search_end_update_visit]);
                     });
                 }
             })
@@ -106,6 +107,7 @@ class CrmListsDelete extends Component
             ->orderByDesc('deleted_at')
             ->paginate($this->pagination);
 
+
         $crmDetails =   CrmDetail::onlyTrashed()
             ->whereHas('crmHeader', function ($q) {
                 $q->whereNull('deleted_at');
@@ -115,6 +117,29 @@ class CrmListsDelete extends Component
             ->paginate($this->paginationItem);
 
         return view('livewire.crm.crm-lists-delete', compact('crms', 'crmDetails'));
+    }
+
+    public function selectedCustomerType()
+    {
+        $this->customerTypes = CustomerType::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function selectedCustomerGroup()
+    {
+        $this->customerGroups = CustomerGroup::whereHas('userCreated.department', function ($query) {
+            $query->where('department_id', $this->departmentId);
+        })
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function selectedsalesStage()
+    {
+        $this->salesStages = SalesStage::all();
     }
 
     public function toggleSearch($value)
@@ -156,7 +181,7 @@ class CrmListsDelete extends Component
             "sweet.success",
             position: "center",
             title: "Restored Successfully !!",
-            text: $document_no . ", Customer: " . $name_english,
+            text: $document_no . " : " . $name_english,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
@@ -179,7 +204,7 @@ class CrmListsDelete extends Component
             "sweet.success",
             position: "center",
             title: "Restored Successfully !!",
-            text: $document_no . ", Product: " . $product_name,
+            text: $document_no . " : " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
@@ -202,7 +227,7 @@ class CrmListsDelete extends Component
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            html: $document_no . "<br>" . $name_english,
+            text: $document_no . " : " . $name_english,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
@@ -225,7 +250,7 @@ class CrmListsDelete extends Component
             "sweet.success",
             position: "center",
             title: "Deleted Successfully !!",
-            html: $document_no . "<br>" . $product_name,
+            text: $document_no . " : " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.list.delete'),
