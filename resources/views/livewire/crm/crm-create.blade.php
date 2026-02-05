@@ -6,11 +6,11 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1>Add CRM</h1>
+                        <h1>CRM</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('crm.list') }}">CRM List</a></li>
                             <li class="breadcrumb-item active">CRM</li>
                         </ol>
                     </div>
@@ -21,7 +21,7 @@
         <!-- card -->
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">CRM Form</h3>
+                <h3 class="card-title">Add & Edit Form</h3>
             </div>
             <!-- /.card-header -->
 
@@ -424,27 +424,30 @@
                                     <div class="form-group">
                                         <div class="mb-2 font-weight-bold">Created</div>
                                         <div class="form-control bg-light">
-                                            {{ Carbon\Carbon::parse($item['created_at'])->format('d/m/Y') }},
-                                            {{ Carbon\Carbon::parse($item['created_at'])->format('H:i:s') }},
+                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->format('d/m/Y') }},
+                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->format('H:i:s') }},
                                             <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item['created_at'])->diffForHumans() }}
+                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->diffForHumans() }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <div class="mb-2 font-weight-bold">updated</div>
+                                        <div class="mb-2 font-weight-bold">Updated</div>
                                         <div class="form-control bg-light">
-                                            {{ Carbon\Carbon::parse($item['updated_at'])->format('d/m/Y') }},
-                                            {{ Carbon\Carbon::parse($item['updated_at'])->format('H:i:s') }},
+                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->format('d/m/Y') }},
+                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->format('H:i:s') }},
                                             <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item['updated_at'])->diffForHumans() }}
+                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->diffForHumans() }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endisset
                         <!-- ./CRM Header ID, Created Date, Updated Date -->
+
+                        <input id="inputs.{{ $key }}.productId"
+                            wire:model="inputs.{{ $key }}.productId" type="hidden">
 
                         <!-- Product Name -->
                         <div class="row">
@@ -521,6 +524,15 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                {{-- <div class="form-group">
+                                    <label>Update Visite</label>
+                                    <div class="form-control bg-light">
+                                        {{ Carbon\Carbon::parse($item['updateVisit'])->format('d/m/Y') }}
+                                    </div>
+
+                                </div> --}}
+
                             </div>
                             <div class="col-3">
                                 <div class="form-group">
@@ -848,8 +860,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                //text: `Item id : ${event.id}, Product : ${event.name}`,
-                text: `${event.document_no}, Product : ${event.product_name}`,
+                html: `${event.document_no}<br>${event.product_name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",

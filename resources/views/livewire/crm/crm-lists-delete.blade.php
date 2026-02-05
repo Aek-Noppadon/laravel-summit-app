@@ -6,12 +6,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>CRM Lists Delete</h1>
+                        <h1>CRM Delete Lists</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">CRM List Delete</li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item active">CRM Delete</li>
                         </ol>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
         <div class="card-header">
             <div class="row mb-3">
                 <div class="col-7">
-                    <h4>Number Delete</h4>
+                    <h4>Numbers</h4>
                 </div>
                 <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
+                        <button wire:click="$dispatch('refresh-crm')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                         <button wire:click="toggleSearch(true)" class="btn btn-primary">
@@ -172,9 +172,11 @@
                         <th scope="col">#</th>
                         <th scope="col">Deleted</th>
                         <th scope="col">Created</th>
+                        <th scope="col" style="width: 35px"></th>
                         <th scope="col">Number</th>
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
+                        <th scope="col">Type</th>
                         <th scope="col">Start Visit</th>
                         <th scope="col">Estimate</th>
                         <th scope="col">Contact</th>
@@ -186,23 +188,53 @@
                         @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }}
-                                    <br>
-                                    <small class="badge badge-light">
-                                        <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->deleted_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->deleted_at->format('H:i') }},
+                                            {{ $item->deleted_at->diffForHumans() }}
+                                        </small>
+                                    </div>
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
-                                    <br>
-                                    <small class="badge badge-light">
-                                        <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->created_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->created_at->format('H:i') }},
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    @if ($item->source === '0')
+                                        <span class="badge badge-pill badge-success">
+                                            Excel
+                                        </span>
+                                    @else
+                                        <span class="badge badge-pill badge-info">
+                                            Web
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
                                 <td>{{ $item->customer->name_english }}</td>
+                                <td>{{ $item->customer_type->name }}</td>
                                 <td>
                                     {{ Carbon\Carbon::parse($item->started_visit_date)->format('d/m/Y') }}
                                 </td>
@@ -271,9 +303,9 @@
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
                                                             {{-- <td>{{ $item->product->principal }}</td> --}}
-                                                            <td>{{ number_format($item->quantity, 0) }}</td>
-                                                            <td>{{ number_format($item->unit_price, 2) }}</td>
-                                                            <td>{{ number_format($item->total_price, 2) }}</td>
+                                                            <td>{{ number_format($item->quantity, 4) }}</td>
+                                                            <td>{{ number_format($item->unit_price, 4) }}</td>
+                                                            <td>{{ number_format($item->total_price, 4) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
                                                             <td>{{ $item->probability->name }}</td>
                                                             <td>
@@ -312,28 +344,28 @@
         <div class="card-header">
             <div class="row mb-3">
                 <div class="col-7">
-                    <h4>Items Delete</h4>
+                    <h4>Items</h4>
                 </div>
-                <div class="col-2">
+                <div class="col-2 offset-3">
                     <select wire:model.live.debounce.1000ms="paginationItem" class="form-control">
                         <option value="20">20</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
                 </div>
-                <div class="col-3 d-flex justify-content-center">
+                {{-- <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
+                        <button wire:click="$dispatch('refresh-crm)" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                         <button wire:click="toggleSearchItem(true)" class="btn btn-primary">
                             <i class="fas fa-search"></i> Search
                         </button>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
-            @if ($isOpenSearchItem == false)
+            {{-- @if ($isOpenSearchItem == false)
                 <div class="row">
                     <div class="col-12">
                         <div class="row mb-3">
@@ -433,7 +465,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             <div class="row">
                 <div class="col-12">
@@ -460,15 +492,15 @@
                     <thead class="thead-dark">
                         <th scope="col">#</th>
                         <th scope="col">Deleted</th>
+                        <th scope="col" style="width: 35px"></th>
                         <th scope="col">Number</th>
                         <th scope="col">Application</th>
                         <th scope="col">Product Name</th>
                         <th scope="col">Brand</th>
-                        <th scope="col">Supplier Rep.</th>
-                        {{-- <th scope="col">Principal</th> --}}
+                        <th scope="col">Supplier</th>
                         <th scope="col">Qty.</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">Total Amt.</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
                         <th scope="col">Sales Stage</th>
                         <th scope="col">Probability</th>
                         <th scope="col">Update Visit</th>
@@ -479,10 +511,34 @@
                         @forelse ($crmDetails as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->deleted_at)->format('d/m/Y') }},
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->deleted_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->deleted_at->format('H:i') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->deleted_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if ($item->source === '0')
+                                        <span class="badge badge-pill badge-success">
+                                            Excel
+                                        </span>
+                                    @else
+                                        <span class="badge badge-pill badge-info">
+                                            Web
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>{{ $item->crmHeader->document_no }}</td>
                                 <td>
@@ -493,8 +549,7 @@
                                 <td>{{ $item->product->product_name }}</td>
                                 <td>{{ $item->product->brand }}</td>
                                 <td>{{ $item->product->supplier_rep }}</td>
-                                {{-- <td>{{ $item->product->principal }}</td> --}}
-                                <td>{{ number_format($item->quantity, 0) }}</td>
+                                <td>{{ number_format($item->quantity, 2) }}</td>
                                 <td>{{ number_format($item->unit_price, 2) }}</td>
                                 <td>{{ number_format($item->total_price, 2) }}</td>
 

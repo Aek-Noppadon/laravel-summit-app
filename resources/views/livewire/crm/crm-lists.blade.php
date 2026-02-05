@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active">CRM Lists</li>
                         </ol>
                     </div>
@@ -21,6 +21,7 @@
 
     <!-- card -->
     <div class="card">
+
         <div class="card-header">
             <div class="row mb-3">
                 <div class="offset-7"></div>
@@ -45,6 +46,7 @@
                     </div>
                 </div>
             </div>
+
             @if ($isOpenSearch == false)
                 <div class="row">
                     <div class="col-12">
@@ -170,10 +172,9 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        <th scope="col" style="width: 120px">Created</th>
-                        {{-- <th scope="col">updated</th> --}}
-                        <th scope="col">ID</th>
-                        <th scope="col" style="width: 120px">Number</th>
+                        <th scope="col">Created</th>
+                        <th scope="col" style="width: 35px"></th>
+                        <th scope="col">Number</th>
                         <th scope="col">Code</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Type</th>
@@ -181,22 +182,42 @@
                         <th scope="col">Estimate</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
-                        <th scope="col" style="width: 115px">Action</th>
+                        <th scope="col" style="width: 100px">Action</th>
                     </thead>
 
                     <tbody>
                         @forelse ($crms as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
-                                    {{-- {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br> --}}
-                                    <small class="badge badge-light">
-                                        <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                        ,{{ $item->userCreated->name }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->created_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->created_at->format('H:i') }},
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
                                 </td>
-                                <td>{{ $item->id }}</td>
+                                <td>
+                                    @if ($item->source === '0')
+                                        <span class="badge badge-pill badge-success">
+                                            Excel
+                                        </span>
+                                    @else
+                                        <span class="badge badge-pill badge-info">
+                                            Web
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->customer->code }}</td>
                                 <td>{{ $item->customer->name_english }}</td>
@@ -269,9 +290,9 @@
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
                                                             {{-- <td>{{ $item->product->principal }}</td> --}}
-                                                            <td>{{ number_format($item->quantity, 2) }}</td>
-                                                            <td>{{ number_format($item->unit_price, 2) }}</td>
-                                                            <td>{{ number_format($item->total_price, 2) }}</td>
+                                                            <td>{{ number_format($item->quantity, 4) }}</td>
+                                                            <td>{{ number_format($item->unit_price, 4) }}</td>
+                                                            <td>{{ number_format($item->total_price, 4) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
                                                             <td>{{ $item->probability->name }}</td>
                                                             <td>
