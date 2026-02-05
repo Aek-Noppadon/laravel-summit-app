@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Customers Master List</h4>
+                <h4 class="modal-title">Customer Master Lists</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,11 +10,11 @@
 
             <div class="modal-body">
                 <div class="row mb-4">
-                    <div class="col-8">
+                    <div class="col-7">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search customer code or customer name">
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -57,6 +57,8 @@
                     <table class="table table-hover table-sm">
                         <thead>
                             <th scope="col">#</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Updated</th>
                             <th scope="col" style="width: 35px"></th>
                             <th scope="col">Code</th>
                             <th scope="col">Name English</th>
@@ -70,9 +72,49 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $customer->userCreated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $customer->created_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $customer->created_at->format('H:i') }},
+                                                {{ $customer->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $customer->userUpdated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $customer->updated_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $customer->updated_at->format('H:i') }},
+                                                {{ $customer->updated_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+
+                                    </td>
+                                    <td>
                                         @if ($customer->source === '0')
                                             <span class="badge badge-pill badge-info">
                                                 AX
+                                            </span>
+                                        @else
+                                            <span class="badge badge-pill badge-success">
+                                                Excel
                                             </span>
                                         @endif
                                     </td>
