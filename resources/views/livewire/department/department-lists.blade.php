@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active">Departments</li>
                         </ol>
                     </div>
@@ -24,11 +24,11 @@
         <div class="card-header">
             <!-- Add Department Modal -->
             <div class="row mb-4">
-                <div class="col-8">
+                <div class="col-7">
                     <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                         placeholder="Search department">
                 </div>
-                <div class="col-1">
+                <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                         <option value="20">20</option>
                         <option value="50">50</option>
