@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active">Products</li>
                         </ol>
                     </div>
@@ -24,11 +24,11 @@
         <div class="card-header">
             <!-- Add Product Modal -->
             <div class="row mb-4">
-                <div class="col-8">
+                <div class="col-7">
                     <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                         placeholder="Search product or brand">
                 </div>
-                <div class="col-1">
+                <div class="col-2">
                     <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                         <option value="20">20</option>
                         <option value="50">50</option>
@@ -69,49 +69,68 @@
                 <table class="table table-hover">
                     <thead>
                         <th scope="col">#</th>
-                        {{-- <th scope="col" style="width: 90px">#</th> --}}
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col"></th>
-                        {{-- <th scope="col" style="width: 53px"></th> --}}
-                        <th scope="col">ID</th>
                         <th scope="col">Code</th>
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
                         <th scope="col">Supplier Rep.</th>
                         <th scope="col">Principal</th>
                         <th scope="col" style="width: 100px">Action</th>
-                        {{-- <th scope="col" style="width: 91px">Action</th> --}}
                     </thead>
 
                     <tbody>
                         @foreach ($products as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light">
-                                        <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                        , {{ $item->userCreated->name }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->created_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->created_at->format('H:i') }},
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light">
-                                        <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                        , {{ $item->userUpdated->name }}
-                                    </small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->updated_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->updated_at->format('H:i') }},
+                                            {{ $item->updated_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
                                 </td>
                                 <td>
                                     @if ($item->source === '0')
                                         <span class="badge badge-pill badge-info">
                                             AX
                                         </span>
+                                    @else
+                                        <span class="badge badge-pill badge-success">
+                                            Excel
+                                        </span>
                                     @endif
                                 </td>
-                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->product_name }}</td>
                                 <td>{{ $item->brand }}</td>
