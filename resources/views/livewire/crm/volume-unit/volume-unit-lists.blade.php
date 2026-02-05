@@ -10,11 +10,11 @@
 
             <div class="modal-body">
                 <div class="row mb-4">
-                    <div class="col-8">
+                    <div class="col-7">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search volume unit name">
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
