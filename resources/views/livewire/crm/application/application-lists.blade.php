@@ -10,11 +10,11 @@
 
             <div class="modal-body">
                 <div class="row mb-4">
-                    <div class="col-8">
+                    <div class="col-7">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search application name">
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <select wire:model.live.debounce.1000ms="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -60,27 +60,50 @@
                         <thead>
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
-                            <th scope="col">updated</th>
-                            <th scope="col">ID</th>
+                            <th scope="col">Updated</th>
                             <th scope="col">Application Name</th>
-                            <th scope="col" style="width: 115px">Action</th>
+                            <th scope="col" style="width: 90px">Action</th>
                         </thead>
 
                         <tbody>
                             @foreach ($applications as $item)
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
-                                    <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                        <small class="badge badge-light"><i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
+                                    <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->created_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->created_at->format('H:i') }},
+                                                {{ $item->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+
                                     </td>
-                                    <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                        <small class="badge badge-light"><i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                    <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->updated_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->updated_at->format('H:i') }},
+                                                {{ $item->updated_at->diffForHumans() }}
+                                            </small>
+                                        </div>
                                     </td>
-                                    <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         <button
