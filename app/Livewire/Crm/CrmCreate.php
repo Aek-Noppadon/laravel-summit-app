@@ -34,9 +34,9 @@ class CrmCreate extends Component
     public $quantity, $unitPrice, $totalPrice;
     public $crmHeader_number, $crmHeader_id, $originalEstimateDate, $crmHeader_created_at, $crmHeader_updated_at;
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
-    public $product_id, $productName, $productBrand, $supplierRep, $principal;
+    public $productId, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
-    public $source = '0';
+    public $source = 1;
     public $departmentId;
 
     public function mount($id = null)
@@ -52,8 +52,6 @@ class CrmCreate extends Component
                 ->where('created_user_id', auth()->user()->id)
                 ->first();
 
-            // dd($crmHeader);
-
             try {
                 $this->customer_id = $crmHeader->customer_id; // Add code 09/12/2025
                 $this->crmHeader_number = $crmHeader->document_no;
@@ -65,6 +63,7 @@ class CrmCreate extends Component
                 $this->originalEstimateDate = $crmHeader->original_estimate_date;
                 $this->customerType = $crmHeader->customer_type_id;
                 $this->customerGroup = $crmHeader->customer_group_id;
+                $this->event_id = $crmHeader->event_id;
                 $this->event_name = $crmHeader->event->name;
                 $this->contact = $crmHeader->contact;
                 $this->purpose = $crmHeader->purpose;
@@ -76,6 +75,7 @@ class CrmCreate extends Component
                 $crmDetails = CrmDetail::where('crm_id', $id)->get();
 
                 foreach ($crmDetails as $value) {
+
                     $this->inputs[] = [
                         'crmDetail_id' => $value->id,
                         'productName' => $value->product->product_name,
@@ -83,19 +83,23 @@ class CrmCreate extends Component
                         'supplierRep' => $value->product->supplier_rep,
                         'principal' => $value->product->principal,
                         'updateVisit' => $value->updated_visit_date,
+                        // 'updateVisit' => $value->updated_at->format('Y-m-d'),
                         'application' => $value->application_id,
                         'salesStage' => $value->sales_stage_id,
                         'probability' => $value->probability_id,
                         'quantity' => $value->quantity,
                         'unitPrice' => $value->unit_price,
-                        'totalPrice' => number_format($value->total_price, 2),
+                        'totalPrice' => $value->total_price,
+                        // 'totalPrice' => number_format($value->total_price, 4),
                         'packingUnit' => $value->packing_unit_id,
                         'volumnQty' => $value->volumn_qty,
                         'volumeUnit' => $value->volume_unit_id,
                         'additional' => $value->additional,
                         'competitor' => $value->competitor,
-                        'created_at' => $value->created_at,
-                        'updated_at' => $value->updated_at,
+                        // 'created_at' => $value->created_at,
+                        // 'updated_at' => $value->updated_at,
+                        'crmDetail_created_at' => $value->created_at,
+                        'crmDetail_updated_at' => $value->updated_at,
                     ];
 
                     // นำค่าตัวแปร product_nam ใส่ไว้ที่ Array chekProduct เพื่อไม่ให้เพิ่มสินค้าตัวเดิมซ้ำ
@@ -114,16 +118,14 @@ class CrmCreate extends Component
                 );
             }
         } else {
-            $this->startVisit = Carbon::now()->toDateString();
-            $this->estimateDate = Carbon::now()->toDateString();
 
-            $event = Event::where(function ($query) {
-                $query->where('name', 'No Event')
-                    ->whereHas('userCreated.department', function ($query) {
-                        $query
-                            ->where('id', $this->departmentId);
-                    });
-            })->first();
+            $this->startVisit = now()->toDateString();
+            $this->estimateDate = now()->toDateString();
+
+            // $this->startVisit = Carbon::now()->toDateString();
+            // $this->estimateDate = Carbon::now()->toDateString();
+
+            $event = Event::where('id', 1)->first();
 
             // dd($event);
 
@@ -173,6 +175,152 @@ class CrmCreate extends Component
         })->get();
 
         // ====================================================
+    }
+
+    public function save()
+    {
+        $this->validate(
+            [
+                'customerNameEng'           => 'required',
+                'startVisit'                => 'required',
+                'estimateDate'              => 'required',
+                'customerType'              => 'required',
+                'contact'                   => 'required',
+                'purpose'                   => 'required',
+                'inputs.*.productName'      => 'required',
+                'inputs.*.productBrand'     => 'required',
+                'inputs.*.updateVisit'      => 'required',
+                'inputs.*.salesStage'       => 'required',
+                'inputs.*.probability'      => 'required',
+            ],
+            [
+                'customerNameEng' => 'Customer name Eng. field is required.',
+                'startVisit'      => 'Start visit date field is required.',
+                'estimateDate'    => 'Estimate date field is required.',
+                'customerType'    => 'Customer type field is required.',
+                'contact'         => 'Contact person field is required.',
+                'purpose'         => 'Purpose field is required.',
+                'inputs.*.productName.required'  => 'Product name field is required.',
+                'inputs.*.productBrand.required' => 'Brand name field is required.',
+                'inputs.*.updateVisit.required'  => 'Update visit date field is required.',
+                'inputs.*.salesStage.required'   => 'Sales stage field is required.',
+                'inputs.*.probability.required'  => 'Probability field is required.',
+            ]
+        );
+
+        if (empty($this->inputs)) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Please Add Product Item !!",
+                text: "Customer : " . $this->customerNameEng,
+                icon: "error",
+                timer: 3000,
+            );
+            return;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $hasChanged = false;
+
+            $dataHeaders = [
+                'customer_id'            => $this->customer_id,
+                'started_visit_date'     => $this->startVisit,
+                'estimate_date'          => $this->estimateDate,
+                'original_estimate_date' => $this->originalEstimateDate ?? $this->estimateDate,
+                'customer_type_id'       => $this->customerType,
+                'customer_group_id'      => empty($this->customerGroup) ? null : $this->customerGroup,
+                'event_id'               => $this->event_id,
+                'contact'                => trim($this->contact ?? ''),
+                'purpose'                => trim($this->purpose ?? ''),
+                'detail'                 => trim($this->detail ?? ''),
+                'opportunity'            => trim($this->opportunity ?? ''),
+                'source'                 => $this->source,
+                'created_user_id'        => auth()->id(),
+                'updated_user_id'        => auth()->id(),
+            ];
+
+            // dd($dataHeaders);
+
+            $crmHeader = CrmHeader::firstOrNew([
+                'id' => $this->crmHeader_id
+            ]);
+
+            $crmHeader->fill($dataHeaders);
+
+            if ($crmHeader->isDirty()) {
+                $hasChanged = true;
+                $crmHeader->save();
+            }
+
+            foreach ($this->inputs as $item) {
+
+                $productId = Product::where('product_name', $item['productName'])->value('id');
+
+                $dataDetails = [
+                    'crm_id'             => $crmHeader->id,
+                    'product_id'         => $productId,
+                    'updated_visit_date' => $item['updateVisit'],
+                    'application_id'     => empty($item['application']) ? null : $item['application'],
+                    'sales_stage_id'     => $item['salesStage'],
+                    'probability_id'     => $item['probability'],
+                    'quantity'           => $item['quantity'] ?? 0,
+                    'unit_price'         => $item['unitPrice'] ?? 0,
+                    'total_price'        => !empty($item['totalPrice']) ? str_replace(',', '', $item['totalPrice']) : 0,
+                    'volumn_qty'         => $item['volumnQty'],
+                    'volume_unit_id'     => $item['volumeUnit'],
+                    'volume_unit_id'     => empty($item['volumeUnit']) ? null : $item['volumeUnit'],
+                    'additional'         => trim($item['additional'] ?? ''),
+                    'competitor'         => trim($item['competitor'] ?? ''),
+                    'source'             => $this->source,
+                    'created_user_id'    => auth()->id(),
+                    'updated_user_id'    => auth()->id(),
+                ];
+
+                // dd($dataDetails);
+
+                $crmDetail = CrmDetail::firstOrNew([
+                    'id'     => $item['crmDetail_id'] ?? null,
+                    'crm_id' => $crmHeader->id,
+                ]);
+
+                $crmDetail->fill($dataDetails);
+
+                if ($crmDetail->isDirty()) {
+                    $hasChanged = true;
+
+                    // $crmDetail->updated_visit_date = $crmDetail->exists ? now() : $item['updateVisit'];
+
+                    $crmDetail->save();
+                }
+            }
+
+            DB::commit();
+
+            if ($hasChanged) {
+                $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "Saved Successfully !!",
+                    text: "CRM : " . $this->customerNameEng,
+                    icon: "success",
+                    timer: 3000,
+                    url: route('crm.update', $crmHeader->id),
+                );
+            }
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Cannot save CRM data !!",
+                text: $e->getMessage(),
+                icon: "error",
+            );
+        }
     }
 
     public function render()
@@ -237,22 +385,24 @@ class CrmCreate extends Component
 
         // dd($product);
 
+        // IF select source = Product AX
         if ($product->source == 0) {
+
             if (empty($product->code)) {
 
-                // dd("No have product code");
-
-                // $product_ax = DB::connection('sqlsrv2')
-                //     ->table('SCC_CRM_PRODUCTS_NEW')
-                //     ->where('ProductName', $product->product_name)
-                //     ->first();
+                // dd('Product Code Empty');
 
                 $product_ax = SrvProduct::where('ProductName', $product->product_name)
+                    ->where('ProductBrand', $product->brand)
+                    ->where('SupplierRep', $product->supplier_rep)
+                    ->where('Principal', $product->principal)
                     ->first();
 
                 // dd($product_ax);
 
                 if ($product_ax) {
+                    // dd("Update product code empty");
+
                     $product->update([
                         'code' => $product_ax->ProductCode,
                         'product_name' => $product_ax->ProductName,
@@ -263,32 +413,33 @@ class CrmCreate extends Component
                         'updated_user_id' => auth()->user()->id,
                     ]);
                 }
-            } else {
+            }
 
-                // dd("Have product code");
+            if (!empty($product->code)) {
 
-                // $product_ax = DB::connection('sqlsrv2')
-                //     ->table('SCC_CRM_PRODUCTS_NEW')
-                //     ->where('ProductCode', $product->code)
-                //     ->first();
+                // dd('Product Code Not Empty');
 
                 $product_ax = SrvProduct::where('ProductCode', $product->code)
                     ->first();
 
                 // dd($product_ax);
 
-                $product->update([
-                    'code' => $product_ax->ProductCode,
-                    'product_name' => $product_ax->ProductName,
-                    'brand' => $product_ax->ProductBrand,
-                    'supplier_rep' => $product_ax->SupplierRep,
-                    'principal' => $product_ax->Principal,
-                    'status' => $product_ax->Status,
-                    'updated_user_id' => auth()->user()->id,
-                ]);
+                if ($product_ax) {
+                    // dd('Update');
+                    $product->update([
+                        'code' => $product_ax->ProductCode,
+                        'product_name' => $product_ax->ProductName,
+                        'brand' => $product_ax->ProductBrand,
+                        'supplier_rep' => $product_ax->SupplierRep,
+                        'principal' => $product_ax->Principal,
+                        'status' => $product_ax->Status,
+                        'updated_user_id' => auth()->user()->id,
+                    ]);
+                }
             }
         }
 
+        $this->productId = $product->id;
         $this->productName = $product->product_name;
         $this->productBrand = $product->brand;
         $this->supplierRep = $product->supplier_rep;
@@ -302,7 +453,6 @@ class CrmCreate extends Component
                 text: "Product : " . $this->productName,
                 icon: "error",
                 timer: 3000,
-                // url: route('crm.list'),
             );
 
             return;
@@ -310,12 +460,12 @@ class CrmCreate extends Component
 
         $this->inputs[] = [
             'crmDetail_id' => $this->crmDetail_id,
+            'productId' => $this->productId,
             'productName' => $this->productName,
             'productBrand' => $this->productBrand,
             'supplierRep' => $this->supplierRep,
             'principal' => $this->principal,
             'updateVisit' => $this->startVisit,
-            // 'updateVisit' => Carbon::now()->toDateString(),
             'application' => $this->application,
             'salesStage' => $this->salesStage,
             'probability' => $this->probability,
@@ -404,197 +554,9 @@ class CrmCreate extends Component
     public function sumRow($index)
     {
         if (($this->inputs[$index]['quantity'] != null) && ($this->inputs[$index]['unitPrice'] != null)) {
-            $this->inputs[$index]['totalPrice'] = number_format((float)$this->inputs[$index]['quantity'] * (float)$this->inputs[$index]['unitPrice'], 2);
+            $this->inputs[$index]['totalPrice'] = number_format($this->inputs[$index]['quantity'] * $this->inputs[$index]['unitPrice'], 4);
         } else {
             $this->inputs[$index]['totalPrice'] = null;
-        }
-
-        // if (($this->inputs[$index]['quantity'] != null) && ($this->inputs[$index]['unitPrice'] != null)) {
-        //     $this->inputs[$index]['totalPrice'] = number_format((int)$this->inputs[$index]['quantity'] * (float)$this->inputs[$index]['unitPrice'], 2);
-        // } else {
-        //     $this->inputs[$index]['totalPrice'] = null;
-        // }
-    }
-
-    public function save()
-    {
-
-        // $this->crmCreateForm->validate();
-
-        // dd($this->inputs);
-
-        // dd('Id : ' . $this->event_id . ", " . $this->event_name);
-
-        $this->validate(
-            [
-                // Validate CRM Headers.                
-                'customerNameEng' => 'required',
-                'startVisit' => 'required',
-                'estimateDate' => 'required',
-                'customerType' => 'required',
-                'contact' => 'required',
-                'purpose' => 'required',
-
-                // Validate CRM Details
-                'inputs.*.productName' => 'required',
-                'inputs.*.productBrand' => 'required',
-                'inputs.*.updateVisit' => 'required',
-                'inputs.*.salesStage' => 'required',
-                'inputs.*.probability' => 'required',
-            ],
-            [
-                // Validate message CRM Headers.               
-                'customerNameEng' => 'Customer name Eng. field is required.',
-                'startVisit' => 'Start visit date field is required.',
-                'estimateDate' => 'Estimate date field is required.',
-                'customerType' => 'Customer type field is required.',
-                'contact' => 'Contact person field is required.',
-                'purpose' => 'Purpose field is required.',
-
-                // Validate CRM Details message.
-                'inputs.*.productName.required' => 'Product name field is required.',
-                'inputs.*.productBrand.required' => 'Brand name field is required.',
-                'inputs.*.updateVisit.required' => 'Update visit date field is required.',
-                'inputs.*.salesStage.required' => 'Sales stage field is required.',
-                'inputs.*.probability.required' => 'Probability field is required.',
-            ]
-        );
-
-        // crm_headers remove input space
-        $this->contact = trim($this->contact);
-        $this->purpose = trim($this->purpose);
-        $this->detail = trim($this->detail);
-
-        if ($this->inputs) {
-
-
-            // dd($this->event_id . ' - ' . $this->event_name);
-
-            try {
-                DB::beginTransaction();
-
-                $crm_header = CrmHeader::updateOrCreate(
-                    [
-                        'id' => $this->crmHeader_id
-                    ],
-                    [
-                        'customer_id' => $this->customer_id,
-                        'started_visit_date' => $this->startVisit,
-                        'estimate_date' => $this->estimateDate,
-                        'original_estimate_date' => (is_null($this->originalEstimateDate)) ? $this->estimateDate : $this->originalEstimateDate,
-                        'customer_type_id' => $this->customerType,
-                        'customer_group_id' => $this->customerGroup,
-                        'event_id' => $this->event_id,
-                        'contact' => $this->contact,
-                        'purpose' => $this->purpose,
-                        'detail' => $this->detail,
-                        'created_user_id' => auth()->user()->id,
-                        'updated_user_id' => auth()->user()->id,
-                    ]
-                );
-
-                foreach ($this->inputs as $value) {
-
-                    $product = Product::where('product_name', $value['productName'])->first();
-
-                    $this->product_id = $product->id;
-
-                    // crm_headers remove input space
-                    $value['additional'] = trim($value['additional']);
-                    $value['competitor'] = trim($value['competitor']);
-
-                    $crm_detail = CrmDetail::where('crm_id', $this->crmHeader_id)
-                        ->where('id', $value['crmDetail_id'])
-                        ->first();
-
-                    if (empty($crm_detail)) {
-                        // CRM data insert to database
-                        $crm_detail = CrmDetail::create([
-                            'crm_id' => $crm_header->id,
-                            'product_id' => $this->product_id,
-                            'updated_visit_date' => $value['updateVisit'],
-                            'application_id' => $value['application'],
-                            'sales_stage_id' => $value['salesStage'],
-                            'probability_id' => $value['probability'],
-                            'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
-                            'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
-                            'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
-                            'packing_unit_id' => $value['packingUnit'],
-                            'volumn_qty' => $value['volumnQty'],
-                            'volume_unit_id' => $value['volumeUnit'],
-                            'additional' => $value['additional'],
-                            'competitor' => $value['competitor'],
-                            'created_user_id' => auth()->user()->id,
-                            'updated_user_id' => auth()->user()->id,
-                        ]);
-
-                        $this->dispatch(
-                            "sweet.success",
-                            position: "center",
-                            title: "Created Successfully !!",
-                            text: (!empty($this->customerCode)) ? "CRM : " . $this->customerNameEng : "CRM " . $this->customerNameEng,
-                            icon: "success",
-                            timer: 3000,
-                            url: route('crm.list'),
-                        );
-                    } else {
-                        // CRM data update to database
-                        dd(Carbon::now()->toDateString());
-
-                        $crm_detail->update([
-                            // 'crm_id' => $crm_header->id,
-                            'product_id' => $this->product_id,
-                            'updated_visit_date' => Carbon::now()->toDateString(),
-                            // 'updated_visit_date' => $value['updateVisit'],
-                            'application_id' => $value['application'],
-                            'sales_stage_id' => $value['salesStage'],
-                            'probability_id' => $value['probability'],
-                            'quantity' => ($value['quantity'] != null) ? $value['quantity'] : 0,
-                            'unit_price' => ($value['unitPrice'] != null) ? $value['unitPrice'] : 0,
-                            'total_price' => ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
-                            'packing_unit_id' => $value['packingUnit'],
-                            'volumn_qty' => $value['volumnQty'],
-                            'volume_unit_id' => $value['volumeUnit'],
-                            'additional' => $value['additional'],
-                            'competitor' => $value['competitor'],
-                            'updated_user_id' => auth()->user()->id,
-                        ]);
-                        $this->dispatch(
-                            "sweet.success",
-                            position: "center",
-                            title: "Updated Successfully !!",
-                            text: (!empty($this->customerCode)) ? $this->crmHeader_number . ", " . $this->customerNameEng : $this->crmHeader_number . ", Customer : " . $this->customerNameEng,
-                            icon: "success",
-                            timer: 3000,
-                            url: route('crm.update', $this->crmHeader_id),
-                        );
-                    }
-                }
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-
-                // return $e->getMessage();
-
-                $this->dispatch(
-                    "sweet.error",
-                    position: "center",
-                    title: "Cannot add CRM data !!",
-                    text: $e->getMessage(),
-                    icon: "error",
-                    // timer: 3000,
-                );
-            }
-        } else {
-            // Error no add item
-            $this->dispatch(
-                "sweet.error",
-                position: "center",
-                title: "Please Add Product Item !!",
-                text: (!empty($this->customerCode)) ? "Customer : " . $this->customerCode . " - " . $this->customerNameEng : "Customer : " . $this->customerNameEng,
-                icon: "error",
-                timer: 3000,
-            );
         }
     }
 
@@ -631,7 +593,7 @@ class CrmCreate extends Component
             "sweet.success",
             position: "center",
             title: "Item deleted successfully !!",
-            text: $document_no . ", Product : " . $product_name,
+            text: $document_no . " : " . $product_name,
             icon: "success",
             timer: 3000,
             url: route('crm.update', $this->crmHeader_id),
