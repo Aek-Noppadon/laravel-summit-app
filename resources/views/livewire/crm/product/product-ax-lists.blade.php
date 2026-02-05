@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Products AX List New</h4>
+                <h4 class="modal-title">Products AX Lists</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -68,7 +68,13 @@
                                     <td>{{ $product->Principal }}</td>
                                     <td>
                                         <button
-                                            wire:click.prevent="$dispatch('save-product-ax',{product_code:{{ "'" . $product->ProductCode . "'" }},product_name:{{ "'" . $product->ProductName . "'" }}})"
+                                            wire:click.prevent="$dispatch('save-product-ax'
+                                            ,{product_code:{{ "'" . $product->ProductCode . "'" }}
+                                            ,product_name:{{ "'" . $product->ProductName . "'" }}
+                                            ,product_brand:{{ "'" . $product->ProductBrand . "'" }}
+                                            ,supplier_rep:{{ "'" . $product->SupplierRep . "'" }}
+                                            ,principal:{{ "'" . $product->Principal . "'" }}
+                                            })"
                                             class="btn btn-success btn-sm">
                                             <i class="fas fa-save"></i>
                                         </button>

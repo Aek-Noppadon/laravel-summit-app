@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Product New</h4>
+                <h4 class="modal-title">Product</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,9 +11,9 @@
             <div class="modal-body">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Product Form</h3>
+                        <h3 class="card-title">Add Form</h3>
                     </div>
-                    {{-- <form wire:submit.prevent="saveProduct"> --}}
+
                     <form>
                         <div class="card-body">
 

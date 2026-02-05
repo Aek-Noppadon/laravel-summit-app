@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Products Master Lists</h4>
+                <h4 class="modal-title">Product Master Lists</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,11 +10,11 @@
             <div class="modal-body">
 
                 <div class="row mb-4">
-                    <div class="col-8">
+                    <div class="col-7">
                         <input wire:model.live.debounce.1000ms="search" type="search" class="form-control"
                             placeholder="Search product name or brand name">
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <select wire:model.live="pagination" class="form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -57,6 +57,8 @@
                     <table class="table table-hover table-sm">
                         <thead>
                             <th scope="col">#</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Updated</th>
                             <th scope="col" style="width: 35px"></th>
                             <th scope="col">Code</th>
                             <th scope="col">Name</th>
@@ -71,9 +73,33 @@
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
+                                        {{ $product->created_at->format('d/m/Y') }}<br>
+                                        <small class="badge badge-light text-left">
+                                            <i class="far fa-clock"></i>
+                                            {{ $product->created_at->format('H:i') }},
+                                            {{ $product->created_at->diffForHumans() }}<br>
+                                            {{ $product->userCreated->name }}
+                                        </small>
+
+                                    </td>
+                                    <td>
+                                        {{ $product->updated_at->format('d/m/Y') }}<br>
+                                        <small class="badge badge-light text-left">
+                                            <i class="far fa-clock"></i>
+                                            {{ $product->updated_at->format('H:i') }},
+                                            {{ $product->updated_at->diffForHumans() }}<br>
+                                            {{ $product->userUpdated->name }}
+                                        </small>
+
+                                    </td>
+                                    <td>
                                         @if ($product->source === '0')
                                             <span class="badge badge-pill badge-info">
                                                 AX
+                                            </span>
+                                        @else
+                                            <span class="badge badge-pill badge-success">
+                                                Excel
                                             </span>
                                         @endif
                                     </td>
