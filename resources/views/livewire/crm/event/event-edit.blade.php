@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Event</h4>
+                <h4 class="modal-title">Event</h4>
                 <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Event Form</h3>
+                        <h3 class="card-title">Edit Form</h3>
                     </div>
 
                     <form>
