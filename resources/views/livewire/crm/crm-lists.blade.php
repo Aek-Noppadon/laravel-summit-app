@@ -1,3 +1,5 @@
+@section('title', 'CRM')
+
 <section class="content">
 
     <div class="container-fluid">
