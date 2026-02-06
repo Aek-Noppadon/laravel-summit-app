@@ -1,3 +1,5 @@
+@section('title', 'CRM')
+
 <section class="content">
 
     <div class="container-fluid">
@@ -262,11 +264,11 @@
                                         class="btn btn-sm btn-primary">
                                         <i class="fas fa-trash-restore"></i>
                                     </button>
-                                    <button
+                                    {{-- <button
                                         wire:click.prevent="confirmDeleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    </button> --}}
                                 </td>
 
                             </tr>
@@ -564,11 +566,11 @@
                                         class="btn btn-sm btn-primary">
                                         <i class="fas fa-trash-restore"></i>
                                     </button>
-                                    <button
+                                    {{-- <button
                                         wire:click.prevent="confirmDeleteCrmItem({{ $item->id }},{{ "'" . $item->crmHeader->document_no . "'" }},{{ "'" . $item->product->product_name . "'" }})"
                                         class="btn btn-sm btn-danger">
                                         <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    </button> --}}
                                 </td>
                             </tr>
                         @empty
