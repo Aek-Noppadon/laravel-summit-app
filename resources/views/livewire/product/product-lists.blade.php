@@ -1,3 +1,5 @@
+@section('title', 'Product')
+
 <section class="content">
 
     <div class="container-fluid">
