@@ -1,3 +1,4 @@
+@section('title', 'Sales Stage')
 <section class="content">
 
     <div class="container-fluid">
@@ -37,10 +38,10 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-sales-stage')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-sales-stage">
+                        {{-- <button wire:click="$dispatch('add-sales-stage')" type="button"
+                            class="btn btn-primary disabled" data-toggle="modal" data-target="#modal-add-sales-stage">
                             <i class="fas fa-plus"></i> Sales Stage
-                        </button>
+                        </button> --}}
                         <button wire:click="$dispatch('refresh-sales-stage')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
@@ -117,16 +118,16 @@
                                 </td>
                                 <td>{{ $item->name }}</td>
                                 <td>
-                                    <button wire:click.prevent="$dispatch('edit-sales-stage',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                    {{-- <button wire:click.prevent="$dispatch('edit-sales-stage',{id:{{ $item->id }}})"
+                                        type="button" class="btn btn-secondary btn-sm disabled" data-toggle="modal"
                                         data-target="#modal-edit-sales-stage">
                                         <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button
+                                    </button> --}}
+                                    {{-- <button
                                         wire:click.prevent="deleteSalesStage({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger">
+                                        class="btn btn-sm btn-danger disabled">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </button> --}}
                                 </td>
                             </tr>
                         @endforeach
