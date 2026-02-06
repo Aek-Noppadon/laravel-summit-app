@@ -1,3 +1,5 @@
+@section('title', 'Probability')
+
 <section class="content">
 
     <div class="container-fluid">
