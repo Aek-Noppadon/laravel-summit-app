@@ -1,5 +1,6 @@
-<section class="content">
+@section('title', 'User Profile')
 
+<section class="content">
     <div class="container-fluid">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -19,7 +20,6 @@
         </section>
     </div>
     <!-- card -->
-
 
     <div class="card card-primary">
         <div class="card-header">
