@@ -15,35 +15,10 @@ class EventTableSeeder extends Seeder
     {
         DB::table('events')->insert(
             array(
-                // PERSONAL & HOME CARE
                 [
                     'name' => 'No Event',
-                    'created_user_id' => 2,
-                    'updated_user_id' => 2,
-                    'created_at' => '2026-01-28',
-                    'updated_at' => '2026-01-28',
-                ],
-                // INDUSTRIAL CHEMICALS
-                [
-                    'name' => 'No Event',
-                    'created_user_id' => 12,
-                    'updated_user_id' => 12,
-                    'created_at' => '2026-01-28',
-                    'updated_at' => '2026-01-28',
-                ],
-                // PHARMA & ACTIVES
-                [
-                    'name' => 'No Event',
-                    'created_user_id' => 18,
-                    'updated_user_id' => 18,
-                    'created_at' => '2026-01-28',
-                    'updated_at' => '2026-01-28',
-                ],
-                // NUTRITIONAL INGREDIENTS
-                [
-                    'name' => 'No Event',
-                    'created_user_id' => 24,
-                    'updated_user_id' => 24,
+                    'created_user_id' => 1,
+                    'updated_user_id' => 1,
                     'created_at' => '2026-01-28',
                     'updated_at' => '2026-01-28',
                 ],
