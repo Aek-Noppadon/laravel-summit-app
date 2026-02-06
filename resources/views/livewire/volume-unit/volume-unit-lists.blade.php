@@ -1,3 +1,5 @@
+@section('title', 'Volume Unit')
+
 <section class="content">
 
     <div class="container-fluid">
