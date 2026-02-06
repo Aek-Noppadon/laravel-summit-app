@@ -1,3 +1,5 @@
+@section('title', 'Department')
+
 <section class="content">
 
     <div class="container-fluid">
@@ -37,10 +39,10 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-department')" type="button" class="btn btn-primary"
+                        {{-- <button wire:click="$dispatch('add-department')" type="button" class="btn btn-primary"
                             data-toggle="modal" data-target="#modal-add-department">
                             <i class="fas fa-plus"></i> Department
-                        </button>
+                        </button> --}}
                         <button wire:click="$dispatch('refresh-department')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
@@ -70,8 +72,7 @@
                     <thead>
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
-                        <th scope="col">updated</th>
-                        <th scope="col">ID</th>
+                        <th scope="col">Updated</th>
                         <th scope="col">Department Name</th>
                         <th scope="col">Action</th>
                     </thead>
@@ -80,29 +81,54 @@
                         @foreach ($departments as $item)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->created_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->created_at->format('H:i') }},
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
                                 </td>
-                                <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
-                                    {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                    <small class="badge badge-light"><i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}</small>
+                                <td>
+                                    <div>
+                                        <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            {{ $item->updated_at->format('d/m/Y') }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <small class="badge badge-light">
+                                            <i class="far fa-clock"></i>
+                                            {{ $item->updated_at->format('H:i') }},
+                                            {{ $item->updated_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+
                                 </td>
-                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>
-                                    <button wire:click.prevent="$dispatch('edit-department',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                    {{-- <button wire:click.prevent="$dispatch('edit-department',{id:{{ $item->id }}})"
+                                        type="button" class="btn btn-secondary btn-sm disabled" data-toggle="modal"
                                         data-target="#modal-edit-department">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button
                                         wire:click.prevent="deleteDepartment({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger">
+                                        class="btn btn-sm btn-danger disabled">
                                         <i class="fas fa-trash"></i>
-                                    </button>
+                                    </button> --}}
                                 </td>
                             </tr>
                         @endforeach
