@@ -12,8 +12,13 @@ class Department extends Model
         'updated_user_id',
     ];
 
-    // public function departmentUser()
-    // {
-    //     return $this->hasMany(User::class, 'department_id');
-    // }
+    public function userCreated()
+    {
+        return $this->belongsTo(User::class, 'created_user_id');
+    }
+
+    public function userUpdated()
+    {
+        return $this->belongsTo(User::class, 'updated_user_id');
+    }
 }
