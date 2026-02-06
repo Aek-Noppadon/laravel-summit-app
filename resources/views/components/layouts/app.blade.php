@@ -1,13 +1,10 @@
-{{-- @php
-    $site_setting = DB::table('site_setting')->select('favicon_image')->first();
-@endphp --}}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('images/logo/favicon.png') }}" type="image/png" />
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -20,8 +17,7 @@
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('backend/admin-lte/plugins/toastr/toastr.min.css') }}">
     @livewireStyles
-    {{-- <title>@yield('title') | Backend</title> --}}
-    <title>Summit Web Application</title>
+    <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
     <!-- Header Script -->
     @yield('header-script')
     <!-- ./Header Script -->
