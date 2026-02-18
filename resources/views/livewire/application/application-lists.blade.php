@@ -73,6 +73,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Application Name</th>
                         <th scope="col" style="width: 100px">Action</th>
                     </thead>
@@ -117,6 +118,7 @@
                                     </div>
 
                                 </td>
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>
                                     <button wire:click.prevent="$dispatch('edit-application',{id:{{ $item->id }}})"
