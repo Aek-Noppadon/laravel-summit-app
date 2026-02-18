@@ -177,7 +177,7 @@ class UserTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'Thida',
-                    'last_name' => 'Thanomngam',
+                    'last_name' => 'Thailaemthong',
                     'sales_id' => '314',
                     'employee_id' => null,
                     'department_id' => 2,
