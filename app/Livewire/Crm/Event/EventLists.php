@@ -39,17 +39,6 @@ class EventLists extends Component
         })->latest()
             ->paginate($this->pagination);
 
-        // $events = Event::whereHas('userCreated.department', function ($query) use ($departmentId) {
-        //     $query->where('department_id', $departmentId);
-        // })
-        //     ->when($this->search, function ($query) {
-        //         $query->where('name', 'like', '%' . $this->search . '%');
-        //     })
-        //     // ->orderBy('name')
-        //     ->latest()
-        //     ->paginate($this->pagination);
-        // =======================================================
-
         return view('livewire.crm.event.event-lists', compact('events'));
     }
 
@@ -68,7 +57,7 @@ class EventLists extends Component
                 "sweet.success",
                 position: "center",
                 title: "Deleted Successfully !!",
-                text: $name,
+                text: "Event : " . $name,
                 icon: "success",
                 timer: 3000,
             );
@@ -77,7 +66,7 @@ class EventLists extends Component
                 "sweet.error",
                 position: "center",
                 title: "Cannot Deleted !!",
-                text: "Event : " . $name . " there is a transaction in CRM.",
+                text: $name . " there is a transaction in CRM.",
                 icon: "error",
             );
         }
