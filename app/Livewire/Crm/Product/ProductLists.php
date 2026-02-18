@@ -20,7 +20,7 @@ class ProductLists extends Component
 
         $products = Product::where(function ($productQuery) use ($departmentId) {
             $productQuery->where('source', 0)
-                ->orWhere('source', 1)
+                ->orWhereIn('source', [1, 2])
                 ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                     $query->where('id', $departmentId);
                 });
@@ -36,7 +36,7 @@ class ProductLists extends Component
                                     ->orWhere('principal', 'like', '%' . $this->search . '%');
                             });
                     })->orWhere(function ($q) use ($departmentId) {
-                        $q->where('source', 1)
+                        $q->whereIn('source', [1, 2])
                             ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                                 $query->where('id', $departmentId);
                             })
@@ -49,7 +49,7 @@ class ProductLists extends Component
                     });
                 });
             })
-            ->orderBy('code')
+            ->orderBy('source', 'asc')
             ->orderBy('product_name')
             ->orderBy('brand')
             ->with(['userCreated:id,name,department_id', 'userCreated.department:id,name'])

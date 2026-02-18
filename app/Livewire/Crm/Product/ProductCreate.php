@@ -45,6 +45,7 @@ class ProductCreate extends Component
             $exists = Product::where('product_name', $this->product_name)
                 ->where('source', 0)
                 ->orWhere('product_name', $this->product_name)
+                ->where('brand', $this->brand)
                 ->whereHas('userCreated', function ($query) use ($departmentId) {
                     $query->where('department_id', $departmentId);
                 })->exists();
