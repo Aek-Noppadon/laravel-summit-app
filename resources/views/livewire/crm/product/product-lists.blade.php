@@ -60,6 +60,7 @@
                             <th scope="col">Created</th>
                             <th scope="col">Updated</th>
                             <th scope="col" style="width: 35px"></th>
+                            <th scope="col">Id</th>
                             <th scope="col">Code</th>
                             <th scope="col">Name</th>
                             <th scope="col">Brand</th>
@@ -69,33 +70,53 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($products as $product)
+                            @foreach ($products as $item)
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
-                                        {{ $product->created_at->format('d/m/Y') }}<br>
-                                        <small class="badge badge-light text-left">
-                                            <i class="far fa-clock"></i>
-                                            {{ $product->created_at->format('H:i') }},
-                                            {{ $product->created_at->diffForHumans() }}<br>
-                                            {{ $product->userCreated->name }}
-                                        </small>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->created_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->created_at->format('H:i') }},
+                                                {{ $item->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
 
                                     </td>
                                     <td>
-                                        {{ $product->updated_at->format('d/m/Y') }}<br>
-                                        <small class="badge badge-light text-left">
-                                            <i class="far fa-clock"></i>
-                                            {{ $product->updated_at->format('H:i') }},
-                                            {{ $product->updated_at->diffForHumans() }}<br>
-                                            {{ $product->userUpdated->name }}
-                                        </small>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->updated_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->updated_at->format('H:i') }},
+                                                {{ $item->updated_at->diffForHumans() }}
+                                            </small>
+                                        </div>
 
                                     </td>
                                     <td>
-                                        @if ($product->source === '0')
-                                            <span class="badge badge-pill badge-info">
+                                        @if ($item->source === '0')
+                                            <span class="badge badge-pill badge-primary">
                                                 AX
+                                            </span>
+                                        @elseif ($item->source === '1')
+                                            <span class="badge badge-pill badge-info">
+                                                Web
                                             </span>
                                         @else
                                             <span class="badge badge-pill badge-success">
@@ -103,27 +124,28 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td>{{ $product->code }}</td>
-                                    <td>{{ $product->product_name }}</td>
-                                    <td>{{ $product->brand }}</td>
-                                    <td>{{ $product->supplier_rep }}</td>
-                                    <td>{{ $product->principal }}</td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->code }}</td>
+                                    <td>{{ $item->product_name }}</td>
+                                    <td>{{ $item->brand }}</td>
+                                    <td>{{ $item->supplier_rep }}</td>
+                                    <td>{{ $item->principal }}</td>
                                     <td>
                                         <button
-                                            wire:click.prevent="$dispatch('select-product',{id:{{ $product->id }}})"
+                                            wire:click.prevent="$dispatch('select-product',{id:{{ $item->id }}})"
                                             wire:click="$dispatch('refresh-product')" class="btn btn-success btn-sm">
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        @if ($product->source === '1')
+                                        @if ($item->source === '1' || $item->source === '2')
                                             <button
-                                                wire:click.prevent="$dispatch('edit-product',{id:{{ $product->id }}})"
+                                                wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
                                                 type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                                 data-target="#modal-edit-product">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button
-                                                wire:click.prevent="deleteProduct({{ $product->id }},{{ "'" . str_replace("'", '', $product->product_name) . "'" }})"
-                                                {{-- wire:click.prevent="deleteProduct({{ $product->id }},{{ "'" . $product->product_name . "'" }})" --}} class="btn btn-sm btn-danger">
+                                                wire:click.prevent="deleteProduct({{ $item->id }},{{ "'" . str_replace("'", '', $item->product_name) . "'" }})"
+                                                {{-- wire:click.prevent="deleteProduct({{ $item->id }},{{ "'" . $item->product_name . "'" }})" --}} class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         @endif
