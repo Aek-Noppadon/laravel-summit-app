@@ -23,6 +23,13 @@
                                     <div class="form-group">
                                         <label for="name_english" class="form-label">Customer Name ENG.</label>
                                         <span class="text-danger font-weight-bold">*</span>
+
+                                        <!-- Customer Website Dataforthai -->
+                                        <a class="btn btn-primary btn-sm" href="https://www.dataforthai.com/business"
+                                            target="_blank">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+
                                         <input id="name_english" wire:model="name_english" type="text"
                                             class="form-control @error('name_english') is-invalid @enderror">
                                         @error('name_english')

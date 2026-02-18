@@ -74,6 +74,7 @@
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col" style="width: 35px"></th>
+                        <th scope="col">Id</th>
                         <th scope="col">Code</th>
                         <th scope="col">Name English</th>
                         <th scope="col">Name Thai</th>
@@ -123,8 +124,12 @@
                                 </td>
                                 <td>
                                     @if ($item->source === '0')
-                                        <span class="badge badge-pill badge-info">
+                                        <span class="badge badge-pill badge-primary">
                                             AX
+                                        </span>
+                                    @elseif ($item->source === '1')
+                                        <span class="badge badge-pill badge-info">
+                                            Web
                                         </span>
                                     @else
                                         <span class="badge badge-pill badge-success">
@@ -132,12 +137,13 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->name_english }}</td>
                                 <td>{{ $item->name_thai }}</td>
                                 <td>{{ $item->parent_code }}</td>
                                 <td>
-                                    @if ($item->source === '1')
+                                    @if ($item->source === '1' || $item->source === '2')
                                         <button
                                             wire:click.prevent="$dispatch('edit-customer',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
