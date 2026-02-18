@@ -3,7 +3,7 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
         <img src="{{ asset('images/logo/favicon.png') }}"Logo" class="brand-image">
-        <span class="brand-text font-weight-light">SMC Chemical</span>
+        <span class="brand-text font-weight-light">Summit Chemical</span>
     </a>
 
     <!-- Sidebar -->
@@ -54,9 +54,14 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('user.profile') }}"
-                                class="nav-link {{ request()->is('user*') ? 'active' : '' }}">
+                                class="nav-link {{ request()->is('user/profile') ? 'active' : '' }}">
                                 <i class="far fa-address-card nav-icon"></i>
                                 <p>Profile</p>
+                            </a>
+                            <a href="{{ route('user.list') }}"
+                                class="nav-link {{ request()->is('user/list') ? 'active' : '' }}">
+                                <i class="far fa-address-card nav-icon"></i>
+                                <p>User Lists</p>
                             </a>
                         </li>
                     </ul>
@@ -75,9 +80,9 @@
 
                 <!-- CRM Menu -->
                 <li
-                    class="nav-item {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*') ? 'menu-open' : '' }}">
+                    class="nav-item {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*', 'events*') ? 'menu-open' : '' }}">
                     <a href="#"
-                        class="nav-link {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('crms*', 'customers*', 'products*', 'applications*', 'customer-types*', 'customer-groups*', 'sales-stages*', 'probabilities*', 'volume-units*', 'events*') ? 'active' : '' }}">
                         {{-- <i class="fab fa-wordpress-simple nav-icon"></i> --}}
                         <i class="fas fa-bars nav-icon"></i>
                         <p>
@@ -114,6 +119,17 @@
                                 class="nav-link {{ request()->is('customers*') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
                                 <p>Customer Lists</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Event Lists -->
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('event.list') }}"
+                                class="nav-link {{ request()->is('events*') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                <p>Event Lists</p>
                             </a>
                         </li>
                     </ul>
