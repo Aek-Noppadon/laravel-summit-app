@@ -72,6 +72,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
+                        <th scope="col">Id</th>
                         <th scope="col">Sales Stage Name</th>
                         <th scope="col" style="width: 100px">Action</th>
                     </thead>
@@ -116,16 +117,17 @@
                                     </div>
 
                                 </td>
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>
                                     {{-- <button wire:click.prevent="$dispatch('edit-sales-stage',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm disabled" data-toggle="modal"
+                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                         data-target="#modal-edit-sales-stage">
                                         <i class="fas fa-edit"></i>
-                                    </button> --}}
-                                    {{-- <button
+                                    </button>
+                                    <button
                                         wire:click.prevent="deleteSalesStage({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger disabled">
+                                        class="btn btn-danger btn-sm">
                                         <i class="fas fa-trash"></i>
                                     </button> --}}
                                 </td>
