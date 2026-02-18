@@ -60,8 +60,8 @@
                         <thead>
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
-                            <th scope="col">updated</th>
-                            <th scope="col">ID</th>
+                            <th scope="col">Updated</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Volume Unit Name</th>
                             <th scope="col" style="width: 115px">Action</th>
                         </thead>
@@ -70,21 +70,40 @@
                             @foreach ($volume_units as $item)
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
-                                    <td> {{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}<br>
-                                        <small class="badge badge-light">
-                                            <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
-                                            , {{ $item->userCreated->name }}
-                                        </small>
+                                    <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userCreated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->created_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->created_at->format('H:i') }},
+                                                {{ $item->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+
                                     </td>
-                                    <td> {{ Carbon\Carbon::parse($item->updated_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($item->updated_at)->format('H:i:s') }}<br>
-                                        <small class="badge badge-light">
-                                            <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item->updated_at)->diffForHumans() }}
-                                            , {{ $item->userUpdated->name }}
-                                        </small>
+                                    <td>
+                                        <div>
+                                            <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                {{ $item->updated_at->format('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div>
+                                            <small class="badge badge-light">
+                                                <i class="far fa-clock"></i>
+                                                {{ $item->updated_at->format('H:i') }},
+                                                {{ $item->updated_at->diffForHumans() }}
+                                            </small>
+                                        </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
