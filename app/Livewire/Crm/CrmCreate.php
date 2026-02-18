@@ -36,7 +36,6 @@ class CrmCreate extends Component
     public $crmDetail_id, $crmDetail_created_at, $crmDetail_updated_at;
     public $productId, $productName, $productBrand, $supplierRep, $principal;
     public $inputs = [], $checkProduct = [];
-    public $source = 1;
     public $departmentId;
 
     public function mount($id = null)
@@ -237,9 +236,9 @@ class CrmCreate extends Component
                 'purpose'                => trim($this->purpose ?? ''),
                 'detail'                 => trim($this->detail ?? ''),
                 'opportunity'            => trim($this->opportunity ?? ''),
-                'source'                 => $this->source,
                 'created_user_id'        => auth()->id(),
                 'updated_user_id'        => auth()->id(),
+                'original_user_id'        => auth()->id(),
             ];
 
             // dd($dataHeaders);
@@ -259,6 +258,10 @@ class CrmCreate extends Component
 
                 $productId = Product::where('product_name', $item['productName'])->value('id');
 
+                $item['quantity'] = !empty($item['quantity']) ? str_replace(',', '', $item['quantity']) : 0;
+                $item['unitPrice'] = !empty($item['unitPrice']) ? str_replace(',', '', $item['unitPrice']) : 0;
+                $item['totalPrice'] = !empty($item['totalPrice']) ? str_replace(',', '', $item['totalPrice']) : 0;
+
                 $dataDetails = [
                     'crm_id'             => $crmHeader->id,
                     'product_id'         => $productId,
@@ -266,15 +269,14 @@ class CrmCreate extends Component
                     'application_id'     => empty($item['application']) ? null : $item['application'],
                     'sales_stage_id'     => $item['salesStage'],
                     'probability_id'     => $item['probability'],
-                    'quantity'           => $item['quantity'] ?? 0,
-                    'unit_price'         => $item['unitPrice'] ?? 0,
-                    'total_price'        => !empty($item['totalPrice']) ? str_replace(',', '', $item['totalPrice']) : 0,
+                    'quantity'           => $item['quantity'],
+                    'unit_price'         => $item['unitPrice'],
+                    'total_price'         => $item['totalPrice'],
                     'volumn_qty'         => $item['volumnQty'],
                     'volume_unit_id'     => $item['volumeUnit'],
                     'volume_unit_id'     => empty($item['volumeUnit']) ? null : $item['volumeUnit'],
                     'additional'         => trim($item['additional'] ?? ''),
                     'competitor'         => trim($item['competitor'] ?? ''),
-                    'source'             => $this->source,
                     'created_user_id'    => auth()->id(),
                     'updated_user_id'    => auth()->id(),
                 ];
@@ -553,8 +555,13 @@ class CrmCreate extends Component
 
     public function sumRow($index)
     {
+        // ($value['totalPrice'] != null) ? str_replace(',', '', $value['totalPrice']) : 0,
+
+        $this->inputs[$index]['quantity'] = str_replace(',', '', $this->inputs[$index]['quantity']);
+        $this->inputs[$index]['unitPrice'] = str_replace(',', '', $this->inputs[$index]['unitPrice']);
+
         if (($this->inputs[$index]['quantity'] != null) && ($this->inputs[$index]['unitPrice'] != null)) {
-            $this->inputs[$index]['totalPrice'] = number_format($this->inputs[$index]['quantity'] * $this->inputs[$index]['unitPrice'], 4);
+            $this->inputs[$index]['totalPrice'] = round($this->inputs[$index]['quantity'] * $this->inputs[$index]['unitPrice'], 2);
         } else {
             $this->inputs[$index]['totalPrice'] = null;
         }
