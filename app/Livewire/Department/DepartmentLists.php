@@ -16,14 +16,11 @@ class DepartmentLists extends Component
     #[On('refresh-department')]
     public function render()
     {
-        if (is_null($this->search)) {
-            $departments = Department::orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        } else {
-            $departments = Department::Where('name', 'like', '%' . $this->search . '%')
-                ->orderBy('id', 'asc')
-                ->paginate($this->pagination);
-        }
+        $departments = Department::when($this->search, function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        })
+            ->orderBy('id')
+            ->paginate($this->pagination);
 
         return view('livewire.department.department-lists', [
             'departments' => $departments
