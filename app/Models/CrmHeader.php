@@ -25,6 +25,7 @@ class CrmHeader extends Model
         'source',
         'created_user_id',
         'updated_user_id',
+        'original_user_id',
     ];
 
     public function userCreated()
