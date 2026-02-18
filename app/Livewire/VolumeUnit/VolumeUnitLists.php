@@ -54,8 +54,8 @@ class VolumeUnitLists extends Component
             $this->dispatch(
                 "sweet.error",
                 position: "center",
-                title: "Can not Deleted !!",
-                text: "Volume Unit : " . $name . " there is a transaction in CRM.",
+                title: "Cannot Deleted !!",
+                text: $name . " there is a transaction in CRM.",
                 icon: "error",
             );
         }
