@@ -24,7 +24,7 @@ class CustomerLists extends Component
         $customers = Customer::where(function ($customerQuery) use ($departmentId) {
             $customerQuery->where('source', 0)
                 ->orWhere(function ($q) use ($departmentId) {
-                    $q->where('source', 1)
+                    $q->whereIn('source', [1, 2])
                         ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                             $query
                                 ->where('id', $departmentId);
@@ -42,7 +42,7 @@ class CustomerLists extends Component
                                     ->orWhere('parent_code', 'like', '%' . $this->search . '%');
                             });
                     })->orWhere(function ($q) use ($departmentId) {
-                        $q->where('source', 1)
+                        $q->whereIn('source', [1, 2])
                             ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                                 $query->where('id', $departmentId);
                             })
@@ -55,7 +55,8 @@ class CustomerLists extends Component
                     });
                 });
             })
-            ->orderBy('code', 'asc')
+            ->orderBy('source')
+            ->orderBy('code')
             ->with(['userCreated:id,name,department_id', 'userCreated.department:id,name'])
             ->paginate($this->pagination);
 
@@ -104,8 +105,8 @@ class CustomerLists extends Component
             $this->dispatch(
                 "sweet.error",
                 position: "center",
-                title: "Can not Deleted !!",
-                text: "Customer : " . $name . " there is a transaction in CRM.",
+                title: "Cannot Deleted !!",
+                text: $name . " there is a transaction in CRM.",
                 icon: "error",
                 // timer: 3000,
             );
