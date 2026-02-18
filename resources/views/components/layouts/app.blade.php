@@ -62,6 +62,8 @@
     <script src="{{ asset('backend/admin-lte/plugins/toastr/toastr.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('backend/admin-lte/dist/js/adminlte.js') }}"></script>
+    <!-- Plugins AlpineJS -->
+    <script src="{{ asset('backend/plugins/alpine-js/number.js') }}"></script>
 
     <!-- Sweet Alert -->
     <script>
