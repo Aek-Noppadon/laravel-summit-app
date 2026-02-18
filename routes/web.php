@@ -14,12 +14,15 @@ use App\Livewire\CustomerType\CustomerTypeCreate;
 use App\Livewire\CustomerType\CustomerTypeLists;
 use App\Livewire\Department\DepartmentCreate;
 use App\Livewire\Department\DepartmentLists;
+use App\Livewire\Event\EventCreate;
+use App\Livewire\Event\EventLists;
 use App\Livewire\Probability\ProbabilityCreate;
 use App\Livewire\Probability\ProbabilityLists;
 use App\Livewire\Product\ProductCreate;
 use App\Livewire\Product\ProductLists;
 use App\Livewire\SalesStage\SalesStageCreate;
 use App\Livewire\SalesStage\SalesStageLists;
+use App\Livewire\User\UserLists;
 use App\Livewire\User\UserProfile;
 use App\Livewire\VolumeUnit\VolumeUnitCreate;
 use App\Livewire\VolumeUnit\VolumeUnitLists;
@@ -52,6 +55,7 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::get('/profile', UserProfile::class)->name('profile');
+    Route::get('/lists', UserLists::class)->name('list');
 });
 
 Route::group([
@@ -163,4 +167,15 @@ Route::group([
     Route::get('/create', VolumeUnitCreate::class)->name('create');
     Route::get('/update/{id}', VolumeUnitCreate::class)->name('update');
     Route::get('/delete/{id}', VolumeUnitCreate::class)->name('delete');
+});
+
+Route::group([
+    'prefix' => 'events',
+    'as' => 'event.',
+    'middleware' => ['auth']
+], function () {
+    Route::get('/', EventLists::class)->name('list');
+    Route::get('/create', EventCreate::class)->name('create');
+    Route::get('/update/{id}', EventCreate::class)->name('update');
+    Route::get('/delete/{id}', EventCreate::class)->name('delete');
 });
