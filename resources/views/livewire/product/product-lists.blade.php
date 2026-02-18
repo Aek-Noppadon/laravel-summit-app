@@ -74,6 +74,7 @@
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col"></th>
+                        <th scope="col">Id</th>
                         <th scope="col">Code</th>
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
@@ -124,8 +125,12 @@
                                 </td>
                                 <td>
                                     @if ($item->source === '0')
-                                        <span class="badge badge-pill badge-info">
+                                        <span class="badge badge-pill badge-primary">
                                             AX
+                                        </span>
+                                    @elseif ($item->source === '1')
+                                        <span class="badge badge-pill badge-info">
+                                            Web
                                         </span>
                                     @else
                                         <span class="badge badge-pill badge-success">
@@ -133,13 +138,14 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td>{{ $item->id }}</td>
                                 <td>{{ $item->code }}</td>
                                 <td>{{ $item->product_name }}</td>
                                 <td>{{ $item->brand }}</td>
                                 <td>{{ $item->supplier_rep }}</td>
                                 <td>{{ $item->principal }}</td>
                                 <td>
-                                    @if ($item->source === '1')
+                                    @if ($item->source === '1' || $item->source === '2')
                                         <button wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                             data-target="#modal-edit-product">
