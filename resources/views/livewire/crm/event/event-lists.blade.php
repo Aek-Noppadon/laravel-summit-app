@@ -55,6 +55,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
                             <th scope="col">Udated</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Event Name</th>
                             <th scope="col" style="width: 115px">Action</th>
                         </thead>
@@ -98,6 +99,7 @@
                                             </small>
                                         </div>
                                     </td>
+                                    <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         <button
@@ -150,7 +152,7 @@
 
             Swal.fire({
                 title: "Are you sure delete ?",
-                text: `${event.name}`,
+                text: `Event : ${event.name}`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
