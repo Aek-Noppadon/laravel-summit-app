@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UserProfile extends Component
@@ -80,5 +81,11 @@ class UserProfile extends Component
             icon: "success",
             timer: 3000,
         );
+    }
+
+    #[On('reset-modal')]
+    public function resetForm()
+    {
+        $this->reset();
     }
 }
