@@ -29,12 +29,13 @@ return new class extends Migration
             $table->text('purpose')->comment('Purpose');
             $table->text('detail')->nullable()->comment('Detail');
             $table->text('opportunity')->nullable()->comment('Opportunity');
-            $table->unsignedTinyInteger('source')->nullable()->comment('0 = Excel, 1 = Web');
+            $table->unsignedTinyInteger('source')->nullable()->comment('0 = Excel, NULL = Web');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
             $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
             $table->foreign('updated_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('original_user_id')->nullable()->comment('Original User');
+            $table->foreign('original_user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -35,7 +35,7 @@ return new class extends Migration
             $table->foreign('volume_unit_id')->references('id')->on('volume_units');
             $table->text('additional')->nullable()->comment('Additional');
             $table->text('competitor')->nullable()->comment('Competitor');
-            $table->unsignedTinyInteger('source')->nullable()->comment('0 = Excel, 1 = Web');
+            $table->unsignedTinyInteger('source')->nullable()->comment('0 = Excel, NULL = Web');
             $table->unsignedTinyInteger('created_user_id')->nullable()->comment('Created User');
             $table->foreign('created_user_id')->references('id')->on('users');
             $table->unsignedTinyInteger('updated_user_id')->nullable()->comment('Updated User');
