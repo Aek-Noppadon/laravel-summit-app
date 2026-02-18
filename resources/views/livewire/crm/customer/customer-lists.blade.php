@@ -60,6 +60,7 @@
                             <th scope="col">Created</th>
                             <th scope="col">Updated</th>
                             <th scope="col" style="width: 35px"></th>
+                            <th scope="col">Id</th>
                             <th scope="col">Code</th>
                             <th scope="col">Name English</th>
                             <th scope="col">Name Thai</th>
@@ -68,49 +69,53 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($customers as $customer)
+                            @foreach ($customers as $item)
                                 <tr>
                                     <th scope="row">{{ $loop->index + 1 }}</th>
                                     <td>
                                         <div>
-                                            <small class="badge badge-light">{{ $customer->userCreated->name }}</small>
+                                            <small class="badge badge-light">{{ $item->userCreated->name }}</small>
                                         </div>
                                         <div>
                                             <small class="badge badge-light">
-                                                {{ $customer->created_at->format('d/m/Y') }}
+                                                {{ $item->created_at->format('d/m/Y') }}
                                             </small>
                                         </div>
                                         <div>
                                             <small class="badge badge-light">
                                                 <i class="far fa-clock"></i>
-                                                {{ $customer->created_at->format('H:i') }},
-                                                {{ $customer->created_at->diffForHumans() }}
+                                                {{ $item->created_at->format('H:i') }},
+                                                {{ $item->created_at->diffForHumans() }}
                                             </small>
                                         </div>
 
                                     </td>
                                     <td>
                                         <div>
-                                            <small class="badge badge-light">{{ $customer->userUpdated->name }}</small>
+                                            <small class="badge badge-light">{{ $item->userUpdated->name }}</small>
                                         </div>
                                         <div>
                                             <small class="badge badge-light">
-                                                {{ $customer->updated_at->format('d/m/Y') }}
+                                                {{ $item->updated_at->format('d/m/Y') }}
                                             </small>
                                         </div>
                                         <div>
                                             <small class="badge badge-light">
                                                 <i class="far fa-clock"></i>
-                                                {{ $customer->updated_at->format('H:i') }},
-                                                {{ $customer->updated_at->diffForHumans() }}
+                                                {{ $item->updated_at->format('H:i') }},
+                                                {{ $item->updated_at->diffForHumans() }}
                                             </small>
                                         </div>
 
                                     </td>
                                     <td>
-                                        @if ($customer->source === '0')
-                                            <span class="badge badge-pill badge-info">
+                                        @if ($item->source === '0')
+                                            <span class="badge badge-pill badge-primary">
                                                 AX
+                                            </span>
+                                        @elseif ($item->source === '1')
+                                            <span class="badge badge-pill badge-info">
+                                                Web
                                             </span>
                                         @else
                                             <span class="badge badge-pill badge-success">
@@ -118,28 +123,29 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td>{{ $customer->code }}</td>
-                                    <td>{{ $customer->name_english }}</td>
-                                    <td>{{ $customer->name_thai }}</td>
-                                    <td>{{ $customer->parent_code }}</td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->code }}</td>
+                                    <td>{{ $item->name_english }}</td>
+                                    <td>{{ $item->name_thai }}</td>
+                                    <td>{{ $item->parent_code }}</td>
                                     <td>
                                         <button
                                             wire:click.prevent="$dispatch('select-customer',
-                                            {id:{{ $customer->id }}})"
+                                            {id:{{ $item->id }}})"
                                             wire:click="$dispatch('refresh-customer')" class="btn btn-success btn-sm">
                                             <i class="fas fa-check"></i>
                                         </button>
 
-                                        @if ($customer->source === '1')
+                                        @if ($item->source === '1' || $item->source === '2')
                                             <button
-                                                wire:click.prevent="$dispatch('edit-customer',{id:{{ $customer->id }}})"
+                                                wire:click.prevent="$dispatch('edit-customer',{id:{{ $item->id }}})"
                                                 type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
                                                 data-target="#modal-edit-customer">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button
-                                                wire:click.prevent="deleteCustomer({{ $customer->id }},{{ "'" . str_replace("'", '', $customer->name_english) . "'" }})"
-                                                {{-- wire:click.prevent="deleteCustomer({{ $customer->id }},{{ "'" . $customer->name_english . "'" }})" --}} class="btn btn-sm btn-danger">
+                                                wire:click.prevent="deleteCustomer({{ $item->id }},{{ "'" . str_replace("'", '', $item->name_english) . "'" }})"
+                                                {{-- wire:click.prevent="deleteCustomer({{ $item->id }},{{ "'" . $item->name_english . "'" }})" --}} class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         @endif
