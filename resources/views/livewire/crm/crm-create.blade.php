@@ -632,11 +632,10 @@
                                     <label for="inputs.{{ $key }}.quantity" class="form-label">
                                         Quantity
                                     </label>
-                                    <input id="inputs.{{ $key }}.quantity"
-                                        wire:model="inputs.{{ $key }}.quantity" step="any"
+                                    <input x-number.2 id="inputs.{{ $key }}.quantity"
+                                        wire:model="inputs.{{ $key }}.quantity"
                                         wire:keyup.debounce.1000ms="sumRow({{ $key }})"
-                                        wire:change="sumRow({{ $key }})" type="number"
-                                        class="form-control">
+                                        wire:change="sumRow({{ $key }})" class="form-control">
                                 </div>
                             </div>
                             <div class="col-3">
@@ -672,11 +671,10 @@
                                     <label for="inputs.{{ $key }}.unitPrice" class="form-label">
                                         Unit Price
                                     </label>
-                                    <input id="inputs.{{ $key }}.unitPrice"
-                                        wire:model="inputs.{{ $key }}.unitPrice" step="any"
+                                    <input x-number.2 id="inputs.{{ $key }}.unitPrice"
+                                        wire:model="inputs.{{ $key }}.unitPrice"
                                         wire:keyup.debounce.1000ms="sumRow({{ $key }})"
-                                        wire:change="sumRow({{ $key }})" type="number"
-                                        class="form-control">
+                                        wire:change="sumRow({{ $key }})" class="form-control">
                                 </div>
                             </div>
                             <div class="col-3">
@@ -684,9 +682,9 @@
                                     <label for="inputs.{{ $key }}.totalPrice" class="form-label">
                                         Total Price
                                     </label>
-                                    <input id="inputs.{{ $key }}.totalPrice"
-                                        wire:model="inputs.{{ $key }}.totalPrice" type="text"
-                                        class="form-control" disabled readonly>
+                                    <input x-number.2 id="inputs.{{ $key }}.totalPrice"
+                                        wire:model="inputs.{{ $key }}.totalPrice" class="form-control"
+                                        disabled readonly>
                                 </div>
                             </div>
                         </div>

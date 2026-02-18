@@ -305,9 +305,9 @@
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
                                                             {{-- <td>{{ $item->product->principal }}</td> --}}
-                                                            <td>{{ number_format($item->quantity, 4) }}</td>
-                                                            <td>{{ number_format($item->unit_price, 4) }}</td>
-                                                            <td>{{ number_format($item->total_price, 4) }}</td>
+                                                            <td>{{ number_format($item->quantity, 2) }}</td>
+                                                            <td>{{ number_format($item->unit_price, 2) }}</td>
+                                                            <td>{{ number_format($item->total_price, 2) }}</td>
                                                             <td>{{ $item->salesStage->name }}</td>
                                                             <td>{{ $item->probability->name }}</td>
                                                             <td>
