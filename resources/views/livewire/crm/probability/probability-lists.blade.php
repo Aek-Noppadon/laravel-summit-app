@@ -61,7 +61,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
                             <th scope="col">updated</th>
-                            {{-- <th scope="col">ID</th> --}}
+                            <th scope="col">Id</th>
                             <th scope="col">Probability Name</th>
                             <th scope="col" style="width: 90px">Action</th>
                         </thead>
@@ -105,7 +105,7 @@
                                             </small>
                                         </div>
                                     </td>
-                                    {{-- <td>{{ $item->id }}</td> --}}
+                                    <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         <button
