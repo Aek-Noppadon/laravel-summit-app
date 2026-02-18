@@ -20,7 +20,7 @@ class ProductLists extends Component
 
         $products = Product::where(function ($productQuery) use ($departmentId) {
             $productQuery->where('source', 0)
-                ->orWhere('source', 1)
+                ->orWhereIn('source', [1, 2])
                 ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                     $query->where('id', $departmentId);
                 });
@@ -36,7 +36,7 @@ class ProductLists extends Component
                                     ->orWhere('principal', 'like', '%' . $this->search . '%');
                             });
                     })->orWhere(function ($q) use ($departmentId) {
-                        $q->where('source', 1)
+                        $q->whereIn('source', [1, 2])
                             ->whereHas('userCreated.department', function ($query) use ($departmentId) {
                                 $query->where('id', $departmentId);
                             })
@@ -49,29 +49,11 @@ class ProductLists extends Component
                     });
                 });
             })
-            ->orderBy('code')
-            ->orderBy('product_name', 'asc')
-            ->orderBy('brand', 'asc')
+            ->orderBy('source', 'asc')
+            ->orderBy('product_name')
+            ->orderBy('brand')
             ->with(['userCreated:id,name,department_id', 'userCreated.department:id,name'])
             ->paginate($this->pagination);
-
-        // if (is_null($this->search)) {
-        //     $products = Product::orderBy('source', 'asc')
-        //         ->orderBy('brand', 'asc')
-        //         ->orderBy('product_name', 'asc')
-        //         ->paginate($this->pagination);
-        // } else {
-        //     $products = Product::Where('product_name', 'like', '%' . $this->search . '%')
-        //         ->orWhere('brand', 'like', '%' . $this->search . '%')
-        //         ->orWhere('supplier_rep', 'like', '%' . $this->search . '%')
-        //         ->orWhere('principal', 'like', '%' . $this->search . '%')
-        //         ->orderBy('source', 'asc')
-        //         ->orderBy('brand', 'asc')
-        //         ->orderBy('product_name', 'asc')
-        //         ->paginate($this->pagination);
-        // }
-
-        // dd($products);
 
         return view('livewire.product.product-lists', [
             'products' => $products
@@ -102,8 +84,8 @@ class ProductLists extends Component
             $this->dispatch(
                 "sweet.error",
                 position: "center",
-                title: "Can not Deleted !!",
-                text: "Product : " . $name . " there is a transaction in CRM.",
+                title: "Cannot Deleted !!",
+                text: $name . " there is a transaction in CRM.",
                 icon: "error",
                 // timer: 3000,
             );

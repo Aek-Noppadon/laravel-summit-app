@@ -46,6 +46,7 @@ class ProductEdit extends Component
         $exists = Product::where('product_name', $this->product_name)
             ->where('source', 0)
             ->orWhere('product_name', $this->product_name)
+            ->where('brand', $this->brand)
             ->where('id', '<>', $this->id)
             ->whereHas('userCreated', function ($query) use ($departmentId) {
                 $query->where('department_id', $departmentId);
