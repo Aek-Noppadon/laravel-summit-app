@@ -7,8 +7,6 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-use function Psy\debug;
-
 class CustomerCreate extends Component
 {
     public $customer_id, $name_english, $name_thai;
