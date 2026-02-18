@@ -78,7 +78,7 @@ class CustomerTypeLists extends Component
                 "sweet.error",
                 position: "center",
                 title: "Cannot Deleted !!",
-                text: "Customer Type : " . $name . " there is a transaction in CRM.",
+                text: $name . " there is a transaction in CRM.",
                 icon: "error",
             );
         }
