@@ -1,9 +1,10 @@
 <div wire:ignore.self class="modal fade" id="modal-add-product" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h4 class="modal-title">Product</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -83,7 +84,7 @@
                         <button wire:click.prevent="save" class="btn btn-success">
                             <i class="fas fa-save"></i> Save
                         </button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                        <button wire:click="$dispatch('close-modal')" type="button" class="btn btn-warning">
                             <i class="fas fa-times-circle"></i> Close
                         </button>
                     </div>
@@ -100,12 +101,15 @@
 <script>
     document.addEventListener('livewire:initialized', () => {
         @this.on('close-modal-product', (event) => {
-            // alert('Close Modal')
             setTimeout(() => {
                 @this.dispatch('refresh-product')
                 $('#modal-add-product').modal('hide')
                 @this.dispatch('reset-modal')
             }, 3000);
+        })
+
+        @this.on('close-modal', (event) => {
+            $('#modal-add-product').modal('hide')
         })
     })
 </script>

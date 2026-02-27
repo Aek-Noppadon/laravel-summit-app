@@ -1,12 +1,14 @@
 <div wire:ignore.self class="modal fade" id="modal-product-ax" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h4 class="modal-title">Products AX Lists</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
 
                 <div class="row mb-4">
@@ -26,7 +28,7 @@
                             <button wire:click="$dispatch('refresh-product-ax')" type="button" class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
-                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <button wire:click="$dispatch('close-modal')" type="button" class="btn btn-warning">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
@@ -46,15 +48,17 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover table-bordered">
+                        <thead class="table-info">
                             <th scope="col">#</th>
                             <th scope="col">Code</th>
                             <th scope="col">Product Name</th>
                             <th scope="col">Brand</th>
                             <th scope="col">Supplier Rep.</th>
                             <th scope="col">Principal</th>
-                            <th scope="col" style="width: 60px">Action</th>
+                            @can('product.create')
+                                <th scope="col" class="text-center">Action</th>
+                            @endcan
                         </thead>
 
                         <tbody>
@@ -66,19 +70,21 @@
                                     <td>{{ $product->ProductBrand }}</td>
                                     <td>{{ $product->SupplierRep }}</td>
                                     <td>{{ $product->Principal }}</td>
-                                    <td>
-                                        <button
-                                            wire:click.prevent="$dispatch('save-product-ax'
+                                    @can('product.create')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="$dispatch('save-product-ax'
                                             ,{product_code:{{ "'" . $product->ProductCode . "'" }}
                                             ,product_name:{{ "'" . $product->ProductName . "'" }}
                                             ,product_brand:{{ "'" . $product->ProductBrand . "'" }}
                                             ,supplier_rep:{{ "'" . $product->SupplierRep . "'" }}
                                             ,principal:{{ "'" . $product->Principal . "'" }}
                                             })"
-                                            class="btn btn-success btn-sm">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                    </td>
+                                                class="btn btn-success btn-sm">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
@@ -104,12 +110,14 @@
     <script>
         document.addEventListener('livewire:initialized', () => {
             @this.on('close-modal-product', (event) => {
-                // alert('Close Modal AX')
                 setTimeout(() => {
                     @this.dispatch('refresh-product')
                     $('#modal-product-ax').modal('hide')
                 }, 3000);
+            })
 
+            @this.on('close-modal', (event) => {
+                $('#modal-product-ax').modal('hide')
             })
         })
     </script>
