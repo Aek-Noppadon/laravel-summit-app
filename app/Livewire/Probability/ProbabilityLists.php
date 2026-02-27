@@ -39,22 +39,9 @@ class ProbabilityLists extends Component
         // ====================================================
 
         return view('livewire.probability.probability-lists', compact('probabilities'));
-
-        // if (is_null($this->search)) {
-        //     $probabilities = Probability::orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // } else {
-        //     $probabilities = Probability::Where('name', 'like', '%' . $this->search . '%')
-        //         ->orderBy('id', 'asc')
-        //         ->paginate($this->pagination);
-        // }
-
-        // return view('livewire.probability.probability-lists', [
-        //     'probabilities' => $probabilities
-        // ]);
     }
 
-    public function deleteProbability($id, $name)
+    public function deleteConfirm($id, $name)
     {
         $this->dispatch("confirm", id: $id, name: $name);
     }
