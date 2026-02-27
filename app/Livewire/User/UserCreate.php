@@ -6,15 +6,19 @@ use App\Models\Department;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class UserCreate extends Component
 {
-    public $departments;
+    public $departments, $allRoles;
     public $name, $last_name, $email, $sales_id, $department_id, $password, $confirm_password;
+    public $roles = [];
 
     public function mount()
     {
         $this->departments = Department::all();
+
+        $this->allRoles = Role::all();
     }
 
     public function render()
@@ -29,6 +33,11 @@ class UserCreate extends Component
 
     public function save()
     {
+        // Convert checkbox item them to integers
+        $this->roles = collect($this->roles)->map(fn($val) => (int)$val);
+
+        // dd($this->roles);
+
         $this->validate(
             [
                 "name"          => "required",
@@ -36,7 +45,8 @@ class UserCreate extends Component
                 "email"         => "required|unique:users,email",
                 "sales_id"      => "required|min:3|max:3|unique:users,sales_id",
                 "department_id" => "required",
-                "password"      =>  "required|same:confirm_password"
+                "password"      =>  "required|same:confirm_password",
+                "roles"         =>  "required",
             ],
             [
                 "required"      => "The :attribute field is required !!",
@@ -55,8 +65,7 @@ class UserCreate extends Component
             "password"      => Hash::make(trim($this->password)),
         ];
 
-
-        User::create([
+        $user = User::create([
             "name" => $dataUser['first_name'],
             "last_name" => $dataUser['last_name'],
             "email" => $dataUser['email'],
@@ -64,6 +73,8 @@ class UserCreate extends Component
             "department_id" => $dataUser['department'],
             "password" => $dataUser['password'],
         ]);
+
+        $user->syncRoles($this->roles);
 
         $this->dispatch(
             "sweet.success",

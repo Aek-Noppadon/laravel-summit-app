@@ -7,15 +7,19 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class UserEdit extends Component
 {
-    public $departments, $user;
+    public $departments, $user, $allRoles;
     public $id, $sales_id, $name, $last_name, $email, $department_id, $password, $confirm_password;
+    public $roles = [];
 
     public function mount()
     {
         $this->departments = Department::all();
+
+        $this->allRoles = Role::all();
     }
 
     public function render()
@@ -39,10 +43,20 @@ class UserEdit extends Component
         $this->last_name = $this->user->last_name;
         $this->email = $this->user->email;
         $this->department_id = $this->user->department_id;
+
+        // dd($this->user->roles()->pluck("name"));
+        $this->roles = $this->user->roles()->pluck("id");
+
+        // dd($this->roles);
     }
 
     public function save()
     {
+        // Convert checkbox item them to integers
+        $this->roles = collect($this->roles)->map(fn($val) => (int)$val);
+
+        // dd($this->roles);
+
         $this->validate(
             [
                 "name"          => "required",
@@ -71,6 +85,8 @@ class UserEdit extends Component
         }
 
         $this->user->save();
+
+        $this->user->syncRoles($this->roles);
 
         $this->dispatch(
             "sweet.success",
