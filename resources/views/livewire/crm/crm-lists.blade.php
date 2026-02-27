@@ -36,9 +36,13 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <a href="{{ route('crm.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Add CRM
-                        </a>
+
+                        @can('crm.create')
+                            <a href="{{ route('crm.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add CRM
+                            </a>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-crm')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
@@ -171,8 +175,8 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-sm table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col" style="width: 35px"></th>
@@ -184,8 +188,12 @@
                         <th scope="col">Start Visit</th>
                         <th scope="col">Estimate</th>
                         <th scope="col">Contact</th>
-                        <th scope="col" colspan="2">Items</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        <th scope="col" colspan="2" class="text-center">Items</th>
+                        @can('crm.edit')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @elsecan('crm.delete')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -210,7 +218,7 @@
                                     </div>
 
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     @if ($item->source === '0')
                                         <span class="badge badge-pill badge-success">
                                             Excel
@@ -233,14 +241,13 @@
                                     {{ Carbon\Carbon::parse($item->estimate_date)->format('d/m/Y') }}
                                 </td>
                                 <td>{{ $item->contact }}</td>
-                                <td>
+                                <td style="width: 40px" class="p-1 text-center">
                                     <h5>
                                         <span class="badge badge-dark">{{ $item->crm_items_count }}</span>
                                     </h5>
                                 </td>
-                                <td>
+                                <td style="width: 40px" class="p-1 text-center">
                                     <button class="btn btn-sm btn-primary" wire:click="toggle({{ $item->id }})">
-                                        {{-- {{ $isOpenId === $item->id ? 'Close Product detail' : 'Product detail' }} --}}
                                         @if ($isOpenId == $item->id)
                                             <i class="fas fa-minus"></i>
                                         @else
@@ -248,32 +255,36 @@
                                         @endif
                                     </button>
                                 </td>
-                                <td>
-                                    <a href="{{ route('crm.update', $item->id) }}" class="btn btn-sm btn-primary"
-                                        target="_blank">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button
-                                        wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
-                                        class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-
+                                @can('crm.edit')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <a href="{{ route('crm.edit', $item->id) }}" class="btn btn-sm btn-primary"
+                                            target="_blank">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                @endcan
+                                @can('crm.delete')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button
+                                            wire:click.prevent="deleteCrm({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                @endcan
                             </tr>
 
                             @if ($isOpenId == $item->id)
                                 <tr>
-                                    <td colspan="14">
+                                    <td colspan="15">
                                         <div class="table-responsive">
-                                            <table class="table table-sm">
-                                                <thead class="thead-dark">
+                                            <table class="table table-sm table-hover table-bordered">
+                                                <thead class="table-warning">
                                                     <th scope="col">#</th>
                                                     <th scope="col">Application</th>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col">Brand</th>
                                                     <th scope="col">Supplier Rep.</th>
-                                                    {{-- <th scope="col">Principal</th> --}}
                                                     <th scope="col">Qty.</th>
                                                     <th scope="col">Unit Price</th>
                                                     <th scope="col">Total Amt.</th>
@@ -293,7 +304,6 @@
                                                             <td>{{ $item->product->product_name }}</td>
                                                             <td>{{ $item->product->brand }}</td>
                                                             <td>{{ $item->product->supplier_rep }}</td>
-                                                            {{-- <td>{{ $item->product->principal }}</td> --}}
                                                             <td>{{ number_format($item->quantity, 2) }}</td>
                                                             <td>{{ number_format($item->unit_price, 2) }}</td>
                                                             <td>{{ number_format($item->total_price, 2) }}</td>
@@ -312,7 +322,9 @@
                             @endif
                         @empty
                             <tr>
-                                <td>No Data</td>
+                                <td colspan="14">
+                                    <span class="d-flex justify-content-center lead">No Data</span>
+                                </td>
                             </tr>
                         @endforelse
 

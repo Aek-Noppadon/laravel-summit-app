@@ -48,10 +48,10 @@
                                 <div class="form-group">
                                     <div class="mb-2 font-weight-bold">Created</div>
                                     <div class="form-control bg-light">
-                                        {{ Carbon\Carbon::parse($crmHeader_created_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($crmHeader_created_at)->format('H:i:s') }},
+                                        {{ $crmHeader_created_at->format('d/m/Y') }},
+                                        {{ $crmHeader_created_at->format('H:i:s') }},
                                         <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($crmHeader_created_at)->diffForHumans() }}
+                                        {{ $crmHeader_created_at->diffForHumans() }}
                                     </div>
                                 </div>
                             </div>
@@ -59,10 +59,10 @@
                                 <div class="form-group">
                                     <div class="mb-2 font-weight-bold">Updated</div>
                                     <div class="form-control bg-light">
-                                        {{ Carbon\Carbon::parse($crmHeader_updated_at)->format('d/m/Y') }},
-                                        {{ Carbon\Carbon::parse($crmHeader_updated_at)->format('H:i:s') }},
+                                        {{ $crmHeader_updated_at->format('d/m/Y') }},
+                                        {{ $crmHeader_updated_at->format('H:i:s') }},
                                         <i class="far fa-clock"></i>
-                                        {{ Carbon\Carbon::parse($crmHeader_updated_at)->diffForHumans() }}
+                                        {{ $crmHeader_updated_at->diffForHumans() }}
                                     </div>
                                 </div>
                             </div>
@@ -84,18 +84,12 @@
                                 <label for="customerNameEng" class="form-label">Customer Name ENG.</label>
                                 <span class="text-danger font-weight-bold">*</span>
 
-                                <!-- Customer Modal Search -->
-                                <button wire:click="$dispatch('refresh-customer')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-customer">
-                                    <i class="fas fa-search"></i>
-                                </button>
-
-                                @livewire('crm.customer.customer-lists')
-
-                                @livewire('crm.customer.customer-ax-lists')
-
-                                @livewire('crm.customer.customer-create')
-                                <!-- ./Customer Modal Search -->
+                                @can('customer.view')
+                                    <button wire:click="$dispatch('refresh-customer')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-customer">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                @endcan
 
                                 <input id="customerNameEng" wire:model="customerNameEng" type="text"
                                     class="form-control @error('customerNameEng') is-invalid @enderror" disabled
@@ -145,17 +139,18 @@
                                 <label for="customerType" class="form-label">Customer Type</label>
                                 <span class="text-danger font-weight-bold">*</span>
 
-                                <!-- Modal Customer Type List -->
-                                <button wire:click="$dispatch('refresh-customer-type')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#modal-customer-type">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <!-- ./Modal Customer Type List -->
+                                @can('customerType.view')
+                                    <button wire:click="$dispatch('refresh-customer-type')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-customer-type">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                @endcan
 
                                 <div wire:loading wire:target="selectedCustomerType" class="spinner-border text-primary"
                                     style="width: 1.2rem;height:1.2rem" role="status">
                                 </div>
+
                                 <select id="customerType" wire:model="customerType"
                                     wire:focus.debounce.1000ms="selectedCustomerType"
                                     class="form-control @error('customerType') is-invalid @enderror">
@@ -167,6 +162,7 @@
                                 @error('customerType')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+
                             </div>
                         </div>
 
@@ -174,18 +170,19 @@
                             <div class="form-group">
                                 <label for="customerGroup" class="form-label">Customer Group</label>
 
-                                <!-- Modal Customer Group List -->
-                                <button wire:click="$dispatch('refresh-customer-group')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#modal-customer-group">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <!-- ./Modal Customer Group List -->
+                                @can('customerGroup.view')
+                                    <button wire:click="$dispatch('refresh-customer-group')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-customer-group">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                @endcan
 
                                 <div wire:loading wire:target="selectedCustomerGroup"
                                     class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                     role="status">
                                 </div>
+
                                 <select id="customerGroup" wire:model="customerGroup"
                                     wire:focus.debounce.1000ms="selectedCustomerGroup" class="form-control">
                                     <option value="">-- Select --</option>
@@ -193,6 +190,7 @@
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
+
                             </div>
                         </div>
                     </div>
@@ -204,16 +202,12 @@
                             <div class="form-group">
                                 <label class="form-label">Event</label>
 
-                                <!-- Event Modal Search -->
-                                <button wire:click="$dispatch('refresh-event')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-event">
-                                    <i class="fas fa-search"></i>
-                                </button>
-
-                                @livewire('crm.event.event-lists')
-
-                                @livewire('crm.event.event-create')
-                                <!-- ./Event Modal Search -->
+                                @can('event.view')
+                                    <button wire:click="$dispatch('refresh-event')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-event">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                @endcan
 
                                 <input wire:model='event_name' type="text" class="form-control" disabled readonly>
                             </div>
@@ -274,17 +268,19 @@
                                     Application
                                 </label>
 
-                                <!-- Modal Application List -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#modal-application">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <!-- ./Modal Application List -->
+                                @can('application.view')
+                                    <button wire:click="$dispatch('refresh-application')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-application">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                @endcan
 
                                 <div wire:loading wire:target="selectedApplication"
                                     class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                     role="status">
                                 </div>
+
                                 <select id="application" wire:model="application"
                                     wire:focus.debounce.1000ms="selectedApplication" class="form-control">
                                     <option value="">-- Select --</option>
@@ -303,6 +299,7 @@
                                 <div wire:loading wire:target="selectedSalesStage" class="spinner-border text-primary"
                                     style="width: 1.2rem;height:1.2rem" role="status">
                                 </div>
+
                                 <select id="salesStage" wire:model="salesStage"
                                     wire:focus.debounce.1000ms="selectedSalesStage"
                                     class="form-control @error('salesStage') is-invalid @enderror">
@@ -323,13 +320,13 @@
                                 </label>
                                 <span class="text-danger font-weight-bold">*</span>
 
-                                <!-- Modal Probability List -->
-                                <button wire:click="$dispatch('refresh-probability')" type="button"
-                                    class="btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#modal-probability">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <!-- ./Modal Probability List -->
+                                @can('probability.view')
+                                    <button wire:click="$dispatch('refresh-probability')" type="button"
+                                        class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#modal-probability">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                @endcan
 
                                 <div wire:loading wire:target="selectedProbability"
                                     class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
@@ -379,29 +376,20 @@
                 <div class="card-footer">
                     <div class="row">
 
-                        <!-- Product Modal Search -->
                         <div class="col-6">
                             <div class="btn-group w-100" role="group">
-                                <button wire:click="$dispatch('refresh-product')" type="button"
-                                    class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
-                                    <i class="fas fa-search"></i> Products
-                                </button>
 
-                                @livewire('crm.product.product-lists')
-
-                                @livewire('crm.product.product-ax-lists')
-
-                                @livewire('crm.product.product-create')
+                                @can('product.view')
+                                    <button wire:click="$dispatch('refresh-product')" type="button"
+                                        class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
+                                        <i class="fas fa-search"></i> Products
+                                    </button>
+                                @endcan
 
                             </div>
                         </div>
-                        <!-- ./Product Modal Search -->
 
-                        <!-- Save CRM -->
                         <div class="col-6">
-                            {{-- <button type="submit" class="btn btn-success w-100">
-                                <i class="fas fa-save"></i> Save
-                            </button> --}}
                             <button wire:click.prevent="save" class="btn btn-success w-100">
                                 <i class="fas fa-save"></i> Save
                             </button>
@@ -426,10 +414,10 @@
                                     <div class="form-group">
                                         <div class="mb-2 font-weight-bold">Created</div>
                                         <div class="form-control bg-light">
-                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->format('d/m/Y') }},
-                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->format('H:i:s') }},
+                                            {{ $item['crmDetail_created_at']->format('d/m/Y') }},
+                                            {{ $item['crmDetail_created_at']->format('H:i:s') }},
                                             <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item['crmDetail_created_at'])->diffForHumans() }}
+                                            {{ $item['crmDetail_created_at']->diffForHumans() }}
                                         </div>
                                     </div>
                                 </div>
@@ -437,10 +425,10 @@
                                     <div class="form-group">
                                         <div class="mb-2 font-weight-bold">Updated</div>
                                         <div class="form-control bg-light">
-                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->format('d/m/Y') }},
-                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->format('H:i:s') }},
+                                            {{ $item['crmDetail_updated_at']->format('d/m/Y') }},
+                                            {{ $item['crmDetail_updated_at']->format('H:i:s') }},
                                             <i class="far fa-clock"></i>
-                                            {{ Carbon\Carbon::parse($item['crmDetail_updated_at'])->diffForHumans() }}
+                                            {{ $item['crmDetail_updated_at']->diffForHumans() }}
                                         </div>
                                     </div>
                                 </div>
@@ -526,15 +514,6 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-
-                                {{-- <div class="form-group">
-                                    <label>Update Visite</label>
-                                    <div class="form-control bg-light">
-                                        {{ Carbon\Carbon::parse($item['updateVisit'])->format('d/m/Y') }}
-                                    </div>
-
-                                </div> --}}
-
                             </div>
                             <div class="col-3">
                                 <div class="form-group">
@@ -542,17 +521,19 @@
                                         Application
                                     </label>
 
-                                    <!-- Modal Application List -->
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#modal-application">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <!-- ./Modal Application List -->
+                                    @can('application.view')
+                                        <button wire:click="$dispatch('refresh-application')" type="button"
+                                            class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#modal-application">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    @endcan
 
                                     <div wire:loading wire:target="selectedApplication"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
                                     </div>
+
                                     <select id="inputs.{{ $key }}.application"
                                         wire:model="inputs.{{ $key }}.application"
                                         wire:focus.debounce.1000ms="selectedApplication" class="form-control">
@@ -573,6 +554,7 @@
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
                                     </div>
+
                                     <select id="inputs.{{ $key }}.salesStage"
                                         wire:model="inputs.{{ $key }}.salesStage"
                                         wire:focus.debounce.1000ms="selectedSalesStage"
@@ -594,13 +576,13 @@
                                     </label>
                                     <span class="text-danger font-weight-bold">*</span>
 
-                                    <!-- Modal Probability List -->
-                                    <button wire:click="$dispatch('refresh-probability')" type="button"
-                                        class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#modal-probability">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <!-- ./Modal Probability List -->
+                                    @can('probability.view')
+                                        <button wire:click="$dispatch('refresh-probability')" type="button"
+                                            class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#modal-probability">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    @endcan
 
                                     <div wire:loading wire:target="selectedProbability"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
@@ -616,7 +598,6 @@
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
-
                                     @error('inputs.' . $key . '.probability')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -644,18 +625,19 @@
                                         Volume Unit
                                     </label>
 
-                                    <!-- Modal Volume Unit List -->
-                                    <button wire:click="$dispatch('refresh-volume-unit')" type="button"
-                                        class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#modal-volume-unit">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <!-- ./Modal Volume Unit List -->
+                                    @can('volumeUnit.view')
+                                        <button wire:click="$dispatch('refresh-volume-unit')" type="button"
+                                            class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#modal-volume-unit">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    @endcan
 
                                     <div wire:loading wire:target="selectedVolumeUnit"
                                         class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
                                         role="status">
                                     </div>
+
                                     <select id="inputs.{{ $key }}.volumeUnit"
                                         wire:model="inputs.{{ $key }}.volumeUnit" step="any"
                                         wire:focus.debounce.1000ms="selectedVolumeUnit" class="form-control">
@@ -689,68 +671,6 @@
                             </div>
                         </div>
                         <!-- ./Quantity, Unit Price, Total Price -->
-
-                        <!--Packing Unit, Volumn Qty, Volume Unit -->
-                        {{-- <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="inputs.{{ $key }}.packingUnit" class="form-label">
-                                        Packing Unit
-                                    </label>
-                                    <div wire:loading wire:target="selectedPackingUnit"
-                                        class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
-                                        role="status">
-                                    </div>
-                                    <select id="inputs.{{ $key }}.packingUnit"
-                                        wire:model="inputs.{{ $key }}.packingUnit"
-                                        wire:focus.debounce.1000ms="selectedPackingUnit" class="form-control">
-                                        <option value="">-- Select --</option>
-                                        @foreach ($packingUnits as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="inputs.{{ $key }}.volumnQty" class="form-label">
-                                        Volumn QTY.
-                                    </label>
-                                    <input id="inputs.{{ $key }}.volumnQty" type="number"
-                                        class="form-control" step="any"
-                                        wire:model="inputs.{{ $key }}.volumnQty">
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="inputs.{{ $key }}.volumeUnit" class="form-label">
-                                        Volume Unit
-                                    </label>
-
-                                    <!-- Modal Volume Unit List -->
-                                    <button wire:click="$dispatch('refresh-volume-unit')" type="button"
-                                        class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#modal-volume-unit">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <!-- ./Modal Volume Unit List -->
-
-                                    <div wire:loading wire:target="selectedVolumeUnit"
-                                        class="spinner-border text-primary" style="width: 1.2rem;height:1.2rem"
-                                        role="status">
-                                    </div>
-                                    <select id="inputs.{{ $key }}.volumeUnit"
-                                        wire:model="inputs.{{ $key }}.volumeUnit" step="any"
-                                        wire:focus.debounce.1000ms="selectedVolumeUnit" class="form-control">
-                                        <option value="">-- Select --</option>
-                                        @foreach ($volumeUnits as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div> --}}
-                        <!-- ./Packing Unit, Volumn Qty, Volume Unit -->
 
                         <!-- Additional Information, Competitor Situation -->
                         <div class="row">
@@ -793,7 +713,7 @@
                                 <div class="col-6">
                                     <button
                                         wire:click.prevent="deleteItem({{ $crm_detail_id }},{{ "'" . $crmHeader_number . "'" }},{{ "'" . str_replace("'", '', $product_name) . "'" }})"
-                                        {{-- wire:click.prevent="deleteItem({{ $crm_detail_id }},{{ "'" . $product_name . "'" }})" --}} {{-- wire:confirm="Are you sure want to delete item"  --}} class="btn btn-danger w-100">
+                                        class="btn btn-danger w-100">
                                         <i class="fas fa-trash"></i> Delete Item
                                     </button>
                                 </div>
@@ -807,10 +727,9 @@
                                     </button>
                                 </div>
                                 <div class="col-6">
-                                    {{-- <button wire:click.prevent="deleteRow({{ $key }})" --}}
                                     <button
                                         wire:click.prevent="removeItem({{ $key }},{{ "'" . str_replace("'", '', $product_name) . "'" }})"
-                                        {{-- wire:click.prevent="removeItem({{ $key }},{{ "'" . $product_name . "'" }})" --}} class="btn btn-info w-100">
+                                        class="btn btn-info w-100">
                                         <i class="fas fa-minus"></i> Remove Item
                                     </button>
                                 </div>
@@ -821,31 +740,25 @@
                 @endforeach
 
                 <!-- ./CRM Details -->
-
-                <!-- Customer Type List Component -->
-                @livewire('crm.customer-type.customer-type-lists')
-                <!-- ./Customer Type List Component -->
-
-                <!-- Customer Group List Component -->
-                @livewire('crm.customer-group.customer-group-lists')
-                <!-- ./Customer Group List Component -->
-
-                <!-- Application List Component -->
-                @livewire('crm.application.application-lists')
-                <!-- ./Application List Component -->
-
-                <!-- Probability List Component -->
-                @livewire('crm.probability.probability-lists')
-                <!-- ./Probability List Component -->
-
-                <!-- Volume Unit List Component -->
-                @livewire('crm.volume-unit.volume-unit-lists')
-                <!-- ./Volume Unit List Component -->
-
             </form>
-
         </div>
         <!-- /.card -->
+
+        @livewire('crm.customer.customer-lists')
+
+        @livewire('crm.product.product-lists')
+
+        @livewire('crm.event.event-lists')
+
+        @livewire('crm.customer-type.customer-type-lists')
+
+        @livewire('crm.customer-group.customer-group-lists')
+
+        @livewire('crm.application.application-lists')
+
+        @livewire('crm.probability.probability-lists')
+
+        @livewire('crm.volume-unit.volume-unit-lists')
 
     </div>
 
@@ -855,9 +768,6 @@
     <!-- Sweet Alert -->
     <script>
         $wire.on("confirm", (event) => {
-
-            // alert(event.name);
-
             Swal.fire({
                 title: "Are you sure delete ?",
                 html: `${event.document_no}<br>${event.product_name}`,
