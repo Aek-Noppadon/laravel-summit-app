@@ -23,10 +23,14 @@
                     </div>
                     <div class="col-3 d-flex justify-content-center">
                         <div class="btn-group w-100" role="group">
-                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                data-target="#modal-add-event">
-                                <i class="fas fa-plus"></i> Add
-                            </button>
+
+                            @can('event.create')
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modal-add-event">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            @endcan
+
                             <button wire:click="$dispatch('refresh-event')" type="button" class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
@@ -50,14 +54,21 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover table-bordered">
+                        <thead class="table-info">
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
                             <th scope="col">Udated</th>
                             <th scope="col">Id</th>
                             <th scope="col">Event Name</th>
-                            <th scope="col" style="width: 115px">Action</th>
+                            @can('crm.create')
+                                <th scope="col" colspan="3" class="text-center">Action</th>
+                            @elsecan('event.edit')
+                                <th scope="col" colspan="3" class="text-center">Action</th>
+                            @elsecan('event.delete')
+                                <th scope="col" colspan="3" class="text-center">Action</th>
+                            @endcan
+
                         </thead>
 
                         <tbody>
@@ -101,26 +112,37 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>
-                                        <button
-                                            wire:click.prevent="$dispatch('select-event',
-                                            {id:{{ $item->id }}})"
-                                            wire:click="$dispatch('refresh-event')" class="btn btn-success btn-sm">
-                                            <i class="fas fa-check"></i>
-                                        </button>
 
-                                        <button wire:click.prevent="$dispatch('edit-event',{id:{{ $item->id }}})"
-                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#modal-edit-event">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            wire:click.prevent="deleteEvent({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                            class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                    @can('crm.create')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="$dispatch('select-event',
+                                                {id:{{ $item->id }}})"
+                                                wire:click="$dispatch('refresh-event')" class="btn btn-success btn-sm">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
 
-                                    </td>
+                                    @can('event.edit')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button wire:click.prevent="$dispatch('edit-event',{id:{{ $item->id }}})"
+                                                type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                data-target="#modal-edit-event">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+
+                                    @can('event.delete')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="deleteEvent({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                                class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
 
@@ -128,6 +150,9 @@
 
                         </tbody>
                     </table>
+
+                    @livewire('crm.event.event-create')
+
                 </div>
 
             </div>
