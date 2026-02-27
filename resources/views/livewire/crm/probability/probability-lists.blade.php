@@ -23,14 +23,17 @@
                     </div>
                     <div class="col-3 d-flex justify-content-center">
                         <div class="btn-group w-100" role="group">
-                            <button wire:click="$dispatch('add-probability')" type="button" class="btn btn-primary"
-                                data-toggle="modal" data-target="#modal-add-probability">
-                                <i class="fas fa-plus"></i>
-                            </button>
 
-                            <!-- Probability Add Component -->
-                            @livewire('crm.probability.probability-create')
-                            <!-- ./Probability Add Component -->
+                            @can('probability.create')
+                                <button wire:click="$dispatch('add-probability')" type="button" class="btn btn-primary"
+                                    data-toggle="modal" data-target="#modal-add-probability">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+
+                                <!-- Probability Add Component -->
+                                @livewire('crm.probability.probability-create')
+                                <!-- ./Probability Add Component -->
+                            @endcan
 
                             <button wire:click="$dispatch('refresh-probability')" type="button"
                                 class="btn btn-success">
@@ -56,14 +59,18 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover table-bordered">
+                        <thead class="table-info">
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
-                            <th scope="col">updated</th>
+                            <th scope="col">Updated</th>
                             <th scope="col">Id</th>
                             <th scope="col">Probability Name</th>
-                            <th scope="col" style="width: 90px">Action</th>
+                            @can('probability.edit')
+                                <th scope="col" colspan="2">Action</th>
+                            @elsecan('probability.delete')
+                                <th scope="col" colspan="2">Action</th>
+                            @endcan
                         </thead>
 
                         <tbody>
@@ -107,25 +114,30 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>
-                                        <button
-                                            wire:click.prevent="$dispatch('edit-probability',{id:{{ $item->id }}})"
-                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#modal-edit-probability">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            wire:click.prevent="deleteConfirm({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                            {{-- wire:click.prevent="deleteProbability({{ $item->id }},{{ "'" . $item->name . "'" }})" --}} class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
+                                    @can('probability.edit')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="$dispatch('edit-probability',{id:{{ $item->id }}})"
+                                                type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                data-target="#modal-edit-probability">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+
+                                    @can('probability.delete')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="deleteConfirm({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                                class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
 
-                            <!-- Probability Edit Component -->
                             @livewire('crm.probability.probability-edit')
-                            <!-- ./Probability Edit Component -->
 
                         </tbody>
                     </table>
