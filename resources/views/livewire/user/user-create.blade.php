@@ -132,6 +132,31 @@
 
                             </div>
 
+                            {{-- All Roles --}}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="roles" class="form-label">Roles</label>
+                                    <span class="text-danger font-weight-bold">*</span>
+                                    @error('roles')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                    <div class="form-group card">
+                                        <div class="card-body py-2">
+                                            @foreach ($allRoles as $item)
+                                                <div class="form-check">
+                                                    <input wire:model="roles"
+                                                        class="form-check-input @error('roles') is-invalid @enderror"
+                                                        type="checkbox" value="{{ $item->id }}" id="roles">
+                                                    <label class="form-check-label" for="roles">
+                                                        {{ $item->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
 
