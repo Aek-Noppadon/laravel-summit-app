@@ -39,15 +39,17 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-volume-unit')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-volume-unit">
-                            <i class="fas fa-plus"></i> Volume Unit
-                        </button>
+
+                        @can('volumeUnit.create')
+                            <button wire:click="$dispatch('add-volume-unit')" type="button" class="btn btn-primary"
+                                data-toggle="modal" data-target="#modal-add-volume-unit">
+                                <i class="fas fa-plus"></i> Volume Unit
+                            </button>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-volume-unit')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
-
-                        @livewire('volume-unit.volume-unit-create')
                     </div>
                 </div>
             </div>
@@ -68,14 +70,18 @@
         <!-- /.card-header -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col">Id</th>
                         <th scope="col">Volume Unit Name</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        @can('volumeUnit.edit')
+                            <th scope="col" colspan="2">Action</th>
+                        @elsecan('volumeUnit.delete')
+                            <th scope="col" colspan="2">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -120,23 +126,34 @@
                                 </td>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td>
-                                    <button wire:click.prevent="$dispatch('edit-volume-unit',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                        data-target="#modal-edit-volume-unit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button
-                                        wire:click.prevent="deleteConfirm({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
+                                @can('volumeUnit.edit')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button wire:click.prevent="$dispatch('edit-volume-unit',{id:{{ $item->id }}})"
+                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                            data-target="#modal-edit-volume-unit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                @endcan
+
+                                @can('volumeUnit.delete')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button
+                                            wire:click.prevent="deleteConfirm({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                @endcan
                             </tr>
                         @endforeach
-                        @livewire('volume-unit.volume-unit-edit')
                     </tbody>
                 </table>
+
+                @livewire('volume-unit.volume-unit-create')
+
+                @livewire('volume-unit.volume-unit-edit')
+
             </div>
         </div>
         <!-- /.card-body -->
