@@ -39,15 +39,17 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-application')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-application">
-                            <i class="fas fa-plus"></i> Application
-                        </button>
+
+                        @can('application.create')
+                            <button wire:click="$dispatch('add-application')" type="button" class="btn btn-primary"
+                                data-toggle="modal" data-target="#modal-add-application">
+                                <i class="fas fa-plus"></i> Application
+                            </button>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-application')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
-
-                        @livewire('application.application-create')
                     </div>
                 </div>
             </div>
@@ -68,14 +70,18 @@
         <!-- /.card-header -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col">Id</th>
                         <th scope="col">Application Name</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        @can('application.edit')
+                            <th scope="col" colspan="2">Action</th>
+                        @elsecan('application.delete')
+                            <th scope="col" colspan="2">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -120,23 +126,33 @@
                                 </td>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td>
-                                    <button wire:click.prevent="$dispatch('edit-application',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                        data-target="#modal-edit-application">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button
-                                        wire:click.prevent="deleteApplication({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
+                                @can('application.edit')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button wire:click.prevent="$dispatch('edit-application',{id:{{ $item->id }}})"
+                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                            data-target="#modal-edit-application">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                @endcan
+                                @can('application.delete')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button
+                                            wire:click.prevent="deleteApplication({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                @endcan
                             </tr>
                         @endforeach
-                        @livewire('application.application-edit')
                     </tbody>
                 </table>
+
+                @livewire('application.application-create')
+
+                @livewire('application.application-edit')
+
             </div>
         </div>
         <!-- /.card-body -->
