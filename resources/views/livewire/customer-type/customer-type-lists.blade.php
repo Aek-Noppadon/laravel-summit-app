@@ -39,15 +39,17 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-customer-type')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-customer-type">
-                            <i class="fas fa-plus"></i> Customer Type
-                        </button>
+
+                        @can('customerType.create')
+                            <button wire:click="$dispatch('add-customer-type')" type="button" class="btn btn-primary"
+                                data-toggle="modal" data-target="#modal-add-customer-type">
+                                <i class="fas fa-plus"></i> Customer Type
+                            </button>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-customer-type')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
-
-                        @livewire('customer-type.customer-type-create')
                     </div>
                 </div>
             </div>
@@ -68,14 +70,18 @@
         <!-- /.card-header -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
                         <th scope="col">Id</th>
                         <th scope="col">Customer Type Name</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        @can('customerType.edit')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @elsecan('customerType.delete')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -120,24 +126,35 @@
                                 </td>
                                 <td>{{ $item->id }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td>
-                                    <button
-                                        wire:click.prevent="$dispatch('edit-customer-type',{id:{{ $item->id }}})"
-                                        type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                        data-target="#modal-edit-customer-type">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button
-                                        wire:click.prevent="deleteCustomerType({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                        class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
+                                @can('customerType.edit')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button
+                                            wire:click.prevent="$dispatch('edit-customer-type',{id:{{ $item->id }}})"
+                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                            data-target="#modal-edit-customer-type">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                @endcan
+
+                                @can('customerType.delete')
+                                    <td style="width: 40px" class="p-1 text-center">
+                                        <button
+                                            wire:click.prevent="deleteCustomerType({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                @endcan
                             </tr>
                         @endforeach
-                        @livewire('customer-type.customer-type-edit')
                     </tbody>
                 </table>
+
+                @livewire('customer-type.customer-type-create')
+
+                @livewire('customer-type.customer-type-edit')
+
             </div>
         </div>
         <!-- /.card-body -->
