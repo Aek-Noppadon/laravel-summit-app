@@ -1,11 +1,14 @@
 <div wire:ignore.self class="modal fade" id="modal-customer-ax" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h4 class="modal-title">Customer AX Lists</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+
             </div>
             <div class="modal-body">
 
@@ -27,7 +30,10 @@
                                 class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
-                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            {{-- <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                <i class="fas fa-times-circle"></i>
+                            </button> --}}
+                            <button wire:click="$dispatch('close-modal')" type="button" class="btn btn-warning">
                                 <i class="fas fa-times-circle"></i>
                             </button>
                         </div>
@@ -98,12 +104,14 @@
     <script>
         document.addEventListener('livewire:initialized', () => {
             @this.on('close-modal-customer', (event) => {
-                // alert('Close Modal AX')
                 setTimeout(() => {
                     @this.dispatch('refresh-customer')
                     $('#modal-customer-ax').modal('hide')
                 }, 3000);
+            })
 
+            @this.on('close-modal', (event) => {
+                $('#modal-customer-ax').modal('hide')
             })
         })
     </script>

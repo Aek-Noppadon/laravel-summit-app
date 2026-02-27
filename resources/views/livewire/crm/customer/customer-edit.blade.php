@@ -14,36 +14,43 @@
                         <h3 class="card-title">Edit Form</h3>
                     </div>
                     {{-- <form wire:submit.prevent="saveCustomer"> --}}
-                    <form>
-                        <div class="card-body">
+                        <form>
+                            <div class="card-body">
 
-                            <div class="row">
+                                <div class="row">
 
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label for="name_english" class="form-label">Customer Name ENG.</label>
-                                        <span class="text-danger font-weight-bold">*</span>
-                                        <input id="name_english" wire:model="name_english" type="text"
-                                            class="form-control @error('name_english') is-invalid @enderror">
-                                        @error('name_english')
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="name_english" class="form-label">Customer Name ENG.</label>
+                                            <span class="text-danger font-weight-bold">*</span>
+
+                                            <!-- Customer Website Dataforthai -->
+                                            <a class="btn btn-primary btn-sm"
+                                                href="https://www.dataforthai.com/business" target="_blank">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+
+                                            <input id="name_english" wire:model="name_english" type="text"
+                                                class="form-control @error('name_english') is-invalid @enderror">
+                                            @error('name_english')
                                             <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name_thai" class="form-label">Customer Name THI.</label>
-                                        <span class="text-danger font-weight-bold">*</span>
-                                        <input id="name_thai" wire:model='name_thai' type="text"
-                                            class="form-control @error('name_thai') is-invalid @enderror">
-                                        @error('name_thai')
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name_thai" class="form-label">Customer Name THI.</label>
+                                            <span class="text-danger font-weight-bold">*</span>
+                                            <input id="name_thai" wire:model='name_thai' type="text"
+                                                class="form-control @error('name_thai') is-invalid @enderror">
+                                            @error('name_thai')
                                             <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                            @enderror
+                                        </div>
                                     </div>
+
                                 </div>
-
+                                <!-- ./Customer Name Eng, Customer Name Thi -->
                             </div>
-                            <!-- ./Customer Name Eng, Customer Name Thi -->
-                        </div>
-                    </form>
+                        </form>
 
                 </div>
             </div>
@@ -69,8 +76,8 @@
 <!-- /.modal -->
 
 @script
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+<script>
+    document.addEventListener('livewire:initialized', () => {
             @this.on('close-modal-customer', (event) => {
                 // alert('Close Modal')
                 setTimeout(() => {
@@ -85,5 +92,5 @@
                 $('#modal-edit-customer').modal('hide')
             })
         })
-    </script>
+</script>
 @endscript
