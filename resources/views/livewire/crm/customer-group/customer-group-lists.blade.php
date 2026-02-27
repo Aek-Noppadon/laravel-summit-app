@@ -23,19 +23,19 @@
                     </div>
                     <div class="col-3 d-flex justify-content-center">
                         <div class="btn-group w-100" role="group">
-                            <button wire:click="$dispatch('add-customer-group')" type="button" class="btn btn-primary"
-                                data-toggle="modal" data-target="#modal-add-customer-group">
-                                <i class="fas fa-plus"></i>
-                            </button>
 
-                            <!-- Customer Group Add Component -->
-                            @livewire('crm.customer-group.customer-group-create')
-                            <!-- ./Customer Group Add Component -->
+                            @can('customerGroup.create')
+                                <button wire:click="$dispatch('add-customer-group')" type="button" class="btn btn-primary"
+                                    data-toggle="modal" data-target="#modal-add-customer-group">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            @endcan
 
                             <button wire:click="$dispatch('refresh-customer-group')" type="button"
                                 class="btn btn-success">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
+
                             <button type="button" class="btn btn-warning" data-dismiss="modal">
                                 <i class="fas fa-times-circle"></i>
                             </button>
@@ -56,14 +56,18 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead>
+                    <table class="table table-sm table-hover table-bordered">
+                        <thead class="table-info">
                             <th scope="col">#</th>
                             <th scope="col">Created</th>
                             <th scope="col">Updated</th>
                             <th scope="col">Id</th>
                             <th scope="col">Customer Group Name</th>
-                            <th scope="col" style="width: 90px">Action</th>
+                            @can('customerGroup.edit')
+                                <th scope="col" colspan="2">Action</th>
+                            @elsecan('customerGroup.delete')
+                                <th scope="col" colspan="2">Action</th>
+                            @endcan
                         </thead>
 
                         <tbody>
@@ -107,30 +111,37 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>
-                                        <button
-                                            wire:click.prevent="$dispatch('edit-customer-group',{id:{{ $item->id }}})"
-                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#modal-edit-customer-group">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            wire:click.prevent="deleteCustomerGroup({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
-                                            class="btn btn-sm btn-danger">
-                                            {{-- wire:click.prevent="deleteCustomerGroup({{ $item->id }},{{ "'" . $item->name . "'" }})"
-                                            class="btn btn-sm btn-danger"> --}}
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
+
+                                    @can('customerGroup.edit')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="$dispatch('edit-customer-group',{id:{{ $item->id }}})"
+                                                type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                data-target="#modal-edit-customer-group">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+
+                                    @can('customerGroup.delete')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="deleteCustomerGroup({{ $item->id }},{{ "'" . str_replace("'", '', $item->name) . "'" }})"
+                                                class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
 
-                            <!-- Customer Group Edit Component -->
                             @livewire('crm.customer-group.customer-group-edit')
-                            <!-- ./Customer Group Edit Component -->
 
                         </tbody>
                     </table>
+
+                    @livewire('crm.customer-group.customer-group-create')
+
                 </div>
 
             </div>
@@ -150,9 +161,6 @@
 @script
     <script>
         $wire.on("confirm-delete-customer-group", (event) => {
-
-            // alert(event.name);
-
             Swal.fire({
                 title: "Are you sure delete ?",
                 text: `Customer Group : ${event.name}`,
@@ -176,7 +184,6 @@
     <script>
         document.addEventListener('livewire:initialized', () => {
             @this.on('close-modal-customer-group', (event) => {
-                // alert('Close Modal')
                 setTimeout(() => {
                     $('#modal-edit-customer-group').modal('hide')
                 }, 3000);
