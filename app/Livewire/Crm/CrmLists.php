@@ -172,7 +172,5 @@ class CrmLists extends Component
             timer: 3000,
             url: route('crm.list'),
         );
-
-        // return $this->redirect(route('crm.list'), navigate: true);
     }
 }

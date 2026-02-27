@@ -109,10 +109,8 @@ class CrmCreate extends Component
                     "sweet.error",
                     position: "center",
                     title: "Cannot find CRM number !!",
-                    // text: "Customer : " . $this->customerNameEng,
                     text: $th->getMessage(),
                     icon: "error",
-                    // timer: 3000,
                     url: route('crm.list'),
                 );
             }
@@ -309,7 +307,7 @@ class CrmCreate extends Component
                     text: "CRM : " . $this->customerNameEng,
                     icon: "success",
                     timer: 3000,
-                    url: route('crm.update', $crmHeader->id),
+                    url: route('crm.edit', $crmHeader->id),
                 );
             }
         } catch (\Throwable $e) {
@@ -603,9 +601,7 @@ class CrmCreate extends Component
             text: $document_no . " : " . $product_name,
             icon: "success",
             timer: 3000,
-            url: route('crm.update', $this->crmHeader_id),
+            url: route('crm.edit', $this->crmHeader_id),
         );
-
-        // return $this->redirect('/crms/update/' . $this->crmNumber);
     }
 }
