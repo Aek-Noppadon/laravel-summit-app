@@ -30,13 +30,20 @@ class EventLists extends Component
 
         $events = Event::where(function ($query) use ($departmentId) {
             $query->where('id', 1)
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%');
+                })
                 ->orWhere(function ($query) use ($departmentId) {
                     $query->whereHas('userCreated.department', function ($query) use ($departmentId) {
                         $query
                             ->where('id', $departmentId);
-                    });
+                    })
+                        ->when($this->search, function ($query) {
+                            $query->where('name', 'like', '%' . $this->search . '%');
+                        });
                 });
-        })->latest()
+        })
+            ->latest()
             ->paginate($this->pagination);
 
         // ====================================================
