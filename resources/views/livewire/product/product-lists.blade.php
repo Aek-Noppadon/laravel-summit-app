@@ -39,15 +39,17 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-product')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-product">
-                            <i class="fas fa-plus"></i> Product
-                        </button>
+
+                        @can('product.create')
+                            <button wire:click="$dispatch('add-product')" type="button" class="btn btn-primary"
+                                data-toggle="modal" data-target="#modal-add-product">
+                                <i class="fas fa-plus"></i> Product
+                            </button>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-product')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
-
-                        @livewire('product.product-create')
                     </div>
                 </div>
             </div>
@@ -68,19 +70,23 @@
         <!-- /.card-header -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
-                        <th scope="col"></th>
+                        <th scope="col" style="width: 35px"></th>
                         <th scope="col">Id</th>
                         <th scope="col">Code</th>
                         <th scope="col">Name</th>
                         <th scope="col">Brand</th>
                         <th scope="col">Supplier Rep.</th>
                         <th scope="col">Principal</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        @can('product.edit')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @elsecan('product.delete')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -144,26 +150,43 @@
                                 <td>{{ $item->brand }}</td>
                                 <td>{{ $item->supplier_rep }}</td>
                                 <td>{{ $item->principal }}</td>
-                                <td>
-                                    @if ($item->source === '1' || $item->source === '2')
-                                        <button wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
-                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#modal-edit-product">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            wire:click.prevent="deleteProduct({{ $item->id }},{{ "'" . str_replace("'", '', $item->product_name) . "'" }})"
-                                            {{-- wire:click.prevent="deleteitem({{ $item->id }},{{ "'" . $item->product_name . "'" }})" --}} class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    @endif
-                                </td>
+                                @if ($item->source === '1' || $item->source === '2')
+                                    @can('product.edit')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button wire:click.prevent="$dispatch('edit-product',{id:{{ $item->id }}})"
+                                                type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                data-target="#modal-edit-product">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+
+                                    @can('product.delete')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="deleteProduct({{ $item->id }},{{ "'" . str_replace("'", '', $item->product_name) . "'" }})"
+                                                class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+                                @else
+                                    {{-- Data Source = 0 AX --}}
+                                    @can('product.edit')
+                                        <td></td>
+                                    @elsecan('product.delete')
+                                        <td></td>
+                                    @endcan
+                                @endif
                             </tr>
                         @endforeach
-                        @livewire('product.product-edit')
-                        {{-- <livewire:product.product-edit /> --}}
                     </tbody>
                 </table>
+
+                @livewire('product.product-create')
+
+                @livewire('product.product-edit')
+
             </div>
         </div>
         <!-- /.card-body -->
