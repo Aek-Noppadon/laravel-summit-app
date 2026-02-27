@@ -16,6 +16,7 @@ class CustomerLists extends Component
     #[On('refresh-customer')]
     public function render()
     {
+        // dd("Refresh Customer");
         // ================================================================================
         // Created by Sun 20/10/2025
         // ================================================================================
