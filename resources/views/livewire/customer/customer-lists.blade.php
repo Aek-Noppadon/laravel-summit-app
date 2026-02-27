@@ -39,15 +39,17 @@
                 </div>
                 <div class="col-3 d-flex justify-content-center">
                     <div class="btn-group w-100" role="group">
-                        <button wire:click="$dispatch('add-customer')" type="button" class="btn btn-primary"
-                            data-toggle="modal" data-target="#modal-add-customer">
-                            <i class="fas fa-plus"></i> Customer
-                        </button>
+
+                        @can('customer.create')
+                            <button wire:click="$dispatch('add-customer')" type="button" class="btn btn-primary"
+                                data-toggle="modal" data-target="#modal-add-customer">
+                                <i class="fas fa-plus"></i> Customer
+                            </button>
+                        @endcan
+
                         <button wire:click="$dispatch('refresh-customer')" type="button" class="btn btn-success">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
-
-                        @livewire('customer.customer-create')
                     </div>
                 </div>
             </div>
@@ -68,8 +70,8 @@
         <!-- /.card-header -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">Created</th>
                         <th scope="col">Updated</th>
@@ -79,7 +81,11 @@
                         <th scope="col">Name English</th>
                         <th scope="col">Name Thai</th>
                         <th scope="col">Parent</th>
-                        <th scope="col" style="width: 100px">Action</th>
+                        @can('customer.edit')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @elsecan('customer.delete')
+                            <th scope="col" colspan="2" class="text-center">Action</th>
+                        @endcan
                     </thead>
 
                     <tbody>
@@ -142,27 +148,44 @@
                                 <td>{{ $item->name_english }}</td>
                                 <td>{{ $item->name_thai }}</td>
                                 <td>{{ $item->parent_code }}</td>
-                                <td>
-                                    @if ($item->source === '1' || $item->source === '2')
-                                        <button
-                                            wire:click.prevent="$dispatch('edit-customer',{id:{{ $item->id }}})"
-                                            type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#modal-edit-customer">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button
-                                            wire:click.prevent="deleteCustomer({{ $item->id }},{{ "'" . str_replace("'", '', $item->name_english) . "'" }})"
-                                            {{-- wire:click.prevent="deleteCustomer({{ $item->id }},{{ "'" . $item->name_english . "'" }})" --}} class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    @endif
-                                </td>
+                                @if ($item->source === '1' || $item->source === '2')
+                                    @can('customer.edit')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="$dispatch('edit-customer',{id:{{ $item->id }}})"
+                                                type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                data-target="#modal-edit-customer">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+
+                                    @can('customer.delete')
+                                        <td style="width: 40px" class="p-1 text-center">
+                                            <button
+                                                wire:click.prevent="deleteCustomer({{ $item->id }},{{ "'" . str_replace("'", '', $item->name_english) . "'" }})"
+                                                class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endcan
+                                @else
+                                    {{-- Data Source = 0 AX --}}
+                                    @can('customer.edit')
+                                        <td></td>
+                                    @elsecan('customer.delete')
+                                        <td></td>
+                                    @endcan
+                                @endif
                             </tr>
                         @endforeach
-                        @livewire('customer.customer-edit')
-                        {{-- <livewire:customer.customer-edit /> --}}
                     </tbody>
                 </table>
+
+                @livewire('customer.customer-create')
+
+                @livewire('customer.customer-edit')
+
             </div>
         </div>
         <!-- /.card-body -->

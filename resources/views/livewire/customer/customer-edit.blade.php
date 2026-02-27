@@ -6,9 +6,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                {{-- <button wire:click="$dispatch('close-modal')" type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> --}}
             </div>
 
             <div class="modal-body">
@@ -16,7 +13,6 @@
                     <div class="card-header">
                         <h3 class="card-title">Edit Form</h3>
                     </div>
-                    {{-- <form wire:submit.prevent="saveCustomer"> --}}
                     <form>
                         <div class="card-body">
 
@@ -26,10 +22,17 @@
                                     <div class="form-group">
                                         <label for="name_english" class="form-label">Customer Name ENG.</label>
                                         <span class="text-danger font-weight-bold">*</span>
+
+                                        <!-- Customer Website Dataforthai -->
+                                        <a class="btn btn-primary btn-sm" href="https://www.dataforthai.com/business"
+                                            target="_blank">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+
                                         <input id="name_english" wire:model="name_english" type="text"
                                             class="form-control @error('name_english') is-invalid @enderror">
                                         @error('name_english')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
@@ -38,7 +41,7 @@
                                         <input id="name_thai" wire:model='name_thai' type="text"
                                             class="form-control @error('name_thai') is-invalid @enderror">
                                         @error('name_thai')
-                                            <span class="text-danger">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
@@ -60,9 +63,6 @@
                         <button type="button" class="btn btn-warning" data-dismiss="modal">
                             <i class="fas fa-times-circle"></i> Close
                         </button>
-                        {{-- <button wire:click="$dispatch('close-modal')" type="button" class="btn btn-primary">
-                            Close
-                        </button> --}}
                     </div>
                 </div>
             </div>
@@ -75,20 +75,14 @@
 <!-- /.modal -->
 
 @script
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+<script>
+    document.addEventListener('livewire:initialized', () => {
             @this.on('close-modal-customer', (event) => {
-                // alert('Close Modal')
                 setTimeout(() => {
                     @this.dispatch('refresh-customer')
                     $('#modal-edit-customer').modal('hide')
                 }, 3000);
-
             })
-            // @this.on('close-modal', (event) => {
-            //     // alert()
-            //     $('#modal-edit-customer').modal('hide')
-            // })
         })
-    </script>
+</script>
 @endscript
