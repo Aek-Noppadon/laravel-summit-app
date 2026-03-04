@@ -63,7 +63,7 @@ Route::group([
     Route::get('/create', CrmCreate::class)->name('create')->middleware('permission:crm.create');
     Route::get('/edit/{id}', CrmCreate::class)->name('edit')->middleware('permission:crm.edit');
     Route::get('/delete', CrmListsDelete::class)->name('list.delete')->middleware('permission:crmDelete.view');
-    Route::get('/close-discontinued', CrmListCloseDiscontinued::class)->name('list.close.discontinued');
+    Route::get('/close-discontinued', CrmListCloseDiscontinued::class)->name('list.close.discontinued')->middleware('permission:crmDiscontinued.view');
 });
 
 Route::group([
