@@ -33,3 +33,4 @@ resources/views/livewire/import/import-form-page.blade.php
 resources/views/livewire/import/select-product.blade copy.php
 resources/views/livewire/import/select-product.blade.php
 resources/views/livewire/import/select-product.blade.php
+resources/views/livewire/import/select-product.blade.php
