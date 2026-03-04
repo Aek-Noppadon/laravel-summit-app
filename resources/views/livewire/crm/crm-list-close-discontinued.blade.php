@@ -78,7 +78,7 @@
                         <th scope="col" colspan="2" class="text-center">Items</th>
                         @can('crm.edit')
                         <th scope="col" colspan="2" class="text-center">Action</th>
-                        @elsecan('crm.delete')
+                        @elsecan('crmDiscontinued.edit')
                         <th scope="col" colspan="2" class="text-center">Action</th>
                         @endcan
                     </thead>
@@ -158,7 +158,8 @@
                                 </a>
                             </td>
                             @endcan
-                            @can('crm.delete')
+
+                            @can('crmDiscontinued.edit')
                             <td style="width: 40px" class="p-1 text-center">
                                 <button
                                     wire:click.prevent="crmDiscontinued({{ $item->id }},{{ "'" . $item->document_no . "'" }},{{ "'" . $item->customer->name_english . "'" }})"
