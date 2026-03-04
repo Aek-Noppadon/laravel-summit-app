@@ -92,7 +92,9 @@
                     </ul>
                 </li>
 
-                @if (auth()->user()->can('crm.view') || auth()->user()->can('crmDelete.view'))
+                @if (auth()->user()->can('crm.view') ||
+                auth()->user()->can('crmDelete.view') ||
+                auth()->user()->can('crmDiscontinued.view'))
                 <li class="nav-item {{ request()->is('crms*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->is('crms*') ? 'active' : '' }}">
                         <i class="fas fa-bars nav-icon"></i>
