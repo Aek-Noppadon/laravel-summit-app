@@ -114,6 +114,8 @@
                         </li>
                         @endif
 
+                        <!-- CRM estimate backdate 2 years for updated close discontinued -->
+                        @if (auth()->user()->can('crmDiscontinued.view'))
                         <li class="nav-item">
                             <a href="{{ route('crm.list.close.discontinued') }}"
                                 class="nav-link {{ request()->is('crms/close-discontinued') ? 'active' : '' }}">
@@ -121,6 +123,7 @@
                                 <p>Updated Discontinued</p>
                             </a>
                         </li>
+                        @endif
 
                         <!-- CRM Delete Lists -->
                         @if (auth()->user()->can('crmDelete.view'))
