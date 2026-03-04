@@ -109,10 +109,18 @@
                             <a href="{{ route('crm.list') }}"
                                 class="nav-link {{ request()->is('crms', 'crms/create', 'crms/update*') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>CRM Lists</p>
+                                <p>Created Lists</p>
                             </a>
                         </li>
                         @endif
+
+                        <li class="nav-item">
+                            <a href="{{ route('crm.list.close.discontinued') }}"
+                                class="nav-link {{ request()->is('crms/close-discontinued') ? 'active' : '' }}">
+                                <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                <p>Updated Discontinued</p>
+                            </a>
+                        </li>
 
                         <!-- CRM Delete Lists -->
                         @if (auth()->user()->can('crmDelete.view'))
@@ -120,7 +128,7 @@
                             <a href="{{ route('crm.list.delete') }}"
                                 class="nav-link {{ request()->is('crms/delete') ? 'active' : '' }}">
                                 <i class="fas fa-chevron-circle-down nav-icon"></i>
-                                <p>CRM Delete Lists</p>
+                                <p>Deleted Lists</p>
                             </a>
                         </li>
                         @endif
