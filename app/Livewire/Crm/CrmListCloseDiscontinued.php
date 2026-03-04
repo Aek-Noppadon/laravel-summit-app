@@ -16,18 +16,20 @@ class CrmListCloseDiscontinued extends Component
     public $isOpenId = null;
     public $isOpenSearch = true;
     public $yearAgo, $userId;
+    public $backDate = 2;
 
     #[On('refresh-crm')]
     public function render()
     {
-        $this->yearAgo = Carbon::now()->subYear(2);
+        // $this->yearAgo = Carbon::now()->subYear($this->yearAgo);
+        $this->yearAgo = Carbon::now()->subYear($this->backDate);
 
         $this->userId = auth()->user()->id;
 
         $crms = CrmHeader::where(function ($query) {
             $query->where('created_user_id', $this->userId);
         })->where(function ($query) {
-            $query->where('estimate_date', '<', $this->yearAgo);
+            $query->where('estimate_date', '<=', $this->yearAgo);
         })
             ->whereHas('crm_items', function ($query) {
                 $query->whereIn('sales_stage_id', [1, 2, 3]);
