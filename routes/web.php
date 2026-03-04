@@ -2,6 +2,7 @@
 
 use App\Livewire\Application\ApplicationLists;
 use App\Livewire\Crm\CrmCreate;
+use App\Livewire\Crm\CrmListCloseDiscontinued;
 use App\Livewire\Crm\CrmLists;
 use App\Livewire\Crm\CrmListsDelete;
 use App\Livewire\Customer\CustomerLists;
@@ -62,6 +63,7 @@ Route::group([
     Route::get('/create', CrmCreate::class)->name('create')->middleware('permission:crm.create');
     Route::get('/edit/{id}', CrmCreate::class)->name('edit')->middleware('permission:crm.edit');
     Route::get('/delete', CrmListsDelete::class)->name('list.delete')->middleware('permission:crmDelete.view');
+    Route::get('/close-discontinued', CrmListCloseDiscontinued::class)->name('list.close.discontinued');
 });
 
 Route::group([
