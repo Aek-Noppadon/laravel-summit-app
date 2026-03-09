@@ -20,15 +20,14 @@
             </div><!-- /.container-fluid -->
         </section>
 
-        <!-- card -->
-        <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title">Add & Edit Form</h3>
-            </div>
-            <!-- /.card-header -->
+        <form>
+            <!-- card -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Add & Edit Form</h3>
 
-            {{-- <form wire:submit.prevent="save"> --}}
-            <form>
+                </div>
+                <!-- /.card-header -->
 
                 <!-- Customer Header -->
                 <div class="card-body">
@@ -371,35 +370,41 @@
                     <!-- ./Header / Additional Information, Competitor Situation -->
 
                 </div>
+            </div>
 
-                <!-- Customer Modal, Produc Modal, Save -->
-                <div class="card-footer">
-                    <div class="row">
+            <!-- Customer Modal, Product Modal, Save -->
+            <div class="card">
+                <div class="row">
 
-                        <div class="col-6">
-                            <div class="btn-group w-100" role="group">
+                    <div class="col-6">
+                        <div class="btn-group w-100" role="group">
 
-                                @can('product.view')
-                                    <button wire:click="$dispatch('refresh-product')" type="button"
-                                        class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
-                                        <i class="fas fa-search"></i> Products
-                                    </button>
-                                @endcan
+                            @can('product.view')
+                                <button wire:click="$dispatch('refresh-product')" type="button"
+                                    class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
+                                    <i class="fas fa-search"></i> Products
+                                </button>
+                            @endcan
 
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <button wire:click.prevent="save" class="btn btn-success w-100">
-                                <i class="fas fa-save"></i> Save
-                            </button>
                         </div>
                     </div>
-                </div>
-                <!-- ./Customer Moal -->
 
-                <!-- CRM Details -->
-                @foreach ($inputs as $key => $item)
+                    <div class="col-6">
+                        <button wire:click.prevent="save" class="btn btn-success w-100">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- ./Customer Moal -->
+
+            @foreach ($inputs as $key => $item)
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Item</h3>
+                    </div>
+
+                    <!-- CRM Details -->
                     @php
                         $crm_detail_id = $item['crmDetail_id'];
                         $product_name = $item['productName'];
@@ -507,6 +512,7 @@
                                         Update Visit
                                     </label>
                                     <span class="text-danger font-weight-bold">*</span>
+
                                     <input id="inputs.{{ $key }}.updateVisit"
                                         wire:model="inputs.{{ $key }}.updateVisit" type="date"
                                         class="form-control @error('inputs.' . $key . '.updateVisit') is-invalid @enderror">
@@ -720,7 +726,7 @@
                             @else
                                 <div class="col-6">
                                     <!-- Button Product Modal, Button Save -->
-                                    <button wire:click="$dispatch('refresh-product')" type="button"
+                                    <button wire:click="$dispatch(' refresh-product')" type="button"
                                         class="btn btn-primary w-100" data-toggle="modal"
                                         data-target="#modal-product">
                                         <i class="fas fa-search"></i> Products
@@ -737,29 +743,23 @@
                         </div>
                     </div>
                     <!-- ./Product Modal, Product Remove -->
-                @endforeach
 
-                <!-- ./CRM Details -->
-            </form>
-        </div>
+
+
+
+                </div>
+            @endforeach
+
+        </form>
         <!-- /.card -->
 
-        @livewire('crm.customer.customer-lists')
-
-        @livewire('crm.product.product-lists')
-
+        @livewire(' crm.customer.customer-lists') @livewire('crm.product.product-lists')
         @livewire('crm.event.event-lists')
-
         @livewire('crm.customer-type.customer-type-lists')
-
         @livewire('crm.customer-group.customer-group-lists')
-
         @livewire('crm.application.application-lists')
-
         @livewire('crm.probability.probability-lists')
-
         @livewire('crm.volume-unit.volume-unit-lists')
-
     </div>
 
 </section>
