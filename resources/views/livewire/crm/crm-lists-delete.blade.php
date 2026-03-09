@@ -177,7 +177,7 @@
                         <th scope="col">Customer Name</th>
                         <th scope="col">Type</th>
                         <th scope="col">Start Visit</th>
-                        <th scope="col">Estimate</th>
+                        <th scope="col">Estimate Close</th>
                         <th scope="col">Contact</th>
                         <th scope="col" colspan="2">Items</th>
                         @can('crmDelete.restore')
