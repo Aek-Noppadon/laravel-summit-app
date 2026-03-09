@@ -119,12 +119,7 @@ class CrmCreate extends Component
             $this->startVisit = now()->toDateString();
             $this->estimateDate = now()->toDateString();
 
-            // $this->startVisit = Carbon::now()->toDateString();
-            // $this->estimateDate = Carbon::now()->toDateString();
-
             $event = Event::where('id', 1)->first();
-
-            // dd($event);
 
             if ($event) {
                 $this->event_id = $event->id;
@@ -193,7 +188,7 @@ class CrmCreate extends Component
             [
                 'customerNameEng' => 'Customer name Eng. field is required.',
                 'startVisit'      => 'Start visit date field is required.',
-                'estimateDate'    => 'Estimate date field is required.',
+                'estimateDate'    => 'Estimate close field is required.',
                 'customerType'    => 'Customer type field is required.',
                 'contact'         => 'Contact person field is required.',
                 'purpose'         => 'Purpose field is required.',
@@ -205,14 +200,30 @@ class CrmCreate extends Component
             ]
         );
 
+        $start_visit = Carbon::parse($this->startVisit);
+        $estimate_date = Carbon::parse($this->estimateDate);
+
+        $day_difference = $start_visit->diffInDays($estimate_date);
+
+        if ($day_difference < 0) {
+            $this->dispatch(
+                "sweet.error",
+                position: "center",
+                title: "Estimate close " . $estimate_date->format('d/m/Y'),
+                text: "Must not be less than Start visit " . $start_visit->format('d/m/Y'),
+                icon: "warning",
+            );
+            return;
+        }
+
         if (empty($this->inputs)) {
             $this->dispatch(
                 "sweet.error",
                 position: "center",
                 title: "Please Add Product Item !!",
                 text: "Customer : " . $this->customerNameEng,
-                icon: "error",
-                timer: 3000,
+                icon: "warning",
+                // timer: 3000,
             );
             return;
         }
@@ -254,6 +265,34 @@ class CrmCreate extends Component
 
             foreach ($this->inputs as $item) {
 
+                $update_visit = Carbon::parse($item['updateVisit']);
+
+                $day_difference = $start_visit->diffInDays($update_visit);
+
+                if ($day_difference < 0) {
+                    $this->dispatch(
+                        "sweet.error",
+                        position: "center",
+                        title: "Update visit " . $update_visit->format('d/m/Y'),
+                        text: "Must not be less than the Start visit " . $start_visit->format('d/m/Y'),
+                        icon: "warning",
+                    );
+                    return;
+                }
+
+                $day_difference = Carbon::now()->diffInDays($update_visit);
+
+                if ($day_difference > 0) {
+                    $this->dispatch(
+                        "sweet.error",
+                        position: "center",
+                        title: "Update visit " . $update_visit->format('d/m/Y'),
+                        text: "Must not be later than today " . Carbon::now()->format('d/m/Y'),
+                        icon: "warning",
+                    );
+                    return;
+                }
+
                 $productId = Product::where('product_name', $item['productName'])->value('id');
 
                 $item['quantity'] = !empty($item['quantity']) ? str_replace(',', '', $item['quantity']) : 0;
@@ -290,9 +329,6 @@ class CrmCreate extends Component
 
                 if ($crmDetail->isDirty()) {
                     $hasChanged = true;
-
-                    // $crmDetail->updated_visit_date = $crmDetail->exists ? now() : $item['updateVisit'];
-
                     $crmDetail->save();
                 }
             }
@@ -451,8 +487,8 @@ class CrmCreate extends Component
                 position: "center",
                 title: "This item has already selected !!",
                 text: "Product : " . $this->productName,
-                icon: "error",
-                timer: 3000,
+                icon: "warning",
+                // timer: 3000,
             );
 
             return;
