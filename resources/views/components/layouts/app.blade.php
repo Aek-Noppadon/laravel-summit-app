@@ -55,7 +55,6 @@
     <script src="{{ asset('backend/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('backend/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="{{ asset('backend/admin-lte/dist/js/adminlte.js') }}"></script> --}}
     <!-- SweetAlert2 -->
     <script src="{{ asset('backend/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <!-- Toastr -->
