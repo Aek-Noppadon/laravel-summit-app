@@ -10,6 +10,8 @@ use App\Livewire\CustomerGroup\CustomerGroupLists;
 use App\Livewire\CustomerType\CustomerTypeLists;
 use App\Livewire\Department\DepartmentLists;
 use App\Livewire\Event\EventLists;
+use App\Livewire\Ncp\NcpCreate;
+use App\Livewire\Ncp\NcpLists;
 use App\Livewire\Probability\ProbabilityLists;
 use App\Livewire\Product\ProductLists;
 use App\Livewire\Role\RoleLists;
@@ -64,6 +66,16 @@ Route::group([
     Route::get('/edit/{id}', CrmCreate::class)->name('edit')->middleware('permission:crm.edit');
     Route::get('/delete', CrmListsDelete::class)->name('list.delete')->middleware('permission:crmDelete.view');
     Route::get('/close-discontinued', CrmListCloseDiscontinued::class)->name('list.close.discontinued')->middleware('permission:crmDiscontinued.view');
+});
+
+Route::group([
+    'prefix' => 'ncps',
+    'as' => 'ncp.',
+    'middleware' => ['auth']
+], function () {
+    Route::get('/', NcpLists::class)->name('list');
+    Route::get('/create', NcpCreate::class)->name('create');
+    Route::get('/edit/{id}', NcpCreate::class)->name('edit');
 });
 
 Route::group([
