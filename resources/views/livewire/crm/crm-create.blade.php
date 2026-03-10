@@ -17,7 +17,8 @@
                         </ol>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.container-fluid -->
         </section>
 
         <form>
@@ -25,7 +26,6 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Add & Edit Form</h3>
-
                 </div>
                 <!-- /.card-header -->
 
