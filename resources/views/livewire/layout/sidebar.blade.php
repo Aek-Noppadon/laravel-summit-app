@@ -144,6 +144,32 @@
             </li>
         @endif
 
+        {{-- @if (auth()->user()->can('crm.view') || auth()->user()->can('crmDelete.view') || auth()->user()->can('crmDiscontinued.view')) --}}
+        <li class="nav-item {{ request()->is('ncps*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->is('ncps*') ? 'active' : '' }}">
+                <i class="fas fa-bars nav-icon"></i>
+                <p>
+                    NCP Application
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview">
+                <!-- NCP Lists -->
+                {{-- @if (auth()->user()->can('crm.view')) --}}
+                <li class="nav-item">
+                    <a href="{{ route('ncp.list') }}"
+                        class="nav-link {{ request()->is('ncps') ? 'active' : '' }}">
+                        <i class="fas fa-chevron-circle-down nav-icon"></i>
+                        <p>Created Lists</p>
+                    </a>
+                </li>
+                {{-- @endif --}}
+
+            </ul>
+        </li>
+        {{-- @endif --}}
+
         @if (auth()->user()->can('customer.view') ||
                 auth()->user()->can('customerType.view') ||
                 auth()->user()->can('customerGroup.view') ||
