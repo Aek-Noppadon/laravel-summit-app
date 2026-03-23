@@ -59,6 +59,8 @@
     <script src="{{ asset('backend/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <!-- Toastr -->
     <script src="{{ asset('backend/admin-lte/plugins/toastr/toastr.min.js') }}"></script>
+    <!-- bs-custom-file-input -->
+    <script src="{{ asset('backend/admin-lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('backend/admin-lte/dist/js/adminlte.js') }}"></script>
     <!-- Plugins AlpineJS -->
@@ -134,6 +136,13 @@
         })
     </script>
     <!-- ./Toastr -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // เปิดใช้งาน Tooltip ของ Bootstrap
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
     @livewireScripts
 </body>
