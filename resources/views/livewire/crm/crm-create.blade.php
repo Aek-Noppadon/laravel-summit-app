@@ -726,7 +726,7 @@
                             @else
                                 <div class="col-6">
                                     <!-- Button Product Modal, Button Save -->
-                                    <button wire:click="$dispatch(' refresh-product')" type="button"
+                                    <button wire:click="$dispatch('refresh-product')" type="button"
                                         class="btn btn-primary w-100" data-toggle="modal"
                                         data-target="#modal-product">
                                         <i class="fas fa-search"></i> Products
@@ -743,17 +743,14 @@
                         </div>
                     </div>
                     <!-- ./Product Modal, Product Remove -->
-
-
-
-
                 </div>
             @endforeach
 
         </form>
         <!-- /.card -->
 
-        @livewire(' crm.customer.customer-lists') @livewire('crm.product.product-lists')
+        @livewire(' crm.customer.customer-lists')
+        @livewire('crm.product.product-lists')
         @livewire('crm.event.event-lists')
         @livewire('crm.customer-type.customer-type-lists')
         @livewire('crm.customer-group.customer-group-lists')
