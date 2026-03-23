@@ -50,15 +50,15 @@ class CustomerGroupEdit extends Component
             ]
         );
 
-        // $this->validate(
-        //     [
-        //         'name' => 'required|unique:customer_groups,name,' . $this->id
-        //     ],
-        //     [
-        //         'required' => 'The customer type :attribute field is required !!',
-        //         'unique' => 'The customer type :attribute has already been taken !!',
-        //     ]
-        // );
+        $this->validate(
+            [
+                'name' => 'required|unique:customer_groups,name,' . $this->id
+            ],
+            [
+                'required' => 'The customer type :attribute field is required !!',
+                'unique' => 'The customer type :attribute has already been taken !!',
+            ]
+        );
 
         $customer_group = CustomerGroup::findOrFail($this->id);
 
