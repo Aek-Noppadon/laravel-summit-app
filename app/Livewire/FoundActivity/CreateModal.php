@@ -12,15 +12,10 @@ class CreateModal extends Component
 {
     public $id, $name;
 
-    // ฟังก์ชันนี้จะทำงานทุกครั้งที่ $name มีการเปลี่ยนแปลง
+    // เมื่อมีการพิมพ์ใน input wire:model="name"
     public function updatedName($value)
     {
         $this->name = ucwords(trim($value));
-    }
-
-    public function render()
-    {
-        return view('livewire.found-activity.create-modal');
     }
 
     protected function rules()
@@ -66,50 +61,59 @@ class CreateModal extends Component
     {
         $this->validate();
 
-        // 1. ค้นหาหรือสร้าง Instance ใหม่
-        $foundActivity = FoundActivity::firstOrNew(['id' => $this->id]);
-
-        // 2. Fill ข้อมูล
-        $foundActivity->fill([
-            'name' => $this->name,
-            'updated_user_id' => auth()->id(),
-        ]);
-
-        if (!$foundActivity->exists) {
-            $foundActivity->created_user_id = auth()->id();
-        }
-
-        // 3. เช็คว่ามีการเปลี่ยนแปลงไหม (Dirty Check)
-        if (!$foundActivity->isDirty()) {
-            $this->dispatch('close-found-activity-add-modal');
-            return;
-        }
-
-        DB::beginTransaction();
         try {
-            $isNew = !$foundActivity->exists;
-            $foundActivity->save();
+            // 1. เตรียม Instance หา Record เดิมหรือสร้างใหม่
+            $foundActivity = FoundActivity::firstOrNew(['id' => $this->id]);
 
-            DB::commit();
+            // 2. Fill ข้อมูลที่มาจาก AX เท่านั้น (ยังไม่ใส่ User ID)
+            $foundActivity->name = $this->name;
+
+            // ถ้าเป็น Record ใหม่ หรือมีการเปลี่ยนชื่อ ให้เตรียม Update User ID
+            if ($foundActivity->isDirty()) {
+                $foundActivity->updated_user_id = auth()->id();
+
+                if (!$foundActivity->exists) {
+                    $foundActivity->created_user_id = auth()->id();
+                }
+            }
+
+            // 3. เช็คความเปลี่ยนแปลง (ถ้าไม่มีอะไรเปลี่ยนเลยจริงๆ)
+            if (!$foundActivity->isDirty()) {
+                return $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "No Changes Detected !!",
+                    text: $foundActivity->name . ": No data changed.",
+                    icon: "info",
+                );
+            }
+
+            // 4. ถ้ามีข้อมูลเปลี่ยนค่อยเริ่ม Transaction บันทึกข้อมูล
+            DB::transaction(function () use ($foundActivity) {
+                $foundActivity->save();
+            });
+
+            // 5. Success Feedback & Close Modal
+            $this->dispatch('close-found-activity-add-modal');
 
             $this->dispatch(
                 "sweet.success",
-                title: $isNew ? "Created Successfully !!" : "Updated Successfully !!",
-                text: "Found During Activity : {$this->name}",
+                title: $foundActivity->wasRecentlyCreated ? "Created Successfully !!" : "Updated Successfully !!",
+                text: "Found During Activity: {$this->name}",
                 icon: "success",
                 timer: 3000
             );
-
-            $this->dispatch('close-found-activity-add-modal');
-            $this->dispatch('refresh-data'); // แนะนำให้เพิ่ม Dispatch เพื่อโหลด List ใหม่
-
         } catch (\Throwable $e) {
-            DB::rollBack();
+            // แบบโปร (เห็น Error ทั้งหมด รวมถึงบรรทัดที่พัง)
+            logger()->error("Found Activity Save Error: " . $e->getMessage(), [
+                'exception' => $e,
+                'foundActivity_id' => $this->id // ใส่ Context เพิ่มเพื่อความง่ายในการหาว่า Found Activity คนไหนที่พัง
+            ]);
 
             $this->dispatch(
                 "sweet.error",
                 title: "Cannot save data !!",
-                text: "Error: " . $e->getMessage(),
+                text: "Something went wrong. Please try again.",
                 icon: "error"
             );
         }
@@ -128,37 +132,8 @@ class CreateModal extends Component
         $this->reset();
     }
 
-    // public function save()
-    // {
-    //     $this->validate();
-
-    //     // ค้นหาหรือสร้าง Instance ใหม่
-    //     $foundActivity = FoundActivity::firstOrNew(['id' => $this->id]);
-
-    //     $foundActivity->fill([
-    //         'name' => $this->name,
-    //         'updated_user_id' => auth()->id(),
-    //     ]);
-
-    //     // ถ้ายังไม่มีใน DB ให้ใส่ created_user_id
-    //     if (!$foundActivity->exists) {
-    //         $foundActivity->created_user_id = auth()->id();
-    //     }
-
-    //     if ($foundActivity->isDirty()) {
-
-    //         $foundActivity->save();
-
-    //         $this->dispatch(
-    //             "sweet.success",
-    //             position: "center",
-    //             title: $foundActivity->wasRecentlyCreated ? "Created Successfully !!" : "Updated Successfully !!",
-    //             text: "Found During Activity : " . $this->name,
-    //             icon: "success",
-    //             timer: 3000,
-    //         );
-
-    //         $this->dispatch('close-found-activity-add-modal');
-    //     }
-    // }
+    public function render()
+    {
+        return view('livewire.found-activity.create-modal');
+    }
 }

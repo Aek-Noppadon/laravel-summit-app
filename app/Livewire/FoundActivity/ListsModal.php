@@ -39,10 +39,9 @@ class ListsModal extends Component
         $this->dispatch("confirm", id: $id, name: $name);
     }
 
-    #[On('destroy')]
+    #[On('destroyFoundActivity')]
     public function destroy($id, $name)
     {
-        // dd("Found");
         try {
 
             $foundActivity = FoundActivity::findOrFail($id);
@@ -64,7 +63,8 @@ class ListsModal extends Component
                 : "เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล";
 
             $this->dispatch(
-                "sweet.eCannot Deleted !!",
+                "sweet.error",
+                title: "Cannot Deleted !!",
                 text: $name . " : " . $errorMessage,
                 icon: "error",
             );
