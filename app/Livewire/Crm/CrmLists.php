@@ -50,7 +50,7 @@ class CrmLists extends Component
         $userId = auth()->user()->id;
 
         $crms = CrmHeader::where(function ($userQuery) use ($userId) {
-            $userQuery->where('created_user_id', $userId);
+            $userQuery->where('original_user_id', $userId);
         })
             ->when($this->search_start_visit, function ($startVisitQuery) {
                 if ($this->search_start_visit && $this->search_end_visit) {
@@ -77,7 +77,7 @@ class CrmLists extends Component
                         ->orWhere('name_english', 'like', '%' . $this->search_customer . '%');
                 })
                     ->where(function ($userQuery) use ($userId) {
-                        $userQuery->where('created_user_id', $userId);
+                        $userQuery->where('original_user_id', $userId);
                     });
             })
             ->when($this->search_start_update_visit, function ($query) {
@@ -98,7 +98,7 @@ class CrmLists extends Component
                         ->orWhere('brand', 'like', '%' . $this->search_product . '%');
                 })
                     ->where(function ($userQuery) use ($userId) {
-                        $userQuery->where('created_user_id', $userId);
+                        $userQuery->where('original_user_id', $userId);
                     });
             })
 

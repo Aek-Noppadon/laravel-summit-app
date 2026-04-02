@@ -27,7 +27,7 @@ class CrmListCloseDiscontinued extends Component
         $this->userId = auth()->user()->id;
 
         $crms = CrmHeader::where(function ($query) {
-            $query->where('created_user_id', $this->userId);
+            $query->where('original_user_id', $this->userId);
         })->where(function ($query) {
             $query->where('estimate_date', '<=', $this->yearAgo);
         })
