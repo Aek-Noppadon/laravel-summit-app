@@ -13,6 +13,12 @@ class CustomerListsModal extends Component
     public $search;
     public $pagination = 20;
 
+    // เพิ่มฟังก์ชันนี้เพื่อให้ Search ทำงานไม่เพี้ยน
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     #[On('refresh-customer')]
     public function render()
     {
