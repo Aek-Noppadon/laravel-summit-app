@@ -127,7 +127,7 @@ return [
     ],
 
     'aliases' => Facade::defaultAliases()->merge([
-        'CustomerEnum' => App\Enums\CustomerEnum::class
+        'CustomerEnum' => App\Enums\CustomerEnum::class,
     ])->toArray(),
 
 
