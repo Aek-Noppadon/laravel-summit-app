@@ -1,3 +1,4 @@
+{{-- ไม่ได้ใช้ไฟล์นี้ --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -15,6 +16,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    @stack('styles')
 </head>
 
 <body class="font-sans antialiased">
@@ -35,7 +38,10 @@
             {{ $slot }}
         </main>
     </div>
+
     @livewireScripts
+
+    @stack('scripts')
 </body>
 
 </html>
