@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_items', function (Blueprint $table) {
-            $table->mediumIncrements('id')->comment('Iten Id');
+            $table->mediumIncrements('id')->comment('Product Item Id');
             $table->string('code', 16)->nullable()->unique()->index()->comment('Item Code');
             $table->string('name', 255)->comment('Item Name');
             $table->string('brand_code', 2)->comment('Brand Code');
