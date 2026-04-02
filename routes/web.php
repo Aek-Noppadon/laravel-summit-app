@@ -17,6 +17,7 @@ use App\Livewire\Product\ProductLists;
 use App\Livewire\Role\RoleLists;
 use App\Livewire\SalesStage\SalesStageLists;
 use App\Livewire\User\UserLists;
+use App\Livewire\User\UserOnline;
 use App\Livewire\User\UserProfile;
 use App\Livewire\VolumeUnit\VolumeUnitLists;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::group([
 ], function () {
     Route::get('/', UserLists::class)->name('list')->middleware('permission:user.view');
     Route::get('/profile', UserProfile::class)->name('profile');
+    Route::get('/online', UserOnline::class)->name('online');
 });
 
 Route::group([
