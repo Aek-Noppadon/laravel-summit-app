@@ -202,7 +202,7 @@
                 confirmButtonText: "Yes, Delete"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $wire.dispatch("destroy", {
+                    $wire.dispatch("destroyFoundActivity", {
                         id: event.id,
                         name: event.name,
                     })
