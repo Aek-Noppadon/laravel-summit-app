@@ -113,7 +113,7 @@
                     <div class="row">
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="startVisit" class="form-label">Start Visit</label>
+                                <label for="startVisit" class="form-label">Start Visit Date</label>
                                 <span class="text-danger font-weight-bold">*</span>
                                 <input id="startVisit" wire:model="startVisit" type="date"
                                     class="form-control @error('startVisit') is-invalid @enderror">
@@ -124,7 +124,7 @@
                         </div>
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="estimateDate" class="form-label">Estimate Date</label>
+                                <label for="estimateDate" class="form-label">Estimate Close Date</label>
                                 <span class="text-danger font-weight-bold">*</span>
                                 <input id="estimateDate" wire:model="estimateDate" type="date"
                                     class="form-control @error('estimateDate') is-invalid @enderror">
@@ -373,27 +373,25 @@
             </div>
 
             <!-- Customer Modal, Product Modal, Save -->
-            <div class="card">
-                <div class="row">
 
-                    <div class="col-6">
-                        <div class="btn-group w-100" role="group">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <div class="btn-group w-100" role="group">
 
-                            @can('product.view')
-                                <button wire:click="$dispatch('refresh-product')" type="button"
-                                    class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
-                                    <i class="fas fa-search"></i> Products
-                                </button>
-                            @endcan
+                        @can('product.view')
+                            <button wire:click="$dispatch('refresh-product')" type="button"
+                                class="btn btn-primary w-100" data-toggle="modal" data-target="#modal-product">
+                                <i class="fas fa-search"></i> Products
+                            </button>
+                        @endcan
 
-                        </div>
                     </div>
+                </div>
 
-                    <div class="col-6">
-                        <button wire:click.prevent="save" class="btn btn-success w-100">
-                            <i class="fas fa-save"></i> Save
-                        </button>
-                    </div>
+                <div class="col-6">
+                    <button wire:click.prevent="save" class="btn btn-success w-100">
+                        <i class="fas fa-save"></i> Save
+                    </button>
                 </div>
             </div>
             <!-- ./Customer Moal -->
