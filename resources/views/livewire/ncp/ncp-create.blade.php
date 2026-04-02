@@ -330,6 +330,9 @@
                             $productName = $item['productName'];
                         @endphp
 
+                        <input id="inputs.{{ $key }}.productId"
+                            wire:model="inputs.{{ $key }}.productId" type="hidden">
+
                         <div class="card-body">
                             <div class="row">
                                 {{-- <div class="col-md-2">
@@ -389,12 +392,13 @@
                                         <label>To WH</label>
                                         <span class="text-danger text-bold">*</span>
 
-                                        <select id="inputs.{{ $key }}.whNo" class="form-control">
-                                            <option selected value="13">13</option>
+                                        <select id="inputs.{{ $key }}.toWhNo"
+                                            wire:model="inputs.{{ $key }}.toWhNo" class="form-control">
+                                            <option value="13">13</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Batch Number</label>
                                         <span class="text-danger text-bold">*</span>
@@ -409,7 +413,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Quantity</label>
                                         <span class="text-danger text-bold">*</span>
@@ -424,9 +428,24 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Ref.Invoice No.(SO)</label>
+                                        <label>Ref.Doument No.</label>
+                                        <span class="text-danger text-bold">*</span>
+
+                                        <input id="inputs.{{ $key }}.refDocumentNo"
+                                            wire:model="inputs.{{ $key }}.refDocumentNo" type="text"
+                                            class="form-control @error('inputs.' . $key . '.refDocumentNo') is-invalid @enderror">
+
+                                        @error('inputs.' . $key . '.refDocumentNo')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Ref.Invoice No.</label>
                                         <span class="text-danger text-bold">*</span>
 
                                         <input id="inputs.{{ $key }}.refInvoiceNo"
