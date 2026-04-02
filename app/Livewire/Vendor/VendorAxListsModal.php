@@ -4,6 +4,7 @@ namespace App\Livewire\Vendor;
 
 use App\Models\SrvVendor;
 use App\Models\Vendor;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,6 +15,18 @@ class VendorAxListsModal extends Component
     public $search;
     public $pagination = 20;
     public $source = 0;
+
+    // เพิ่มฟังก์ชันนี้เพื่อให้ Search ทำงานไม่เพี้ยน
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    // ฟังก์ชันนี้จะทำงานทุกครั้งที่ $name มีการเปลี่ยนแปลง
+    public function updatedName($value)
+    {
+        $this->name = ucwords(trim($value));
+    }
 
     #[On('refresh-vendor-ax')]
     public function render()
@@ -37,39 +50,71 @@ class VendorAxListsModal extends Component
     #[On('save-vendor-ax')]
     public function saveVendorAx($id)
     {
+        // 1. ดึงข้อมูลจาก AX ก่อน (Fail Fast)
         $vendorAx = SrvVendor::select('ACCOUNTNUM', 'NAME')
             ->where('ACCOUNTNUM', $id)
-            ->firstOrFail(); // ใช้ firstOrFail เพื่อกันกรณีไม่พบข้อมูลใน AX
+            ->firstOrFail();
 
-        // ค้นหาหรือสร้าง Instance ใหม่
-        $vendor = Vendor::firstOrNew(['code' => $id]);
+        try {
+            // 2. เตรียม Instance หา Record เดิมหรือสร้างใหม่
+            $vendor = Vendor::firstOrNew(['code' => $id]);
 
-        $vendor->fill([
-            'name_english'    => strtoupper(trim($vendorAx->NAME)),
-            'source'          => $this->source,
-            'updated_user_id' => auth()->id(),
-        ]);
+            // 3. Fill ข้อมูลที่มาจาก AX (ยังไม่ใส่ User ID)
+            $vendor->fill([
+                'name_english' => $vendorAx->NAME,
+                'source'       => $this->source,
+            ]);
 
-        // ถ้าเป็น Record ใหม่ ให้ใส่ created_user_id ด้วย
-        if (!$vendor->exists) {
-            $vendor->created_user_id = auth()->id();
-        }
+            // ถ้าเป็น Record ใหม่ หรือมีการเปลี่ยนชื่อ ให้เตรียม Update User ID
+            if ($vendor->isDirty()) {
+                $vendor->updated_user_id = auth()->id();
 
-        // ตรวจสอบว่ามีการเปลี่ยนแปลงข้อมูลหรือไม่ (รวมถึงกรณีสร้างใหม่ด้วย)
-        if ($vendor->isDirty()) {
-            $isNew = !$vendor->exists;
-            $vendor->save();
+                if (!$vendor->exists) {
+                    $vendor->created_user_id = auth()->id();
+                }
+            }
 
+            // 4. เช็คความเปลี่ยนแปลง (ถ้าไม่มีอะไรเปลี่ยนเลยจริงๆ)
+            if (!$vendor->isDirty()) {
+                return $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "No Changes Detected !!",
+                    text: "{$vendor->name_english}: No data changed.",
+                    icon: "info"
+                );
+            }
+
+            // 5. ถ้ามีข้อมูลเปลี่ยนค่อยเริ่ม Transaction
+            DB::transaction(function () use ($vendor) {
+                $vendor->save();
+            });
+
+            // 6. Success Feedback & Close Modal
+            $this->dispatch('close-modal-vendor');
+
+            // 7. แจ้งเตือนเมื่อสำเร็จ
             $this->dispatch(
                 "sweet.success",
                 position: "center",
-                title: $isNew ? "Created Successfully !!" : "Updated Successfully !!",
-                text: "Vendor : " . $vendor->name_english,
+                title: $vendor->wasRecentlyCreated ? "Created Successfully !!" : "Updated Successfully !!",
+                text: "Vendor: " . $vendor->name_english,
                 icon: "success",
-                timer: 3000,
+                timer: 3000
             );
+        } catch (\Throwable $e) {
+            // แบบโปร (เห็น Error ทั้งหมด รวมถึงบรรทัดที่พัง)
+            logger()->error("VendorAx Save Error: " . $e->getMessage(), [
+                'exception' => $e,
+                'vendor_id' => $id // ใส่ Context เพิ่มเพื่อความง่ายในการหาว่า Vendor คนไหนที่พัง
+            ]);
 
-            $this->dispatch('close-modal-vendor');
+            $this->dispatch(
+                "sweet.error",
+                title: "Cannot save data !!",
+                text: "Something went wrong. Please try again.",
+                icon: "error"
+            );
         }
     }
 
