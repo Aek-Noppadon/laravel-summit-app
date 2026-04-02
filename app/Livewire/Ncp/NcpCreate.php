@@ -15,6 +15,8 @@ use Livewire\WithFileUploads;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
+use function Laravel\Prompts\info;
+
 class NcpCreate extends Component
 {
     use WithFileUploads;
@@ -22,10 +24,12 @@ class NcpCreate extends Component
     public $customerId, $customerCode, $customerNameEng, $customerNameThi;
     public $foundActivityId, $foundActivityName, $problemDescription;
     public $preventiveActionId, $preventiveActionName, $correctiveActionName, $result;
-    public $productId, $productCode, $productName, $productBrand, $whNo, $batchNo, $quantity, $refInvoiceNo, $remark;
+    public $productId, $productCode, $productName, $productBrand, $batchNo, $quantity, $refDocumentNo, $refInvoiceNo, $remark;
     public $inputs = [];
+    public $allDetails = [];
     public $imagePreviews = [];
     public $sourceType = 'customer';
+    public $toWhNo = 13;
 
     public function updatedSourceType()
     {
@@ -123,16 +127,12 @@ class NcpCreate extends Component
     {
         $productItem = ProductItem::findOrFail($id);
 
-        $this->productId = $productItem->id;
-        $this->productCode = $productItem->code;
-        $this->productName = $productItem->name;
-        $this->productBrand = $productItem->brand_name;
-
         $this->inputs[] = [
-            'productId' => $this->productId,
-            'productCode' => $this->productCode,
-            'productName' => $this->productName,
-            'productBrand' => $this->productBrand,
+            'productId'    => $productItem->id, // ดึงจาก Model โดยตรง
+            'productCode'  => $productItem->code,
+            'productName'  => $productItem->name,
+            'productBrand' => $productItem->brand_name,
+            'toWhNo'         => $this->toWhNo, // ใช้ค่า Default 13
         ];
 
         $this->dispatch(
@@ -148,6 +148,11 @@ class NcpCreate extends Component
     public function removeItem($key, $productName)
     {
         unset($this->inputs[$key]);
+
+        $this->inputs = array_values($this->inputs); // รีเซ็ต Index ให้กลับมาเป็น 0, 1, 2 ใหม่
+
+        // เคลียร์ Error Message ของทั้ง Form เพื่อป้องกัน Error ค้างข้ามแถว
+        $this->resetErrorBag();
 
         $this->dispatch(
             "toastr.info",
@@ -218,6 +223,9 @@ class NcpCreate extends Component
             mkdir($folderPath, 0755, true);
         }
 
+        // 1. สร้าง Array เปล่าไว้เก็บชื่อไฟล์ข้างนอก Loop
+        $allImages = [];
+
         foreach ($this->imagePreviews as $base64) {
             // จัดการข้อมูล Base64
             @list($type, $imageData) = explode(';', $base64);
@@ -226,12 +234,22 @@ class NcpCreate extends Component
             $extension = explode('/', $type)[1];
             if ($extension == 'jpeg') $extension = 'jpg';
 
-            $fileName = hexdec(uniqid()) . '.' . $extension;
+            // --- ส่วนที่แก้ไข: ตั้งชื่อไฟล์ตามวันเวลา ---
+            // Y = ปี (2024), m = เดือน (05), d = วัน (20)
+            // H = ชม. (24 ชม.), i = นาที, s = วินาที
+            // เพิ่ม rand() เล็กน้อยกันกรณีที่มีการอัปโหลดหลายรูปในวินาทีเดียวกัน
+            $fileName = date('Ymd_His') . '_' . rand(100, 999) . '.' . $extension;
+
             $decodedImage = base64_decode($imageData);
 
             // บันทึกไฟล์
             $fullPath = $folderPath . DIRECTORY_SEPARATOR . $fileName;
             file_put_contents($fullPath, $decodedImage);
+
+            // 2. เก็บชื่อไฟล์ลง Array (แก้ไข Syntax ให้ถูกต้อง)
+            $allImages[] = [
+                'imageName' => $fileName,
+            ];
 
             // --- เพิ่มโค้ดบันทึกลง Database ตรงนี้ ---
             // ตัวอย่าง:
@@ -240,6 +258,9 @@ class NcpCreate extends Component
             //     'file_name' => $fileName
             // ]);
         }
+
+        // 3. ย้าย dd มาไว้ตรงนี้ เพื่อดูชื่อรูปทั้งหมดที่ถูกจัดการเสร็จแล้ว
+        dd($allImages);
     }
 
     public function rules()
@@ -299,18 +320,52 @@ class NcpCreate extends Component
 
     public function save()
     {
-        $this->validate();
+        // $this->validate();
 
-        if (empty($this->inputs)) {
-            $this->dispatchSweetError(
-                "Please Add Product Item !!",
-                ($this->sourceType == 'customer' ? "Customer: " : "Vendor: ") . $this->customerNameEng
-            );
-            return;
-        }
+        // if (empty($this->inputs)) {
+        //     $this->dispatchSweetError(
+        //         "Please Add Product Item !!",
+        //         ($this->sourceType == 'customer' ? "Customer: " : "Vendor: ") . $this->customerNameEng
+        //     );
+        //     return;
+        // }
 
         try {
             DB::transaction(function () {
+
+                // Data Headers
+                $dataHeaders = [
+                    'customerId'            => $this->customerId,    // Function select-customer,select-vendor เก็บค่า CusotmerId เข้าตัวแปรแล้ว
+                    'foundActivityId'       => $this->foundActivityId,
+                    'problemDescription'    => trim($this->problemDescription),
+                    'preventiveActionId'    => $this->preventiveActionId,
+                    'correctiveActionName'  => trim($this->correctiveActionName),
+                    'result'                => trim($this->result),
+
+                ];
+
+                // dd($dataHeaders);
+
+                // ./Data Header
+
+                // Data Details
+                foreach ($this->inputs as $key => $item) {
+                    $allDetails[] = [
+                        // ดึงค่าจาก $item ซึ่งเก็บข้อมูลของแต่ละ index ไว้
+                        'productId'  => $item['productId'] ?? null,
+                        'toWhNo'       => $item['toWhNo'] ?? null,
+                        'batchNo'    => strtoupper(trim($item['batchNo'] ?? '')),
+                        'quantity'   => $item['quantity'] ?? 0,
+                        'refInvoice' => strtoupper(trim($item['refInvoiceNo'] ?? '')),
+                        'remark'     => trim($item['remark'] ?? ''),
+                    ];
+                }
+
+                // dd($allDetails); // ลองดูค่าที่ออกมาจะเป็น Array ของทุก Item
+
+                // dd($dataDetails);
+
+                // .Data Detail
 
                 // 1. Validation (เปิดใช้งานเมื่อพร้อม)
                 // $this->validate([...]);
@@ -344,6 +399,54 @@ class NcpCreate extends Component
             $this->dispatch('toastr.error', title: 'เกิดข้อผิดพลาด', message: 'ไม่สามารถบันทึกได้: ' . $e->getMessage());
         }
     }
+
+    // public function save()
+    // {
+    //     $this->validate();
+
+    //     if (empty($this->inputs)) {
+    //         $this->dispatchSweetError(
+    //             "Please Add Product Item !!",
+    //             ($this->sourceType == 'customer' ? "Customer: " : "Vendor: ") . $this->customerNameEng
+    //         );
+    //         return;
+    //     }
+
+    //     try {
+    //         DB::transaction(function () {
+
+    //             // 1. Validation (เปิดใช้งานเมื่อพร้อม)
+    //             // $this->validate([...]);
+
+    //             // 1. บันทึกตารางหลักก่อน
+    //             // $ncp = \App\Models\Ncp::create([
+    //             //     'title' => $this->title,
+    //             //     // ... fields อื่นๆ ...
+    //             // ]);
+
+    //             // 2. บันทึกข้อมูลหลัก (NCP) ลงฐานข้อมูลก่อน เพื่อเอา ID มาผูกกับรูป
+    //             // $ncp = Ncp::create([...]);
+
+    //             // 3. เรียกใช้ฟังก์ชันอัปโหลดรูป (ส่ง ID ของ record หลักไปด้วยถ้าจำเป็น)
+    //             // $this->uploadImages($ncp->id);
+    //             $this->uploadImages();
+
+    //             // 4. ล้างค่าและแจ้งเตือน
+    //             $this->reset(['imagePreviews']);
+
+    //             $this->dispatch(
+    //                 "toastr.success",
+    //                 position: "toast-top-left", //toast-botton-left
+    //                 progressbar: true,
+    //                 timeout: 3000,
+    //                 title: "สถานะการทำงาน",
+    //                 message: 'บันทึกข้อมูล และอัปโหลดรูปเรียบร้อย',
+    //             );
+    //         });
+    //     } catch (\Throwable $e) {
+    //         $this->dispatch('toastr.error', title: 'เกิดข้อผิดพลาด', message: 'ไม่สามารถบันทึกได้: ' . $e->getMessage());
+    //     }
+    // }
 
     public function render()
     {
