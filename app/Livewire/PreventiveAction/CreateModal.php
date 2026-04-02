@@ -4,7 +4,6 @@ namespace App\Livewire\PreventiveAction;
 
 use App\Models\PreventiveAction;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -17,11 +16,6 @@ class CreateModal extends Component
     public function updatedName($value)
     {
         $this->name = ucwords(trim($value));
-    }
-
-    public function render()
-    {
-        return view('livewire.preventive-action.create-modal');
     }
 
     protected function rules()
@@ -59,6 +53,8 @@ class CreateModal extends Component
 
         $preventiveAction = PreventiveAction::findOrFail($id);
 
+        // dd($preventiveAction);
+
         // ใช้ fill เพื่อความรวดเร็ว (ต้องมี property $id และ $name ใน class)
         $this->fill($preventiveAction->only('id', 'name'));
     }
@@ -67,50 +63,131 @@ class CreateModal extends Component
     {
         $this->validate();
 
-        // 1. เตรียม Object
-        $preventiveAction = PreventiveAction::findOrNew($this->id);
-        $isNew = !$preventiveAction->exists;
-
-        // 2. Mapping ข้อมูล
-        $preventiveAction->name = $this->name;
-        $preventiveAction->updated_user_id = auth()->id();
-
-        if ($isNew) {
-            $preventiveAction->created_user_id = auth()->id();
-        }
-
-        // 3. Dirty Check: ถ้าไม่มีการแก้ไข ให้ปิด Modal ไปเลย
-        if (!$isNew && !$preventiveAction->isDirty()) {
-            $this->dispatch('close-modal');
-            return;
-        }
-
-        DB::beginTransaction();
         try {
-            $preventiveAction->save();
-            DB::commit();
+            // 1. เตรียม Instance หา Record เดิมหรือสร้างใหม่
+            $preventiveAction = PreventiveAction::firstOrNew(['id' => $this->id]);
+
+            // 2. Fill ข้อมูลที่มาจาก AX เท่านั้น (ยังไม่ใส่ User ID)
+            $preventiveAction->name = $this->name;
+
+            // ถ้าเป็น Record ใหม่ หรือมีการเปลี่ยนชื่อ ให้เตรียม Update User ID
+            if ($preventiveAction->isDirty()) {
+                $preventiveAction->updated_user_id = auth()->id();
+
+                if (!$preventiveAction->exists) {
+                    $preventiveAction->created_user_id = auth()->id();
+                }
+            }
+
+            // 3. เช็คความเปลี่ยนแปลง (ถ้าไม่มีอะไรเปลี่ยนเลยจริงๆ)
+            if (!$preventiveAction->isDirty()) {
+                return $this->dispatch(
+                    "sweet.success",
+                    position: "center",
+                    title: "No Changes Detected !!",
+                    text: $preventiveAction->name . ": No data changed.",
+                    icon: "info",
+                );
+            }
+
+            // 4. ถ้ามีข้อมูลเปลี่ยนค่อยเริ่ม Transaction บันทึกข้อมูล
+            DB::transaction(function () use ($preventiveAction) {
+                $preventiveAction->save();
+            });
+
+            // 5. Success Feedback & Close Modal
+            $this->dispatch('close-preventive-action-add-modal');
 
             $this->dispatch(
                 "sweet.success",
-                title: $isNew ? "Created Successfully !!" : "Updated Successfully !!",
-                text: "Preventive Action : {$this->name}",
+                title: $preventiveAction->wasRecentlyCreated ? "Created Successfully !!" : "Updated Successfully !!",
+                text: "Found During Activity: {$this->name}",
                 icon: "success",
                 timer: 3000
             );
-
-            $this->dispatch('close-preventive-action-add-modal');
         } catch (\Throwable $e) {
-            DB::rollBack();
-            Log::error("Preventive Action Save Error: " . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            // แบบโปร (เห็น Error ทั้งหมด รวมถึงบรรทัดที่พัง)
+            logger()->error("Preventive Action Save Error: " . $e->getMessage(), [
+                'exception' => $e,
+                'preventiveAction_id' => $this->id // ใส่ Context เพิ่มเพื่อความง่ายในการหาว่า Preventive Action คนไหนที่พัง
+            ]);
 
             $this->dispatch(
                 "sweet.error",
-                title: "Something went wrong!",
-                text: "Unable to process your request at this moment.",
+                title: "Cannot save data !!",
+                text: "Something went wrong. Please try again.",
                 icon: "error"
             );
         }
     }
+
+    // public function save()
+    // {
+    //     $this->validate();
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         // 1. หา Record เดิมหรือสร้าง Instance ใหม่
+    //         $preventiveAction = PreventiveAction::findOrNew($this->id);
+    //         $isNew = !$preventiveAction->exists;
+
+    //         // 2. Fill ข้อมูลที่มาจาก AX เท่านั้น (ยังไม่ใส่ User ID)
+    //         $preventiveAction->name = $this->name;
+
+    //         // 3. ตรวจสอบว่ามีการเปลี่ยนแปลง หรือ เป็น Record ใหม่หรือไม่
+    //         // isDirty() จะเป็น true ถ้า name เปลี่ยน
+    //         // !$preventiveAction->exists จะเป็น true ถ้าเป็นรายการใหม่ที่ยังไม่มีใน DB
+    //         if ($preventiveAction->isDirty() || !$preventiveAction->exists) {
+
+    //             $isNew = !$preventiveAction->exists;
+
+    //             if ($isNew) {
+    //                 $preventiveAction->created_user_id = auth()->id();
+    //             }
+
+    //             // อัปเดต updated_user_id ทุกกรณีที่มีการเปลี่ยนแปลง (หรือเฉพาะตอน Update ตามต้องการ)
+    //             $preventiveAction->updated_user_id = auth()->id();
+
+    //             $preventiveAction->save();
+
+    //             DB::commit();
+
+    //             $this->dispatch(
+    //                 "sweet.success",
+    //                 title: $isNew ? "Created Successfully !!" : "Updated Successfully !!",
+    //                 text: "Preventive Action: {$this->name}",
+    //                 icon: "success",
+    //                 timer: 3000
+    //             );
+
+    //             $this->dispatch('close-preventive-action-add-modal');
+    //         } else {
+    //             // กรณีไม่มีอะไรเปลี่ยนแปลง (isDirty เป็น false และ exists เป็น true)
+    //             DB::rollBack(); // ไม่มีการทำอะไรก็ rollback หรือไม่ต้องเริ่ม transaction ตั้งแต่แรกก็ได้ครับ
+
+    //             // กรณีข้อมูลเหมือนเดิมเป๊ะ และไม่ใช่การสร้างใหม่
+    //             $this->dispatch(
+    //                 "sweet.success",
+    //                 position: "center",
+    //                 title: "No Changes Detected !!",
+    //                 text: $preventiveAction->name . ": No data changed.",
+    //                 icon: "info",
+    //             );
+    //         }
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
+
+    //         Log::error("Preventive Action Save Error: " . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+
+    //         $this->dispatch(
+    //             "sweet.error",
+    //             title: "Something went wrong!",
+    //             text: "Unable to process your request at this moment.",
+    //             icon: "error"
+    //         );
+    //     }
+    // }
 
     #[On('reset-form')]
     public function resetForm()
@@ -123,5 +200,10 @@ class CreateModal extends Component
     {
         $this->resetValidation(); // ล้างข้อความ Error ด้วย
         $this->reset();
+    }
+
+    public function render()
+    {
+        return view('livewire.preventive-action.create-modal');
     }
 }

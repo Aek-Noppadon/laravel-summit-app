@@ -39,10 +39,9 @@ class ListsModal extends Component
         $this->dispatch("confirm", id: $id, name: $name);
     }
 
-    #[On('destroy-1')]
+    #[On('destroyPreventive')]
     public function destroy($id, $name)
     {
-        // dd("Preventive");
         try {
 
             $preventiveAction = PreventiveAction::findOrFail($id);
