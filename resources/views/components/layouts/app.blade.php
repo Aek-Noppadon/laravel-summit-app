@@ -10,6 +10,8 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('backend/admin-lte/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ asset('backend/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('backend/admin-lte/dist/css/adminlte.min.css') }}">
     <!-- SweetAlert2 -->
@@ -21,6 +23,8 @@
     <!-- Header Script -->
     @yield('header-script')
     <!-- ./Header Script -->
+
+    @stack('styles')
 </head>
 
 <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed">
@@ -145,6 +149,7 @@
     </script>
 
     @livewireScripts
+    @stack('scripts')
 </body>
 
 </html>
