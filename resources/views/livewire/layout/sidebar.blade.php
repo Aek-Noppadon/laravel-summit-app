@@ -80,6 +80,14 @@
                                     <p>User Lists</p>
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('user.online') }}"
+                                    class="nav-link {{ request()->is('users/list', 'users/online') ? 'active' : '' }}">
+                                    <i class="fas fa-chevron-circle-down nav-icon"></i>
+                                    <p>User Online</p>
+                                </a>
+                            </li>
                         @endcan
 
                         <!-- Department Lists -->
@@ -165,7 +173,6 @@
                     </a>
                 </li>
                 {{-- @endif --}}
-
             </ul>
         </li>
         {{-- @endif --}}
