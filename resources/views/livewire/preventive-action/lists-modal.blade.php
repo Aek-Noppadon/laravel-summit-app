@@ -139,7 +139,7 @@
                                     <td style="width: 40px" class="p-1 text-center">
                                         <button wire:click.prevent="$dispatch('edit',{id:{{ $item->id }}})"
                                             type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                                            data-target="#prevent-action-add-modal">
+                                            data-target="#preventive-action-add-modal">
 
                                             <span data-toggle="tooltip" data-placement="bottom"
                                                 data-original-title="Edit">
@@ -201,7 +201,7 @@
                 confirmButtonText: "Yes, Delete"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $wire.dispatch("destroy-1", {
+                    $wire.dispatch("destroyPreventive", {
                         id: event.id,
                         name: event.name,
                     })
